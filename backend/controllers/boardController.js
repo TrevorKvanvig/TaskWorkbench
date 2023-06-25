@@ -1,5 +1,5 @@
 const boardCollection = require('../mongoose_models/board_model');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 
 const getAllBoards = async (req, res) => {
@@ -7,7 +7,7 @@ const getAllBoards = async (req, res) => {
   const allBoards = await boardCollection.find({}).sort({createdAt: 1});
   
   // send boards as json data
-  res.status(200).json(allBoards)
+  res.status(200).json(allBoards);
 }
 
 const sendSingleBoard = async (req, res) => {
@@ -18,53 +18,53 @@ const sendSingleBoard = async (req, res) => {
       .create({
         boardTitle,
         tickets
-      }) 
+      });
 
     // send created board to user as conformation
-    res.status(200).json(boardCreated)
+    res.status(200).json(boardCreated);
 
   } catch (error) {
-    res.status(400).json({error: error.message})
+    res.status(400).json({error: error.message});
   }
 }
 
 const getSingleBoard = async (req, res) => {
   // get searched board id from parameters in route
-  const { boardID } = req.params
+  const { boardID } = req.params;
 
   //use mongoose function to see if id is valid
   if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'})
+    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
   }
 
   // find board and store in found board
-  const foundBoard = await boardCollection.findById(boardID)
+  const foundBoard = await boardCollection.findById(boardID);
 
   // if found board does not exist
   if (!foundBoard) {
-    return res.status(404).json({error: 'No such workout'})
+    return res.status(404).json({error: 'Board does not exist'});
   }
 
   // if everything is successful send board found as json
-  res.status(200).json(foundBoard)
+  res.status(200).json(foundBoard);
 }
 
 const updateBoard = async (req, res) => {
   // get id from params
-  const { boardID } = req.params
+  const { boardID } = req.params;
 
   //check if valid id
   if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'})
+    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
   }
 
   // find board with id and update 
   const updatedBoard = await boardCollection.findOneAndUpdate({_id: boardID}, {
     ...req.body
-  })
+  });
 
   if (!updatedBoard) {
-    return res.status(404).json({error: 'Board Does not exist'})
+    return res.status(404).json({error: 'Board does not exist'});
   }
 
   res.status(200).json(updatedBoard);
@@ -73,21 +73,21 @@ const updateBoard = async (req, res) => {
 
 const deleteBoard = async (req, res) => {
   // get id from params
-  const { boardID } = req.params
+  const { boardID } = req.params;
 
   //check if valid id
   if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'})
+    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
   }
 
-  const BoardDeleted = await boardCollection.findByIdAndDelete({_id: boardID})
+  const BoardDeleted = await boardCollection.findByIdAndDelete({_id: boardID});
 
   // if failed to delete
   if(!BoardDeleted) {
-    res.status(404).json({error: 'Board Does not exist'})
+    res.status(404).json({error: 'Board Does not exist'});
   }
 
-  res.status(200).json(BoardDeleted)
+  res.status(200).json(BoardDeleted);
 }
 
 module.exports = {
@@ -97,4 +97,4 @@ module.exports = {
   updateBoard,
   deleteBoard
 
-}
+};
