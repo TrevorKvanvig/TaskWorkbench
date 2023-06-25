@@ -1,32 +1,43 @@
 const express = require('express');
 const {
   getAllBoards,
-  sendSingleBoard
+  sendSingleBoard,
+  getSingleBoard,
+  updateBoard,
+  deleteBoard
 } = require('../controllers/boardController');
 
 // alows router functionality
 const router = express.Router()
 
+// ======== General ===================
 router.route('/')
   // return all boards in database
   .get(getAllBoards)
+  
   // add a board to database
   .post(sendSingleBoard)
+//
 
+
+// ======== When ID is Searched =======
 router.route('/:boardID')
   // return board with specified id
-  .get((req, res) => {
-    
-    res.send("Router hi");
-  })
+  .get(getSingleBoard)
+
   // delete board from database with id specified
-  .delete((req, res) => {
-    
-  })
+  .delete(deleteBoard)
+
   // update board in database with id specified
-  .patch((req, res) => {
-    
-  })
+  .patch(updateBoard)
+//
+
+// router.route('/:boardID/:ticketID')
+//   .get(getTicket)
+
+
+
+
 
 // allow routes to be used in other files
 module.exports = router;
