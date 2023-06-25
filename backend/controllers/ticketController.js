@@ -28,7 +28,7 @@ const addTicketToBoard = async (req, res) => {
 
     foundBoard.tickets.push(newTicket);
 
-    updatedBoard = await foundBoard.save()
+    updatedBoard = await foundBoard.save();
 
     // if everything is successful send board found as json
     res.status(200).json(updatedBoard);
