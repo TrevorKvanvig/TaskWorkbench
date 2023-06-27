@@ -3,6 +3,7 @@ import { useReducer, createContext } from "react";
 export const BoardsContext = createContext()
 
 export const boardsReducer = (currentState, action) => {
+  
   switch(action.type) {
     case 'SET_BOARDS':
       return { // sets workouts key to array of all current workouts in database when dispach is called from home.js with SET_WORKOUTS as action type
@@ -11,6 +12,7 @@ export const boardsReducer = (currentState, action) => {
     default:
       return currentState
   }
+  
   
 }
 

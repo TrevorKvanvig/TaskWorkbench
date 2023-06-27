@@ -22,7 +22,7 @@ const Dashboard = () => {
     }
     
     getBoardsfromDB()
-    console.log(boards);
+    
   }, [dispatch])
 
   
