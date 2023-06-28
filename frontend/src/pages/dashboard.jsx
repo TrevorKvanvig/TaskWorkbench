@@ -6,6 +6,7 @@ const Dashboard = () => {
   const {boards, dispatch} = useBoardsContext();
 
   useEffect(() => {
+    
     const getBoardsfromDB = async () => {
       //get response object
       const response = await fetch('/api/boards');
@@ -22,12 +23,12 @@ const Dashboard = () => {
     }
     
     getBoardsfromDB()
-    
+
   }, [dispatch])
 
   
   return (
-    <BoardContainer boards={boards}/>
+    <BoardContainer/>
   );
 }
 export default Dashboard

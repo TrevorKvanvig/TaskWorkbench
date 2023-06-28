@@ -31,6 +31,15 @@ header a {
   max-height: 600px;
   background-color: #333;
   margin: 30px;
-  padding-top: 1px;
-  padding-left: 20px;
+  padding-top: 30px;
+  padding-left: 30px;
+  display: flex;
+  justify-content: space-between;
+  overflow-x: scroll;
+}
+
+.board {
+  color: var(--primary);
+  background-color: #f1f1f1;
+  max-height: 550px;
 }
