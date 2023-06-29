@@ -26,20 +26,29 @@ header a {
 }
 
 .board-container {
-  max-width: 3000px;
-  height: 600px;
-  max-height: 600px;
   background-color: #333;
-  margin: 30px;
-  padding-top: 30px;
-  padding-left: 30px;
-  display: flex;
-  justify-content: space-between;
-  overflow-x: scroll;
+  padding: 20px;
+
+}
+.board {
+  background: #fff;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+  border-radius: 10px;
+}
+.board h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+  color: var(--primary);
+  text-align: center;
 }
 
-.board {
-  color: var(--primary);
-  background-color: #f1f1f1;
-  max-height: 550px;
+.board p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+  padding-left: 20px;
+}
+
+ticket {
+  border-bottom:#1aac83, 1px;
 }

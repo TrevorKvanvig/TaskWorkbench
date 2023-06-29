@@ -1,6 +1,6 @@
-import BoardContainer from '../components/BoardContainer';
 import { useBoardsContext } from '../hooks/useBoardsContext' 
 import { useEffect } from 'react';
+import Board from '../components/Board'
 
 const Dashboard = () => {
   const {boards, dispatch} = useBoardsContext();
@@ -28,7 +28,11 @@ const Dashboard = () => {
 
   
   return (
-    <BoardContainer/>
+    <div className="board-container">
+      {boards && boards.map((board) => {
+        return(<Board key={board._id} boardDetails={board}/>);
+      })}
+    </div>
   );
 }
 export default Dashboard

@@ -2,7 +2,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const Ticket = ({ticket}) => {
 
-  return (<div className="ticket-container">
+  return (<div className="ticket">
     <h4>{ticket.ticketTitle}</h4>
     <p>{ticket.ticketDescription}</p>
     <p>{ticket.ticketPriority}</p>
