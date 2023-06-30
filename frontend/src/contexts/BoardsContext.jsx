@@ -9,6 +9,14 @@ export const boardsReducer = (currentState, action) => {
       return { // sets workouts key to array of all current workouts in database when dispach is called from home.js with SET_WORKOUTS as action type
         boards: action.payload
       }
+    case 'DELETE_BOARD':
+      return {
+        boards: currentState.boards.filter(board => action.payload._id !== board._id)
+      }
+    case 'ADD_BOARD':
+      return {
+        boards: [...currentState.boards, action.payload]
+      }
     default:
       return currentState
   }
