@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import ReactDOM  from "react-dom";
 const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
   const [ticketDetails, setTicketDetails] = useState({
     ticketTitle: '',
@@ -9,16 +9,18 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
 
   const handleChange = (event) => {
     const {name, value} = event.target;
-    console.log(ticketDetails);
+
     setTicketDetails({
       ...ticketDetails,
       [name]: value
     });
   }
 
-  console.log(ticketDetails);
-  return (
-    <form className="add-board-modal">
+
+  return(
+    <>
+      <div className='overlay-style'></div>
+      <form className="add-board-modal modal">
       <h2>Add New Ticket to "{boardDetails.boardTitle}"</h2>
       
       <label htmlFor="ticket-title">New Ticket Title</label>
@@ -46,7 +48,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
         onClose()
       }}>close</button>
     </form>
-    
+    </>
   );
 }
 

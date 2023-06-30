@@ -31,6 +31,7 @@ header a {
   display: flex;
   justify-content: space-between;
   overflow-x: scroll;
+  height: '100%';
   
 }
 .board {
@@ -78,33 +79,21 @@ header a {
 }
 
 .modal {
+  background-color:beige;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 50px;
+  z-index: 1000;
+}
+
+.overlay-style {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-}
-
-.modal.open {
-  display: flex;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.modal-content h2 {
-  margin-top: 0;
-}
-
-.modal-content button {
-  margin-top: 10px;
+  background-color: rgba(0,0,0, .7);
+  z-index: 1000;
 }

@@ -1,20 +1,22 @@
 import { useBoardsContext } from '../hooks/useBoardsContext' 
 import { useEffect, useState } from 'react';
+
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
-import lightFormat from 'date-fns/esm/fp/lightFormat/index.js';
+
 
 const Dashboard = () => {
+  // current state of boards
   const {boards, dispatch} = useBoardsContext();
 
-
+  // use states
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
   const [ticketsBoardDetails, setBoardDetails] = useState(null)
 
   
-
+  // Whenever dasboard gets loaded run this function once
   useEffect(() => {
     
     const getBoardsfromDB = async () => {
@@ -31,17 +33,23 @@ const Dashboard = () => {
       }
 
     }
+
+    // call async function
     getBoardsfromDB();
 
   }, [dispatch])
 
+  
   const handleAddBoard = async (boardTitle) => {
+    // close board modal
     changeBoardModalState(false);
-    console.log("board title passed", JSON.stringify(boardTitle) );
+    
+    //create new board to pass into database
     const newBoard = {
       boardTitle: boardTitle
     }
 
+    // send board to database
     const response = await fetch('api/boards', {
       method: 'POST',
       body: JSON.stringify(newBoard),
@@ -50,10 +58,12 @@ const Dashboard = () => {
       }
     });
 
+    // get board added back from database
     const boardAdded = await response.json()
-    console.log('Board added to Database =>',boardAdded);
 
+    // if board sucessfuly added to database
     if(response.ok) {
+      // change current state of boards on dom using board contex
       dispatch({
         type: 'ADD_BOARD',
         payload: boardAdded
@@ -61,20 +71,23 @@ const Dashboard = () => {
     }else{
       console.log("error getting add board resopnse");
     }
-
   }
+
   const handleBoardModalOpen = () => {
+    // open board modal
     changeBoardModalState(true);
   }
 
   const handleBoardModalClose = () => {
+    // close board modal
     changeBoardModalState(false);
   }
 
+  // ticketDetails: ticket details to dadd to databased passed from modal form
+  // boardID: board id of where to add ticket from modal
   const handleAddTicket = async (ticketDetails, boardID) => {
-    console.log("Ticket Details Passed =>",ticketDetails);
-    console.log("Board ID Passed =>", boardID);
 
+    // try to add ticket to database
     const response = await fetch('api/boards/' + boardID, {
       method: 'POST',
       body: JSON.stringify(ticketDetails),
@@ -83,9 +96,12 @@ const Dashboard = () => {
       }
     });
 
+    // get ticket added back from api response
     const ticketAdded = await response.json()
 
+    // if sucessfully added
     if(response.ok) {
+      // add ticked into correct board to dom
       dispatch({
         type: 'ADD_TICKET',
         payload: {
@@ -98,19 +114,25 @@ const Dashboard = () => {
     }
   }
 
+
   const handleTicketModalClose = () => {
+    // close ticket modal
+    // reset board details
     changeTicketModalState(false)
     setBoardDetails(null);
 
   }
 
   const handleTicketModalOpen = (boardDetails) => {
+    // open ticket modal
+    // get board details of where to add ticket back from modal
     setBoardDetails(boardDetails);
     changeTicketModalState(true);
   }
   
   return (
     <>
+      
       <div className="board-container">
         <button onClick={handleBoardModalOpen}>Add Board</button>
         {boards && boards.map((board) => {
@@ -123,6 +145,8 @@ const Dashboard = () => {
       onSubmit={handleAddTicket} 
       boardDetails={ticketsBoardDetails}
       />}
+
+      
 
       {isBoardModalOpen && <AddBoardModal 
       onClose={handleBoardModalClose} 

@@ -11,7 +11,7 @@ const AddBoardModal = ({onSubmit, onClose}) => {
   }
   console.log(boardTitle);
   return (
-  <form className="add-board-modal">
+  <form className="add-board-modal modal">
     <h2>ADD BOARD</h2>
     
     <label htmlFor="board-title">New Board Title</label>
