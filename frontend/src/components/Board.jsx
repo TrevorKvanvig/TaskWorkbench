@@ -19,17 +19,14 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
     }
   }
   
-  function handleAddTicket() {
-
-  }
 
   return(<div className="board">
     <h3>{boardDetails.boardTitle}</h3>
     {boardDetails.tickets.map((ticket) => {
-      return(<Ticket key={ticket._id} ticket={ticket} />)
+      return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails}/>)
     })}
     <button onClick={() => {
-      onTicketModalOpen()
+      onTicketModalOpen(boardDetails)
     }}>ADD TICKET</button>
     <button onClick={handleDeleteBoard}>Delete Entire Board</button>
     

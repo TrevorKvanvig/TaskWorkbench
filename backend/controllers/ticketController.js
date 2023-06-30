@@ -23,15 +23,19 @@ const addTicketToBoard = async (req, res) => {
     const newTicket = {
       ticketTitle,
       ticketDescription,
-      ticketPriority
+      ticketPriority,
+      createdAt: new Date()
     };
 
     foundBoard.tickets.push(newTicket);
 
     updatedBoard = await foundBoard.save();
 
-    // if everything is successful send board found as json
-    res.status(200).json(updatedBoard);
+    // Get the ID of the newly created ticket
+    const newTicketID = updatedBoard.tickets[updatedBoard.tickets.length - 1]._id;
+
+    // Return the newly added ticket with its ID
+    res.status(200).json({ ...newTicket, _id: newTicketID });
 
   } catch (error) {
     res.status(400).json({error: error.message})

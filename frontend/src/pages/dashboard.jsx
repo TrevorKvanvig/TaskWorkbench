@@ -3,11 +3,15 @@ import { useEffect, useState } from 'react';
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
+import lightFormat from 'date-fns/esm/fp/lightFormat/index.js';
 
 const Dashboard = () => {
   const {boards, dispatch} = useBoardsContext();
+
+
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
+  const [ticketsBoardDetails, setBoardDetails] = useState(null)
 
   
 
@@ -67,16 +71,42 @@ const Dashboard = () => {
     changeBoardModalState(false);
   }
 
-  const handleAddTicket = () => {
+  const handleAddTicket = async (ticketDetails, boardID) => {
+    console.log("Ticket Details Passed =>",ticketDetails);
+    console.log("Board ID Passed =>", boardID);
 
+    const response = await fetch('api/boards/' + boardID, {
+      method: 'POST',
+      body: JSON.stringify(ticketDetails),
+      headers: {
+        "Content-Type": 'application/json'
+      }
+    });
+
+    const ticketAdded = await response.json()
+
+    if(response.ok) {
+      dispatch({
+        type: 'ADD_TICKET',
+        payload: {
+          ticketAdded,
+          boardID
+        }
+      })
+    } else {
+      console.log(ticketAdded.error);
+    }
   }
 
   const handleTicketModalClose = () => {
     changeTicketModalState(false)
+    setBoardDetails(null);
+
   }
 
-  const handleTicketModalOpen = () => {
-    changeTicketModalState(true)
+  const handleTicketModalOpen = (boardDetails) => {
+    setBoardDetails(boardDetails);
+    changeTicketModalState(true);
   }
   
   return (
@@ -87,8 +117,17 @@ const Dashboard = () => {
           return(<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen}/>);
         })}
       </div>
-      {isTicketModalOpen && <AddTicketModal onClose={handleTicketModalClose} onSubmit={handleAddTicket} />}
-      {isBoardModalOpen && <AddBoardModal onClose={handleBoardModalClose} onSubmit={handleAddBoard} />}
+
+      {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal 
+      onClose={handleTicketModalClose} 
+      onSubmit={handleAddTicket} 
+      boardDetails={ticketsBoardDetails}
+      />}
+
+      {isBoardModalOpen && <AddBoardModal 
+      onClose={handleBoardModalClose} 
+      onSubmit={handleAddBoard} 
+      />}
     </>
     
   );
