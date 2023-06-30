@@ -2,8 +2,7 @@ import Ticket from "./Ticket";
 import { useBoardsContext } from "../hooks/useBoardsContext";
 
 
-
-const Board = ({boardDetails}) => {
+const Board = ({boardDetails, onTicketModalOpen}) => {
   const { dispatch } = useBoardsContext();
 
   const handleDeleteBoard = async () => {
@@ -29,7 +28,9 @@ const Board = ({boardDetails}) => {
     {boardDetails.tickets.map((ticket) => {
       return(<Ticket key={ticket._id} ticket={ticket} />)
     })}
-    <button>ADD TICKET</button>
+    <button onClick={() => {
+      onTicketModalOpen()
+    }}>ADD TICKET</button>
     <button onClick={handleDeleteBoard}>Delete Entire Board</button>
     
   </div>);

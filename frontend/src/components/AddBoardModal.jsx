@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Modal = ({onSubmit, onClose}) => {
+const AddBoardModal = ({onSubmit, onClose}) => {
   const [boardTitle, setBoardTitle] = useState('');
 
   const handleChange = (event) => {
@@ -28,4 +28,4 @@ const Modal = ({onSubmit, onClose}) => {
   );
 }
 
-export default Modal;
+export default AddBoardModal;
