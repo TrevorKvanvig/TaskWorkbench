@@ -1,5 +1,6 @@
 import { useState } from "react";
-import ReactDOM  from "react-dom";
+
+
 const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
   const [ticketDetails, setTicketDetails] = useState({
     ticketTitle: '',

@@ -1,9 +1,20 @@
 import Ticket from "./Ticket";
 import { useBoardsContext } from "../hooks/useBoardsContext";
+import { useEffect, useState } from "react";
 
 
 const Board = ({boardDetails, onTicketModalOpen}) => {
   const { dispatch } = useBoardsContext();
+  const [currentTitle, setBoardTitle] = useState('No Title')
+  const [revertedTitle, setrevertedTitle] = useState('No Title')
+  const [isTitleChanging, setIsTitleChanging] = useState(false)
+
+  useEffect(() => {
+    setBoardTitle(boardDetails.boardTitle)
+    setrevertedTitle(boardDetails.boardTitle)
+
+    
+  }, [boardDetails.boardTitle])
 
   const handleDeleteBoard = async () => {
     const response = await fetch('api/boards/' + boardDetails._id, {
@@ -18,10 +29,27 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
       })
     }
   }
-  
 
-  return(<div className="board">
-    <h3>{boardDetails.boardTitle}</h3>
+  const handleTitleChange = async (event) => {
+    setIsTitleChanging(true);
+    const {value} = event.target;
+    
+    setBoardTitle(value);
+  }
+
+  const saveNewBoardTitle = async () => {
+    setIsTitleChanging(false);
+  }
+  
+  
+  return(
+  <div className="board">
+    <div className="board-title">
+      <input value={currentTitle} onChange={handleTitleChange}/>
+      {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
+    </div>
+    
+
     {boardDetails.tickets.map((ticket) => {
       return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails}/>)
     })}

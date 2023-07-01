@@ -42,12 +42,17 @@ header a {
   min-width: 300px;
   margin-left: 30px;
 }
-.board h3 {
-  margin: 0 0 10px 0;
+
+.board-title input {
+  margin-top: 20px;
+  margin-right: 0;
+  margin-left: 140px;
   font-size: 1.2em;
-  color: var(--primary);
+  color: #333;
   text-align: center;
+  border: 0;
 }
+
 .board button{
   margin-left: 20px;
 }
