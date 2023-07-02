@@ -2,6 +2,7 @@ import { useState } from "react";
 
 
 const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
+  
   const [ticketDetails, setTicketDetails] = useState({
     ticketTitle: '',
     ticketDescription: '',

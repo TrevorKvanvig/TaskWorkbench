@@ -118,7 +118,7 @@ const Dashboard = () => {
   const handleTicketModalClose = () => {
     // close ticket modal
     // reset board details
-    changeTicketModalState(false)
+    changeTicketModalState(false);
     setBoardDetails(null);
 
   }

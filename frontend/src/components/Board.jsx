@@ -9,10 +9,22 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
   const titleRef = useRef()
 
   // declare states
-  const [currentTitle, setBoardTitle] = useState(boardDetails.boardTitle)
-  const [isTitleChanging, setIsTitleChanging] = useState(false)
-  
+  const [currentTitle, setBoardTitle] = useState(boardDetails.boardTitle);
+  const [isTitleChanging, setIsTitleChanging] = useState(false);
+
   useEffect(() => {
+    const handleClickOutside = (e) => {
+
+      // when a click is detected 
+      // if it is not the title div
+      if (!titleRef.current.contains(e.target)) {
+        // set is title changing to false removing save button
+        setIsTitleChanging(false);
+        // set board title back to title in database
+        setBoardTitle(boardDetails.boardTitle)
+      }
+    };
+
     // set current title state to title from database 
     setBoardTitle(boardDetails.boardTitle)
     
@@ -22,17 +34,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
     
   }, [boardDetails.boardTitle])
 
-  const handleClickOutside = (e) => {
 
-    // when a click is detected 
-    // if it is not the title div
-    if (!titleRef.current.contains(e.target)) {
-      // set is title changing to false removing save button
-      setIsTitleChanging(false);
-      // set board title back to title in database
-      setBoardTitle(boardDetails.boardTitle)
-    }
-  };
 
   const handleDeleteBoard = async () => {
     // when the delete baord button in pressed
@@ -81,9 +83,6 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
       body: JSON.stringify(updatedTitle)
     })
 
-    // get response
-    const json = await response.json()
-
     // if sucessful 
     if(response.ok){  
       
@@ -114,6 +113,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
     <button onClick={() => {
       onTicketModalOpen(boardDetails)
     }}>ADD TICKET</button>
+    
     <button onClick={handleDeleteBoard}>Delete Entire Board</button>
     
   </div>);
