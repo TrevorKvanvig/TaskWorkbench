@@ -39,8 +39,6 @@ export const boardsReducer = (currentState, action) => {
       }
       case 'DELETE_TICKET':
         const { deletedTicket, boardID } = action.payload;
-        console.log("ticket passed =>", deletedTicket);
-        console.log("BoardID passed =>", boardID);
         const updatedState = currentState.boards.map(board => {
           if (board._id === boardID) {
             
@@ -56,8 +54,22 @@ export const boardsReducer = (currentState, action) => {
           ...currentState,
           boards: updatedState
         };
-    default:
-      return currentState
+
+      case 'UPDATE_BOARD_TITLE':
+        return{
+          boards: currentState.boards.map(board => {
+            if(board._id === action.payload.boardID){
+              return {...board,
+              boardTitle: action.payload.title}
+            }else{
+              return board
+            }
+            
+          })
+        }
+      
+      default:
+        return currentState
   }
   
   
