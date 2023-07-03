@@ -67,7 +67,66 @@ export const boardsReducer = (currentState, action) => {
             
           })
         }
-      
+      case 'UPDATE_TICKET_TITLE':
+        return {
+          boards: currentState.boards.map(board => {
+            if (board._id === action.payload.boardID) {
+              return {
+                ...board,
+                tickets: board.tickets.map(ticket => {
+                  if (ticket._id === action.payload.ticketID) {
+                    return {
+                      ...ticket,
+                      ticketTitle: action.payload.updateObject.ticketTitle
+                    };
+                  }
+                  return ticket;
+                })
+              };
+            }
+            return board;
+          })
+        }
+      case 'UPDATE_TICKET_DESC':
+        return {
+          boards: currentState.boards.map(board => {
+            if (board._id === action.payload.boardID) {
+              return {
+                ...board,
+                tickets: board.tickets.map(ticket => {
+                  if (ticket._id === action.payload.ticketID) {
+                    return {
+                      ...ticket,
+                      ticketDescription: action.payload.updateObject.ticketDescription
+                    };
+                  }
+                  return ticket;
+                })
+              };
+            }
+            return board;
+          })
+        }
+      case 'UPDATE_TICKET_PRI':
+        return {
+          boards: currentState.boards.map(board => {
+            if (board._id === action.payload.boardID) {
+              return {
+                ...board,
+                tickets: board.tickets.map(ticket => {
+                  if (ticket._id === action.payload.ticketID) {
+                    return {
+                      ...ticket,
+                      ticketPriority: action.payload.updateObject.ticketPriority
+                    };
+                  }
+                  return ticket;
+                })
+              };
+            }
+            return board;
+          })
+        }
       default:
         return currentState
   }

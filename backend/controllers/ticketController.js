@@ -109,35 +109,39 @@ const deleteTicketFromBoard = async (req, res) => {
 const updateTicketFromBoard = async (req, res) => {
   const { boardID, ticketID } = req.params;
 
-  //use mongoose function to see if id is valid
-  if(!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+  try {
+    //use mongoose function to see if id is valid
+    if(!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)){ // if not valid mongo ID
+      return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+    }
+
+    // find board and store in found board
+    const foundBoard = await boardCollection.findById(boardID);
+
+    // if found board does not exist
+    if (!foundBoard) {
+      return res.status(404).json({error: 'Board Does not exist'});
+    }
+
+    const foundTicket = foundBoard.tickets.id(ticketID);
+
+    if (!foundTicket) {
+      return res.status(404).json({error: 'Ticket Does not exist inside of board with id ' + boardID});
+    }
+
+
+    foundTicket.set({ ...req.body });
+
+    // Save the updated board to the database
+    await foundBoard.save();
+
+
+
+    // if everything is successful send board found as json
+    res.status(200).json( {mssg: 'UpdateTicket Sucessful', foundTicket});
+  } catch (error) {
+    res.status(500).json({error: 'Cant update'})
   }
-
-  // find board and store in found board
-  const foundBoard = await boardCollection.findById(boardID);
-
-  // if found board does not exist
-  if (!foundBoard) {
-    return res.status(404).json({error: 'Board Does not exist'});
-  }
-
-  const foundTicket = foundBoard.tickets.id(ticketID);
-
-  if (!foundTicket) {
-    return res.status(404).json({error: 'Ticket Does not exist inside of board with id ' + boardID});
-  }
-
-
-  foundTicket.set({ ...req.body });
-
-  // Save the updated board to the database
-  await foundBoard.save();
-
-
-
-  // if everything is successful send board found as json
-  res.status(200).json( {mssg: 'UpdateTicket Sucessful', foundTicket});
 }
 
 

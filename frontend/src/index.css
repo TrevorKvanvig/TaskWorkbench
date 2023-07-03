@@ -93,6 +93,9 @@ header a {
   z-index: 1000;
 }
 
+.modal input {
+  display: block;
+}
 .overlay-style {
   position: fixed;
   top: 0;

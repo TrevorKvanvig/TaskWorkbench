@@ -51,7 +51,7 @@ const Ticket = ({ticket, boardDetails}) => {
     <p>{formatDistanceToNow(new Date(ticket.createdAt), {addSuffix: true}) }</p>
     <button name="delete-button" onClick={handleDeleteTicket}>DELETE</button>
   </div>
-  {isTicketOpen && <TicketDetails ticketDetails={ticket} onClose={handleTicketClose} />}
+  {isTicketOpen && <TicketDetails ticketDetails={ticket} onClose={handleTicketClose} boardID={boardDetails._id} />}
   
   </>);
 
