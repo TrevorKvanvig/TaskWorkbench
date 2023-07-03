@@ -13,11 +13,11 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
   const [isTitleChanging, setIsTitleChanging] = useState(false);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const handleClickOutside = (event) => {
 
       // when a click is detected 
       // if it is not the title div
-      if (!titleRef.current.contains(e.target)) {
+      if (!titleRef.current.contains(event.target)) {
         // set is title changing to false removing save button
         setIsTitleChanging(false);
         // set board title back to title in database
@@ -30,7 +30,10 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
     
     // create a listener for the entire dom that will detect clicks and call function
     document.addEventListener('mousedown', handleClickOutside)
-
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
     
   }, [boardDetails.boardTitle])
 
@@ -113,7 +116,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
     <button onClick={() => {
       onTicketModalOpen(boardDetails)
     }}>ADD TICKET</button>
-    
+
     <button onClick={handleDeleteBoard}>Delete Entire Board</button>
     
   </div>);
