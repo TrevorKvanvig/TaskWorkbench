@@ -1,4 +1,3 @@
-import lightFormat from 'date-fns/esm/fp/lightFormat/index.js';
 import React, { useRef, useEffect, useState }  from 'react'
 import { useBoardsContext } from '../hooks/useBoardsContext';
 
@@ -29,19 +28,19 @@ const TicketDetails = ({ticketDetails, onClose, boardID}) => {
         onClose();
       }
       if (titleRef.current && !titleRef.current.contains(event.target)) {
-        console.log("clicked outside title");
+        
         setCurrentTitle(ticketDetails.ticketTitle);
         setTitleChanging(false);
 
       }
       if (descRef.current && !descRef.current.contains(event.target)) {
-        console.log("clicked outside Desc");
+      
         setCurrentDesc(ticketDetails.ticketDescription);
         setDescChanging(false);
 
       }
       if (priRef.current && !priRef.current.contains(event.target)) {
-        console.log("clicked outside Pri");
+      
         setCurrentPri(ticketDetails.ticketPriority);
         setPriChanging(false);
       }
@@ -52,7 +51,7 @@ const TicketDetails = ({ticketDetails, onClose, boardID}) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [modalRef.current, titleRef.current, priRef.current, descRef.current]);
+  }, [onClose,ticketDetails.ticketDescription, ticketDetails.ticketPriority, ticketDetails.ticketTitle]);
 
   const handleChange = (event) => {
     const {name, value} = event.target;
@@ -73,7 +72,8 @@ const TicketDetails = ({ticketDetails, onClose, boardID}) => {
 
   // functions to update database
   const handleUpdateTicketTitle = async () => {
-    console.log('Clicked');
+    setCurrentTitle(currentTitle)
+  
     const updateObject = {
       ticketTitle: currentTitle
     }
@@ -103,7 +103,8 @@ const TicketDetails = ({ticketDetails, onClose, boardID}) => {
   }
 
   const handleUpdateTicketPriority = async () => {
-    console.log('Clicked');
+    setCurrentPri(currentPri)
+  
     const updateObject = {
       ticketPriority: currentPri
     }
@@ -133,7 +134,8 @@ const TicketDetails = ({ticketDetails, onClose, boardID}) => {
   }
 
   const handleUpdateTicketDescription = async () => {
-    console.log('Clicked');
+    setCurrentDesc(currentDesc);
+
     const updateObject = {
       ticketDescription: currentDesc
     }
