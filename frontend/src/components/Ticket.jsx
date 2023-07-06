@@ -40,7 +40,6 @@ const Ticket = ({ticket, boardDetails}) => {
   }
 
   const handleTicketClose = () => {
-    console.log('clicked close button');
     setTicketOpen(false)
   }
 

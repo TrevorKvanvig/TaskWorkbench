@@ -1,8 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 
 const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
-  
+  const ticketModalRef = useRef();
+
+  useEffect(() => {
+
+    const handleClickOutside = (event) => {
+      // if user clicks outside of form close modal
+      if(ticketModalRef.current && !ticketModalRef.current.contains(event.target)){
+        onClose();
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.addEventListener('mousedown', handleClickOutside);
+    } 
+  }, [onClose]);
+
   const [ticketDetails, setTicketDetails] = useState({
     ticketTitle: '',
     ticketDescription: '',
@@ -22,7 +39,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
   return(
     <>
       <div className='overlay-style'></div>
-      <form className="add-board-modal modal">
+      <form className="add-board-modal modal" ref={ticketModalRef}>
       <h2>Add New Ticket to "{boardDetails.boardTitle}"</h2>
       
       <label htmlFor="ticket-title">New Ticket Title</label>
