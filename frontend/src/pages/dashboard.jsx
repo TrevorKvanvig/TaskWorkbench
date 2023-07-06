@@ -1,5 +1,6 @@
 import { useBoardsContext } from '../hooks/useBoardsContext' 
 import { useEffect, useState } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
@@ -129,25 +130,36 @@ const Dashboard = () => {
     setBoardDetails(boardDetails);
     changeTicketModalState(true);
   }
+
+  const handleDragEnd = (result) => {
+    const { destination, source, draggavleId } = result;
+
+    // if place item is grabbed fro  is the same as where it was placed do nothing
+    if (source.droppableId == destination.droppableId) return;
+
+    
+  }
   
   return (
     <>
-      
+      <DragDropContext onDragEnd={handleDragEnd}>
       <div className="board-container">
         <button onClick={handleBoardModalOpen}>Add Board</button>
         {boards && boards.map((board) => {
           return(<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen}/>);
         })}
       </div>
+      </DragDropContext>
+      
+
+
+
 
       {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal 
       onClose={handleTicketModalClose} 
       onSubmit={handleAddTicket} 
       boardDetails={ticketsBoardDetails}
       />}
-
-      
-
       {isBoardModalOpen && <AddBoardModal 
       onClose={handleBoardModalClose} 
       onSubmit={handleAddBoard} 
