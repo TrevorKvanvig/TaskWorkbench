@@ -127,6 +127,8 @@ export const boardsReducer = (currentState, action) => {
             return board;
           })
         }
+      case 'ADD_TICKET_AT_INDEX':
+        
       default:
         return currentState
   }

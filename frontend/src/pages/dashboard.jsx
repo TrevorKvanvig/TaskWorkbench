@@ -1,6 +1,6 @@
 import { useBoardsContext } from '../hooks/useBoardsContext' 
 import { useEffect, useState } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext, resetServerContext } from 'react-beautiful-dnd'
 
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
@@ -131,13 +131,55 @@ const Dashboard = () => {
     changeTicketModalState(true);
   }
 
+  const findTicketInDOM = (sourceBoardID, draggableId ) => {
+    const boardWhereTicketMovedFrom = boards.find((board) => board._id === sourceBoardID)
+    console.log(boardWhereTicketMovedFrom);
+
+    console.log(draggableId);
+    const ticketDragged = boardWhereTicketMovedFrom.tickets.find(ticket => ticket._id === draggableId)
+
+    return ticketDragged
+  }
+
   const handleDragEnd = (result) => {
-    const { destination, source, draggavleId } = result;
+    console.log("restult =>", result);
+    const { destination, source, draggableId } = result;
+    const sourceBoardID = source.droppableId;
+    const destinationBoardID = destination.droppableId;
+
+    console.log("source board ID: ",sourceBoardID);
+    console.log("destination board id", destinationBoardID);
 
     // if place item is grabbed fro  is the same as where it was placed do nothing
-    if (source.droppableId == destination.droppableId) return;
+    if (source.droppableId === destination.droppableId){
+      console.log('dropped in same Board');
+      return;
 
-    
+
+    } else {
+      console.log('dropped in different board');
+      // steps
+      // 1. find ticket in boards database and store it
+      const ticketDragged = findTicketInDOM(sourceBoardID, draggableId);
+      console.log(ticketDragged);
+      
+      
+      // 2. remove ticket from souce board
+      const deletedTicket = {
+        foundTicket: ticketDragged
+      }
+
+      dispatch({
+        type: 'DELETE_TICKET',
+        payload: {
+          deletedTicket, 
+          boardID: sourceBoardID
+        }
+      })
+      // 3. add it into destination board at correct index
+    }
+
+
   }
   
   return (
