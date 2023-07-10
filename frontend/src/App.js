@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/dashboard';
 
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -11,7 +12,11 @@ function App() {
         <Routes>
           <Route
           path="/"
-          element={<Dashboard />}
+          element={
+        
+            <Dashboard />
+        
+          }
           />
         </Routes>
       </div>

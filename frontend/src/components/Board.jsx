@@ -1,6 +1,7 @@
 import Ticket from "./Ticket";
 import { useBoardsContext } from "../hooks/useBoardsContext";
 import { useEffect, useState, useRef } from "react";
+import { Droppable } from "react-beautiful-dnd";
 
 
 
@@ -108,18 +109,28 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
       <input value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
     </div>
-    
+    <Droppable droppableId={boardDetails._id}>
+      {(provided, snapshot) => (
+        <div ref={provided.innerRef} {...provided.droppableProps} >
+          {
+            boardDetails.tickets.map((ticket, index) => {
+            return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails} index={index}/>)
+            })
+          }
 
-    {boardDetails.tickets.map((ticket) => {
-      return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails}/>)
-    })}
-    <button onClick={() => {
-      onTicketModalOpen(boardDetails)
-    }}>ADD TICKET</button>
+          <button onClick={() => {
+            onTicketModalOpen(boardDetails)
+          }}>ADD TICKET</button>
 
-    <button onClick={handleDeleteBoard}>Delete Entire Board</button>
-    
-  </div>);
+          <button onClick={handleDeleteBoard}>Delete Entire Board</button>
+          
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+
+  </div>
+  );
   
 }
 

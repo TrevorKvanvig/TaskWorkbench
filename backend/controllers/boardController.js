@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const getAllBoards = async (req, res) => {
   // get boards from database
-  const allBoards = await boardCollection.find({}).sort({createdAt: 1});
+  const allBoards = await boardCollection.find({});
   
   // send boards as json data
   res.status(200).json(allBoards);
