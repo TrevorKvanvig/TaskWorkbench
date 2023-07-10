@@ -1,4 +1,4 @@
-import { useBoardsContext } from '../hooks/useBoardsContext' 
+import { useBoardsContext } from '../hooks/useBoardsContext'
 import { useEffect, useState } from 'react';
 import { DragDropContext, resetServerContext } from 'react-beautiful-dnd'
 
@@ -6,28 +6,29 @@ import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
 import formatRelativeWithOptions from 'date-fns/esm/fp/formatRelativeWithOptions/index.js';
+import { add } from 'date-fns';
 
 
 const Dashboard = () => {
   // current state of boards
-  const {boards, dispatch} = useBoardsContext();
+  const { boards, dispatch } = useBoardsContext();
 
   // use states
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
   const [ticketsBoardDetails, setBoardDetails] = useState(null)
 
-  
+
   // Whenever dasboard gets loaded run this function once
   useEffect(() => {
-    
+
     const getBoardsfromDB = async () => {
       //get response object
       const response = await fetch('/api/boards');
       // get boards from the response object
       const allBoards = await response.json();
-      
-      if(!allBoards.ok){
+
+      if (!allBoards.ok) {
         dispatch({
           type: 'SET_BOARDS',
           payload: allBoards
@@ -41,11 +42,11 @@ const Dashboard = () => {
 
   }, [dispatch])
 
-  
+
   const handleAddBoard = async (boardTitle) => {
     // close board modal
     changeBoardModalState(false);
-    
+
     //create new board to pass into database
     const newBoard = {
       boardTitle: boardTitle
@@ -64,13 +65,13 @@ const Dashboard = () => {
     const boardAdded = await response.json()
 
     // if board sucessfuly added to database
-    if(response.ok) {
+    if (response.ok) {
       // change current state of boards on dom using board contex
       dispatch({
         type: 'ADD_BOARD',
         payload: boardAdded
       })
-    }else{
+    } else {
       console.log("error getting add board resopnse");
     }
   }
@@ -102,7 +103,7 @@ const Dashboard = () => {
     const ticketAdded = await response.json()
 
     // if sucessfully added
-    if(response.ok) {
+    if (response.ok) {
       // add ticked into correct board to dom
       dispatch({
         type: 'ADD_TICKET',
@@ -132,7 +133,7 @@ const Dashboard = () => {
     changeTicketModalState(true);
   }
 
-  const findTicketInDOM = (sourceBoardID, draggableId ) => {
+  const findTicketInDOM = (sourceBoardID, draggableId) => {
     const boardWhereTicketMovedFrom = boards.find((board) => board._id === sourceBoardID)
     console.log(boardWhereTicketMovedFrom);
 
@@ -150,95 +151,78 @@ const Dashboard = () => {
     console.log(result);
 
     // if place item is grabbed fro  is the same as where it was placed do nothing
-    if (source.droppableId === destination.droppableId && source.index === destination.index){
-      console.log('dropped in same Board');
+    if (source.droppableId === destination.droppableId && source.index === destination.index) {
+      console.log('dropped in same Place');
       return;
-
-
     } else {
       console.log('dropped in different board');
       // steps
       // 1. find ticket in boards database and store it
       const ticketDragged = findTicketInDOM(sourceBoardID, draggableId);
       console.log(ticketDragged);
-      
-      
-      // 2. remove ticket from souce board
-      
 
-      const response = await fetch('api/boards/' + sourceBoardID + "/" + draggableId, {
+
+      // 2. remove ticket from souce board ===============
+      const deletedTicket = {
+        foundTicket: ticketDragged
+      }
+      dispatch({
+        type: 'MOVE_TICKET',
+        payload: {
+          deletedTicket,
+          sourceBoardID,
+          destinationBoardID,
+          index: destination.index
+        }
+      });
+      const response = await fetch('api/boards/' + sourceBoardID + '/' + draggableId, {
         method: 'DELETE'
       })
-
-      const deletedTicket = await response.json()
-  
-      if (response.ok) {
-        dispatch({
-          type: 'DELETE_TICKET',
-          payload: {
-            deletedTicket, 
-            boardID: sourceBoardID
-          }
-        })
-      }else {
-        console.log(deletedTicket.error);
+      if (!response.ok) {
+        console.log(response.json.error);
       }
 
-      // 3. add it into destination board at correct index
-      const responseWithIndex = await fetch('api/boards/' + destinationBoardID + "/" + draggableId + '?index=' + destination.index, {
+
+      // 3. add ticket at correct index ===============
+      const addTicketResponse = await fetch('api/boards/' + destinationBoardID + '?index=' + destination.index, {
         method: 'POST',
-        body: JSON.stringify(deletedTicket),
+        body: JSON.stringify(ticketDragged),
         headers: {
           "Content-Type": 'application/json'
         }
-      })
-
-      const addedTicket = await responseWithIndex.json()
-
-      if(responseWithIndex.ok){
-        dispatch({
-          type: 'ADD_TICKET_AT_INDEX',
-          payload: {
-            ticketAdded: ticketDragged,
-            boardID: destinationBoardID,
-            index: destination.index
-          }
-        });
-      } else {
-        console.log(addedTicket.error);
+      });
+      if (!addTicketResponse) {
+        console.log(addTicketResponse.json.error)
       }
-      
     }
-    
-
   }
-  
+
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="board-container">
-        <button onClick={handleBoardModalOpen}>Add Board</button>
-        {boards && boards.map((board) => {
-          return(<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen}/>);
-        })}
-      </div>
+        <div className="board-container">
+          <button onClick={handleBoardModalOpen}>Add Board</button>
+          {boards && boards.map((board) => {
+            return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
+          })}
+        </div>
       </DragDropContext>
-      
 
 
 
 
-      {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal 
-      onClose={handleTicketModalClose} 
-      onSubmit={handleAddTicket} 
-      boardDetails={ticketsBoardDetails}
+
+      {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal
+        onClose={handleTicketModalClose}
+        onSubmit={handleAddTicket}
+        boardDetails={ticketsBoardDetails}
       />}
-      {isBoardModalOpen && <AddBoardModal 
-      onClose={handleBoardModalClose} 
-      onSubmit={handleAddBoard} 
+      {isBoardModalOpen && <AddBoardModal
+        onClose={handleBoardModalClose}
+        onSubmit={handleAddBoard}
       />}
     </>
-    
+
   );
 }
 
