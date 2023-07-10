@@ -50,7 +50,8 @@ const Ticket = ({ ticket, boardDetails, index }) => {
     <>
       <Draggable draggableId={`${ticket._id}`} key={ticket._id} index={index}>
         {(provided, snapshot) => (
-          <div className="ticket" onClick={handleTicketClick}
+          <>
+            <div className="ticket" onClick={handleTicketClick}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
@@ -58,10 +59,13 @@ const Ticket = ({ ticket, boardDetails, index }) => {
             <h4>{ticket.ticketTitle}</h4>
             <p>{formatDistanceToNow(new Date(ticket.createdAt), { addSuffix: true })}</p>
             <button name="delete-button" onClick={handleDeleteTicket}>DELETE</button>
+            </div>
+            
             {provided.placeholder}
-          </div>
+          </>
+          
         )}
-
+        
       </Draggable>
 
 

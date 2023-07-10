@@ -144,10 +144,15 @@ const updateTicketFromBoard = async (req, res) => {
   }
 }
 
+const addTicketAtIndex = async(req, res) => {
+  const { boardID, ticketID, index } = req.params;
+}
+
 
 module.exports = {
   addTicketToBoard,
   getTicketFromBoard,
   deleteTicketFromBoard,
-  updateTicketFromBoard
+  updateTicketFromBoard,
+  addTicketAtIndex
 }

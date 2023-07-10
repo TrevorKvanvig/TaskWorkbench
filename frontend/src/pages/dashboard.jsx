@@ -5,6 +5,7 @@ import { DragDropContext, resetServerContext } from 'react-beautiful-dnd'
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
+import formatRelativeWithOptions from 'date-fns/esm/fp/formatRelativeWithOptions/index.js';
 
 
 const Dashboard = () => {
@@ -148,10 +149,13 @@ const Dashboard = () => {
     const destinationBoardID = destination.droppableId;
 
     console.log("source board ID: ",sourceBoardID);
+    console.log("souce index", source.index);
     console.log("destination board id", destinationBoardID);
+    console.log('destination index', destination.index);
+    console.log(result);
 
     // if place item is grabbed fro  is the same as where it was placed do nothing
-    if (source.droppableId === destination.droppableId){
+    if (source.droppableId === destination.droppableId && source.index === destination.index){
       console.log('dropped in same Board');
       return;
 
@@ -177,8 +181,16 @@ const Dashboard = () => {
         }
       })
       // 3. add it into destination board at correct index
+      dispatch({
+        type: 'ADD_TICKET_AT_INDEX',
+        payload: {
+          ticketAdded: ticketDragged,
+          boardID: destinationBoardID,
+          index: destination.index
+        }
+      });
     }
-
+    
 
   }
   

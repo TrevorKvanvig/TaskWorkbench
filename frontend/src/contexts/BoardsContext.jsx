@@ -128,7 +128,21 @@ export const boardsReducer = (currentState, action) => {
           })
         }
       case 'ADD_TICKET_AT_INDEX':
-        
+        console.log(action.payload.boardID, action.payload.ticketAdded, action.payload.index );
+        return {
+          boards: currentState.boards.map(board => {
+            if (board._id === action.payload.boardID) {
+              const updatedTickets = [...board.tickets];
+              updatedTickets.splice(action.payload.index, 0, action.payload.ticketAdded);
+      
+              return {
+                ...board,
+                tickets: updatedTickets
+              };
+            }
+            return board;
+          })
+        };
       default:
         return currentState
   }
