@@ -3,51 +3,55 @@ const boardCollection = require('../mongoose_models/board_model');
 
 const addTicketToBoard = async (req, res) => {
   const { boardID } = req.params;
+  const index = req.query.index;
+
   const { ticketTitle, ticketDescription, ticketPriority } = req.body;
 
-  //use mongoose function to see if id is valid
-  if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
-  }
-
-  // find board and store in found board
-  const foundBoard = await boardCollection.findById(boardID);
-
-  // if found board does not exist
-  if (!foundBoard) {
-    return res.status(404).json({error: 'Board Does not exist'});
+  if (!mongoose.Types.ObjectId.isValid(boardID)) {
+    return res.status(404).json({ error: 'Not MongoDB Id Format' });
   }
 
   try {
+    const foundBoard = await boardCollection.findById(boardID);
+
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board Does not exist' });
+    }
 
     const newTicket = {
       ticketTitle,
       ticketDescription,
       ticketPriority,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
-    foundBoard.tickets.push(newTicket);
+    if (!index) {
+      // No index specified, push the ticket to the end
+      foundBoard.tickets.push(newTicket);
+    } else {
+      // Index specified, insert the ticket at the specified index
+      const parsedIndex = parseInt(index);
+      foundBoard.tickets.splice(parsedIndex, 0, newTicket);
+    }
 
-    updatedBoard = await foundBoard.save();
+    const updatedBoard = await foundBoard.save();
 
     // Get the ID of the newly created ticket
     const newTicketID = updatedBoard.tickets[updatedBoard.tickets.length - 1]._id;
 
     // Return the newly added ticket with its ID
     res.status(200).json({ ...newTicket, _id: newTicketID });
-
   } catch (error) {
-    res.status(400).json({error: error.message})
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
 const getTicketFromBoard = async (req, res) => {
   const { boardID, ticketID } = req.params;
 
   //use mongoose function to see if id is valid
-  if(!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+  if (!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)) { // if not valid mongo ID
+    return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
   }
 
   // find board and store in found board
@@ -55,13 +59,13 @@ const getTicketFromBoard = async (req, res) => {
 
   // if found board does not exist
   if (!foundBoard) {
-    return res.status(404).json({error: 'Board Does not exist'});
+    return res.status(404).json({ error: 'Board Does not exist' });
   }
 
   const foundTicket = foundBoard.tickets.id(ticketID);
 
   if (!foundTicket) {
-    return res.status(404).json({error: 'Ticket Does not exist inside of board with id ' + boardID});
+    return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
   }
 
   // if everything is successful send board found as json
@@ -73,20 +77,20 @@ const deleteTicketFromBoard = async (req, res) => {
   const { boardID, ticketID } = req.params;
 
   //use mongoose function to see if id is valid
-  if(!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+  if (!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)) { // if not valid mongo ID
+    return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
   }
 
   // find board and store in found board
   const foundBoard = await boardCollection.findById(boardID);
   // if found board does not exist
   if (!foundBoard) {
-    return res.status(404).json({error: 'Board Does not exist'});
+    return res.status(404).json({ error: 'Board Does not exist' });
   }
 
   const foundTicket = foundBoard.tickets.id(ticketID);
   if (!foundTicket) {
-    return res.status(404).json({error: 'Ticket Does not exist inside of board with id ' + boardID});
+    return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
   }
 
   // Find the index of the ticket within the board's tickets array
@@ -111,8 +115,8 @@ const updateTicketFromBoard = async (req, res) => {
 
   try {
     //use mongoose function to see if id is valid
-    if(!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)){ // if not valid mongo ID
-      return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+    if (!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)) { // if not valid mongo ID
+      return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
     }
 
     // find board and store in found board
@@ -120,13 +124,13 @@ const updateTicketFromBoard = async (req, res) => {
 
     // if found board does not exist
     if (!foundBoard) {
-      return res.status(404).json({error: 'Board Does not exist'});
+      return res.status(404).json({ error: 'Board Does not exist' });
     }
 
     const foundTicket = foundBoard.tickets.id(ticketID);
 
     if (!foundTicket) {
-      return res.status(404).json({error: 'Ticket Does not exist inside of board with id ' + boardID});
+      return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
     }
 
 
@@ -138,15 +142,12 @@ const updateTicketFromBoard = async (req, res) => {
 
 
     // if everything is successful send board found as json
-    res.status(200).json( {mssg: 'UpdateTicket Sucessful', foundTicket});
+    res.status(200).json({ mssg: 'UpdateTicket Sucessful', foundTicket });
   } catch (error) {
-    res.status(500).json({error: 'Cant update'})
+    res.status(500).json({ error: 'Cant update' })
   }
 }
 
-const addTicketAtIndex = async(req, res) => {
-  const { boardID, ticketID, index } = req.params;
-}
 
 
 module.exports = {
@@ -154,5 +155,4 @@ module.exports = {
   getTicketFromBoard,
   deleteTicketFromBoard,
   updateTicketFromBoard,
-  addTicketAtIndex
 }

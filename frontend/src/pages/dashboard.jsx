@@ -142,16 +142,11 @@ const Dashboard = () => {
     return ticketDragged
   }
 
-  const handleDragEnd = (result) => {
-    console.log("restult =>", result);
+  const handleDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
     const sourceBoardID = source.droppableId;
     const destinationBoardID = destination.droppableId;
 
-    console.log("source board ID: ",sourceBoardID);
-    console.log("souce index", source.index);
-    console.log("destination board id", destinationBoardID);
-    console.log('destination index', destination.index);
     console.log(result);
 
     // if place item is grabbed fro  is the same as where it was placed do nothing
@@ -169,26 +164,50 @@ const Dashboard = () => {
       
       
       // 2. remove ticket from souce board
-      const deletedTicket = {
-        foundTicket: ticketDragged
+      
+
+      const response = await fetch('api/boards/' + sourceBoardID + "/" + draggableId, {
+        method: 'DELETE'
+      })
+
+      const deletedTicket = await response.json()
+  
+      if (response.ok) {
+        dispatch({
+          type: 'DELETE_TICKET',
+          payload: {
+            deletedTicket, 
+            boardID: sourceBoardID
+          }
+        })
+      }else {
+        console.log(deletedTicket.error);
       }
 
-      dispatch({
-        type: 'DELETE_TICKET',
-        payload: {
-          deletedTicket, 
-          boardID: sourceBoardID
+      // 3. add it into destination board at correct index
+      const responseWithIndex = await fetch('api/boards/' + destinationBoardID + "/" + draggableId + '?index=' + destination.index, {
+        method: 'POST',
+        body: JSON.stringify(deletedTicket),
+        headers: {
+          "Content-Type": 'application/json'
         }
       })
-      // 3. add it into destination board at correct index
-      dispatch({
-        type: 'ADD_TICKET_AT_INDEX',
-        payload: {
-          ticketAdded: ticketDragged,
-          boardID: destinationBoardID,
-          index: destination.index
-        }
-      });
+
+      const addedTicket = await responseWithIndex.json()
+
+      if(responseWithIndex.ok){
+        dispatch({
+          type: 'ADD_TICKET_AT_INDEX',
+          payload: {
+            ticketAdded: ticketDragged,
+            boardID: destinationBoardID,
+            index: destination.index
+          }
+        });
+      } else {
+        console.log(addedTicket.error);
+      }
+      
     }
     
 

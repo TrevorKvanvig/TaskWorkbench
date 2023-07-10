@@ -57,6 +57,5 @@ router.route('/:boardID/:ticketID')
   .patch(updateTicketFromBoard)
   // allow routes to be used in other files
 
-router.route('/:boardID/:ticketID/:index')
-  .patch(addTicketAtIndex)
+
 module.exports = router;
