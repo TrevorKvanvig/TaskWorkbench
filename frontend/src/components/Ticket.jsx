@@ -46,28 +46,47 @@ const Ticket = ({ ticket, boardDetails, index }) => {
     setTicketOpen(false)
   }
 
+  const ticketStyle = {
+    backgroundColor: "#1aac83",
+    marginLeft: "20px",
+    marginRight: "20px",
+    marginBottom: "0px",
+    marginTop: "0px",
+  
+    borderRadius: "10px",
+  }
+
   return (
     <>
       <Draggable draggableId={`${ticket._id}`} key={ticket._id} index={index}>
-        {(provided, snapshot) => (
-          <>
-            <div className="ticket" onClick={handleTicketClick}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
-            <h4>{ticket.ticketTitle}</h4>
-            <p>{formatDistanceToNow(new Date(ticket.createdAt), { addSuffix: true })}</p>
-            <button name="delete-button" onClick={handleDeleteTicket}>DELETE</button>
-            </div>
-            
-            {provided.placeholder}
-          </>
-          
-        )}
-        
-      </Draggable>
-
+  {(provided, snapshot) => (
+    <>
+      <div
+        className="ticket"
+        onClick={handleTicketClick}
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        style={{
+          backgroundColor: "#1aac83",
+          marginLeft: "20px",
+          marginRight: "20px",
+          marginBottom: "0px",
+          marginTop: "0px",
+          borderRadius: "10px",
+          ...provided.draggableProps.style 
+        }}
+      >
+        <h4 style={{textAlign: 'center'}}>{ticket.ticketTitle}</h4>
+        <p>{formatDistanceToNow(new Date(ticket.createdAt), { addSuffix: true })}</p>
+        <button style={{textAlign: 'center'}} name="delete-button" onClick={handleDeleteTicket}>
+          DELETE
+        </button>
+      </div>
+      {provided.placeholder}
+    </>
+  )}
+</Draggable>
 
 
 
