@@ -16,7 +16,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
 
-      // when a click is detected 
+      // when a click is detected outside
       // if it is not the title div
       if (!titleRef.current.contains(event.target)) {
         // set is title changing to false removing save button

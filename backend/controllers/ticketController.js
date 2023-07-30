@@ -17,7 +17,6 @@ const addTicketToBoard = async (req, res) => {
     if (!foundBoard) {
       return res.status(404).json({ error: 'Board Does not exist' });
     }
-     // create new ticket in correct format required for mongo db
     const newTicket = {
       ticketTitle,
       ticketDescription,
