@@ -103,6 +103,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
     setIsTitleChanging(false);
   }
   
+  // return this jsx code to browser
   return(
   <div className="board">
     <div className="board-title" ref={titleRef}>
