@@ -119,17 +119,17 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
             })
           }
 
-          <button onClick={() => {
-            onTicketModalOpen(boardDetails)
-          }}>ADD TICKET</button>
-
-          <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
+          
           
           {provided.placeholder}
         </div>
+        
       )}
     </Droppable>
-
+    <button onClick={() => {
+            onTicketModalOpen(boardDetails)
+    }}>ADD TICKET</button>
+    <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
   </div>
   );
   
