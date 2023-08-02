@@ -198,6 +198,7 @@ const Dashboard = () => {
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
+      <div className='grid'>
         <div className="board-container">
           {boards && boards.map((board) => {
             return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
@@ -206,6 +207,9 @@ const Dashboard = () => {
             <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
           </div>
         </div>
+        <div className='hit-bottom'></div>
+      </div>
+        
       </DragDropContext>
 
       {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal

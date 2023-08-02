@@ -7,6 +7,9 @@ const Navbar = () => {
         <Link to='/'>
           <h1>Task Workbench</h1>
         </Link>
+        <div className='navbar-right'>
+          <h3><a>LOGOUT</a></h3>
+        </div>
       </div>
     </header>
     

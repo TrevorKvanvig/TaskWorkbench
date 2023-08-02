@@ -126,10 +126,13 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
         
       )}
     </Droppable>
-    <button onClick={() => {
+    <div className="end-board-buttons">
+      <button onClick={() => {
             onTicketModalOpen(boardDetails)
     }}>ADD TICKET</button>
     <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
+    </div>
+    
   </div>
   );
   
