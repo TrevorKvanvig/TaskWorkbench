@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState }  from 'react'
 import { useBoardsContext } from '../hooks/useBoardsContext';
-
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const TicketDetails = ({ticketDetails, onClose, boardID}) => {
   const {dispatch} = useBoardsContext()
@@ -185,7 +185,7 @@ const TicketDetails = ({ticketDetails, onClose, boardID}) => {
       <input name="currentPri" value={currentPri} onChange={handleChange}/>
       {ispriChanging && <button onClick={handleUpdateTicketPriority}>Save New Priority</button>}
     </div>
-    
+    <p className='ticket-edited'>{formatDistanceToNow(new Date(ticketDetails.createdAt), { addSuffix: true })}</p>
     <button onClick={onClose}>close</button>
   </div>
   </>

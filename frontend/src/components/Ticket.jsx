@@ -1,4 +1,4 @@
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+
 import { useBoardsContext } from '../hooks/useBoardsContext';
 import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -67,19 +67,10 @@ const Ticket = ({ ticket, boardDetails, index }) => {
         ref={provided.innerRef}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
-        style={{
-          backgroundColor: "#1aac83",
-          marginLeft: "20px",
-          marginRight: "20px",
-          marginBottom: "0px",
-          marginTop: "0px",
-          borderRadius: "10px",
-          ...provided.draggableProps.style 
-        }}
       >
-        <h4 style={{textAlign: 'center'}}>{ticket.ticketTitle}</h4>
-        <p>{formatDistanceToNow(new Date(ticket.createdAt), { addSuffix: true })}</p>
-        <button style={{textAlign: 'center'}} name="delete-button" onClick={handleDeleteTicket}>
+        <h4 className='ticket-title'>{ticket.ticketTitle}</h4>
+
+        <button className="ticket-delete" name="delete-button" onClick={handleDeleteTicket}>
           DELETE
         </button>
       </div>

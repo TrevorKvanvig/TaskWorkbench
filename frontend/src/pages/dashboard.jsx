@@ -1,6 +1,6 @@
 import { useBoardsContext } from '../hooks/useBoardsContext'
 import { useEffect, useState } from 'react';
-import { DragDropContext} from 'react-beautiful-dnd'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
@@ -199,16 +199,14 @@ const Dashboard = () => {
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="board-container">
-          <button onClick={handleBoardModalOpen}>Add Board</button>
           {boards && boards.map((board) => {
             return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
           })}
+          <div className='add-board-btn-container'>
+            <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
+          </div>
         </div>
       </DragDropContext>
-
-
-
-
 
       {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal
         onClose={handleTicketModalClose}

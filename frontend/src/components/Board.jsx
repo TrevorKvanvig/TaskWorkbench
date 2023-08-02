@@ -107,7 +107,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
   return(
   <div className="board">
     <div className="board-title" ref={titleRef}>
-      <input value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
+      <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
     </div>
     <Droppable droppableId={boardDetails._id}>
@@ -123,7 +123,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
             onTicketModalOpen(boardDetails)
           }}>ADD TICKET</button>
 
-          <button onClick={handleDeleteBoard}>Delete Entire Board</button>
+          <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
           
           {provided.placeholder}
         </div>
