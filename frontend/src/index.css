@@ -44,14 +44,12 @@ header a {
 
 .grid {
   display: grid;
-  grid-template-rows: 10fr 1fr;
-  height: 89vh;
+  grid-template-rows: auto 1fr;
+  
 }
 
 .board-container {
-  background-color: #1aac83;
   display: flex;
-  
   justify-content: stretch;
   flex-wrap: nowrap;
   align-items: flex-start;
