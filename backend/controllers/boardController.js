@@ -1,4 +1,4 @@
-const boardCollection = require('../mongoose_models/board_model');
+const boardCollection = require('../mongooseModels/boardModel');
 const mongoose = require('mongoose');
 
 

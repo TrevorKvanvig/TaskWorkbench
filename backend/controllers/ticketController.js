@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const boardCollection = require('../mongoose_models/board_model');
+const boardCollection = require('../mongooseModels/boardModel');
 
 const addTicketToBoard = async (req, res) => {
   const { boardID } = req.params;
