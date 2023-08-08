@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 
 //============== Routes =================
 // use routes from board routes when requests are made
-app.use('/api', boardRoutes);
+app.use('/api/boards', boardRoutes);
 app.use('/api/users', userRoutes);
 
 //============== Body =================

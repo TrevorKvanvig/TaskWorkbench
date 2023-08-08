@@ -1,4 +1,4 @@
-const boardsSchema = require('./boardModel');
+const teamSchema = require('./teamModel');
 const mongoose = require('mongoose');
 
 
@@ -14,7 +14,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    boards: [boardsSchema]
+    teams: [teamSchema]
   },
 );
 
