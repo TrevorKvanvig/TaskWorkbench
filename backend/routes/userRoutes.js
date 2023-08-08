@@ -1,5 +1,5 @@
 const {getAllUsers, addUser, getSingleUser, deleteUser} = require('../controllers/userController')
-const {addTeamToUser, deleteTeam} = require('../controllers/teamController')
+const {addTeamToUser, deleteTeam, updateTeamTitle, getTeam} = require('../controllers/teamController')
 const express = require('express');
 
 // alows router functionality
@@ -21,4 +21,6 @@ router.route('/:userID')
 
 router.route('/:userID/:teamID')
 .delete(deleteTeam)
+.patch(updateTeamTitle)
+.get(getTeam)
 module.exports = router;

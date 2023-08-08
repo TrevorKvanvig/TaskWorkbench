@@ -138,8 +138,6 @@ const updateTicketFromBoard = async (req, res) => {
     // Save the updated board to the database
     await foundBoard.save();
 
-
-
     // if everything is successful send board found as json
     res.status(200).json({ mssg: 'UpdateTicket Sucessful', foundTicket });
   } catch (error) {

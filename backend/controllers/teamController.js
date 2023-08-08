@@ -58,9 +58,74 @@ const deleteTeam = async (req, res) => {
   }
 };
 
+const updateTeamTitle = async (req, res) => {
+  const { userID, teamID } = req.params;
+
+  try {
+    //use mongoose function to see if id is valid
+    if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) { // if not valid mongo ID
+      return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
+    }
+
+    // find board and store in found board
+    const foundUser = await userCollection.findById(userID);
+
+    // if found board does not exist
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User Does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + userID });
+    }
+
+
+    foundTeam.set({ ...req.body });
+
+    // Save the updated board to the database
+    await foundUser.save();
+
+    // if everything is successful send board found as json
+    res.status(200).json({ mssg: 'UpdateTicket Sucessful', foundTeam });
+  } catch (error) {
+    res.status(500).json({ error: 'Cant update' })
+  }
+
+} 
+const getTeam = async (req, res) => {
+  const { userID, teamID } = req.params;
+
+  //use mongoose function to see if id is valid
+  if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) { // if not valid mongo ID
+    return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
+  }
+
+  // find board and store in found board
+  const foundUser = await userCollection.findById(userID);
+
+  // if found board does not exist
+  if (!foundUser) {
+    return res.status(404).json({ error: 'User Does not exist' });
+  }
+
+  const foundTeam = foundUser.teams.id(teamID);
+
+  if (!foundTeam) {
+    return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + userID });
+  }
+
+  // if everything is successful send board found as json
+  res.status(200).json(foundTeam);
+
+}
+
 
 
 module.exports = {
   addTeamToUser,
-  deleteTeam
+  deleteTeam,
+  updateTeamTitle,
+  getTeam
 }
