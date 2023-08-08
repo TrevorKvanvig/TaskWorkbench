@@ -68,66 +68,114 @@ const sendSingleBoard = async (req, res) => {
 }
 
 const getSingleBoard = async (req, res) => {
-  // get searched board id from parameters in route
-  const { boardID } = req.params;
+  const { userID, teamID, boardID } = req.params;
 
-  //use mongoose function to see if id is valid
-  if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+  if (!mongoose.Types.ObjectId.isValid(userID) ||
+      !mongoose.Types.ObjectId.isValid(teamID) ||
+      !mongoose.Types.ObjectId.isValid(boardID)) {
+    return res.status(400).json({ error: 'Invalid MongoDB ID format' });
   }
 
-  // find board and store in found board
-  const foundBoard = await boardCollection.findById(boardID);
+  try {
+    const foundUser = await userCollection.findById(userID);
 
-  // if found board does not exist
-  if (!foundBoard) {
-    return res.status(404).json({error: 'Board does not exist'});
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team does not exist inside the user with ID ' + userID });
+    }
+
+    const foundBoard = foundTeam.boards.id(boardID);
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board does not exist inside the team with ID ' + teamID });
+    }
+
+    // Send the found board as a response
+    res.status(200).json(foundBoard);
+
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the board: ' + error });
   }
-
-  // if everything is successful send board found as json
-  res.status(200).json(foundBoard);
-}
+};
 
 const updateBoard = async (req, res) => {
-  // get id from params
-  const { boardID } = req.params;
+  const { userID, teamID, boardID } = req.params;
+  const updatedBoardData = req.body; // Make sure to send the updated data in the request body
 
-  //check if valid id
-  if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+  if (!mongoose.Types.ObjectId.isValid(userID) ||
+      !mongoose.Types.ObjectId.isValid(teamID) ||
+      !mongoose.Types.ObjectId.isValid(boardID)) {
+    return res.status(400).json({ error: 'Invalid MongoDB ID format' });
   }
 
-  // find board with id and update 
-  const updatedBoard = await boardCollection.findOneAndUpdate({_id: boardID}, {
-    ...req.body
-  });
+  try {
+    const foundUser = await userCollection.findById(userID);
 
-  if (!updatedBoard) {
-    return res.status(404).json({error: 'Board does not exist'});
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team does not exist inside the user with ID ' + userID });
+    }
+
+    const foundBoard = foundTeam.boards.id(boardID);
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board does not exist inside the team with ID ' + teamID });
+    }
+
+    // Update the board data with the updatedBoardData
+    Object.assign(foundBoard, updatedBoardData);
+    await foundUser.save(); // Save the changes to the user document
+
+    // Send a success response
+    res.status(200).json({ message: 'Board updated successfully', updatedBoard: foundBoard });
+
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the board: ' + error });
   }
-
-  res.status(200).json(updatedBoard);
-
-}
+};
 
 const deleteBoard = async (req, res) => {
-  // get id from params
-  const { boardID } = req.params;
+  const { userID, teamID, boardID } = req.params;
 
-  //check if valid id
-  if(!mongoose.Types.ObjectId.isValid(boardID)){ // if not valid mongo ID
-    return res.status(404).json({error: 'Not MongoDB Id Fromat'});
+  if (!mongoose.Types.ObjectId.isValid(userID) ||
+      !mongoose.Types.ObjectId.isValid(teamID) ||
+      !mongoose.Types.ObjectId.isValid(boardID)) {
+    return res.status(400).json({ error: 'Invalid MongoDB ID format' });
   }
 
-  const BoardDeleted = await boardCollection.findByIdAndDelete({_id: boardID});
+  try {
+    const foundUser = await userCollection.findById(userID);
 
-  // if failed to delete
-  if(!BoardDeleted) {
-    res.status(404).json({error: 'Board Does not exist'});
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team does not exist inside the user with ID ' + userID });
+    }
+
+    const foundBoard = foundTeam.boards.id(boardID);
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board does not exist inside the team with ID ' + teamID });
+    }
+
+    foundTeam.boards.pull(boardID);  // Remove the board from the team's boards array
+    await foundUser.save(); // Save the changes to the user document
+
+    // Send a success response
+    res.status(200).json({ message: 'Board deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting the board: ' + error });
   }
-
-  res.status(200).json(BoardDeleted);
-}
+};
 
 module.exports = {
   getAllBoards,

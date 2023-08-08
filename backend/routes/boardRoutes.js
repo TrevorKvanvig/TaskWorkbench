@@ -46,7 +46,7 @@ router.route('/:userID/:teamID/:boardID')
   .post(addTicketToBoard)
 //
 
-router.route('/:boardID/:ticketID')
+router.route('/:userID/:teamID/:boardID/:ticketID')
   //get a single ticket from board
   .get(getTicketFromBoard)
   

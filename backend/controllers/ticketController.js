@@ -1,22 +1,35 @@
 const mongoose = require('mongoose');
-const boardCollection = require('../mongooseModels/boardModel');
+const userCollection = require('../mongooseModels/userModel');
 
 const addTicketToBoard = async (req, res) => {
-  const { boardID } = req.params;
+  const { userID, teamID, boardID } = req.params;
   const index = req.query.index;
 
   const { ticketTitle, ticketDescription, ticketPriority } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(boardID)) {
-    return res.status(404).json({ error: 'Not MongoDB Id Format' });
+  if (!mongoose.Types.ObjectId.isValid(userID) ||
+      !mongoose.Types.ObjectId.isValid(teamID) ||
+      !mongoose.Types.ObjectId.isValid(boardID)) {
+    return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
   }
 
   try {
-    const foundBoard = await boardCollection.findById(boardID);
+    const foundUser = await userCollection.findById(userID);
 
-    if (!foundBoard) {
-      return res.status(404).json({ error: 'Board Does not exist' });
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User Does not exist' });
     }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team Does not exist inside of User with id ' + userID });
+    }
+
+    const foundBoard = foundTeam.boards.id(boardID);
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board Does not exist inside of Team with id ' + teamID });
+    }
+
     const newTicket = {
       ticketTitle,
       ticketDescription,
@@ -33,10 +46,10 @@ const addTicketToBoard = async (req, res) => {
       foundBoard.tickets.splice(parsedIndex, 0, newTicket);
     }
 
-    const updatedBoard = await foundBoard.save();
+    const updatedUser = await foundUser.save();
 
     // Get the ID of the newly created ticket
-    const newTicketID = updatedBoard.tickets[updatedBoard.tickets.length - 1]._id;
+    const newTicketID = updatedUser.teams.id(teamID).boards.id(boardID).tickets[updatedUser.teams.id(teamID).boards.id(boardID).tickets.length - 1]._id;
 
     // Return the newly added ticket with its ID
     res.status(200).json({ ...newTicket, _id: newTicketID });
@@ -46,84 +59,30 @@ const addTicketToBoard = async (req, res) => {
 };
 
 const getTicketFromBoard = async (req, res) => {
-  const { boardID, ticketID } = req.params;
+  const { userID, teamID, boardID, ticketID } = req.params;
 
-  //use mongoose function to see if id is valid
-  if (!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)) { // if not valid mongo ID
-    return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
+  if (!mongoose.Types.ObjectId.isValid(userID) ||
+      !mongoose.Types.ObjectId.isValid(teamID) ||
+      !mongoose.Types.ObjectId.isValid(boardID) ||
+      !mongoose.Types.ObjectId.isValid(ticketID)) {
+    return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
   }
-
-  // find board and store in found board
-  const foundBoard = await boardCollection.findById(boardID);
-
-  // if found board does not exist
-  if (!foundBoard) {
-    return res.status(404).json({ error: 'Board Does not exist' });
-  }
-
-  const foundTicket = foundBoard.tickets.id(ticketID);
-
-  if (!foundTicket) {
-    return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
-  }
-
-  // if everything is successful send board found as json
-  res.status(200).json(foundTicket);
-
-}
-
-const deleteTicketFromBoard = async (req, res) => {
-  const { boardID, ticketID } = req.params;
-
-  //use mongoose function to see if id is valid
-  if (!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)) { // if not valid mongo ID
-    return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
-  }
-
-  // find board and store in found board
-  const foundBoard = await boardCollection.findById(boardID);
-  // if found board does not exist
-  if (!foundBoard) {
-    return res.status(404).json({ error: 'Board Does not exist' });
-  }
-
-  const foundTicket = foundBoard.tickets.id(ticketID);
-  if (!foundTicket) {
-    return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
-  }
-
-  // Find the index of the ticket within the board's tickets array
-  const ticketIndex = foundBoard.tickets.findIndex(ticket => ticket._id.equals(ticketID));
-  // If the ticket does not exist
-  if (ticketIndex === -1) {
-    return res.status(404).json({ error: 'Ticket Does Not Exist' });
-  }
-
-  // Remove the ticket from the tickets array using splice
-  foundBoard.tickets.splice(ticketIndex, 1);
-  // Save the updated board to the database
-  await foundBoard.save();
-
-  // If everything is successful, send a success response
-  res.status(200).json({ message: 'Ticket deleted successfully', foundTicket });
-
-}
-
-const updateTicketFromBoard = async (req, res) => {
-  const { boardID, ticketID } = req.params;
 
   try {
-    //use mongoose function to see if id is valid
-    if (!mongoose.Types.ObjectId.isValid(boardID) || !mongoose.Types.ObjectId.isValid(ticketID)) { // if not valid mongo ID
-      return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
+    const foundUser = await userCollection.findById(userID);
+
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User Does not exist' });
     }
 
-    // find board and store in found board
-    const foundBoard = await boardCollection.findById(boardID);
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team Does not exist inside of User with id ' + userID });
+    }
 
-    // if found board does not exist
+    const foundBoard = foundTeam.boards.id(boardID);
     if (!foundBoard) {
-      return res.status(404).json({ error: 'Board Does not exist' });
+      return res.status(404).json({ error: 'Board Does not exist inside of Team with id ' + teamID });
     }
 
     const foundTicket = foundBoard.tickets.id(ticketID);
@@ -132,18 +91,112 @@ const updateTicketFromBoard = async (req, res) => {
       return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
     }
 
+    // Send the found ticket as a response
+    res.status(200).json(foundTicket);
 
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the ticket: ' + error });
+  }
+};
+
+const deleteTicketFromBoard = async (req, res) => {
+  const { userID, teamID, boardID, ticketID } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userID) ||
+      !mongoose.Types.ObjectId.isValid(teamID) ||
+      !mongoose.Types.ObjectId.isValid(boardID) ||
+      !mongoose.Types.ObjectId.isValid(ticketID)) {
+    return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
+  }
+
+  try {
+    const foundUser = await userCollection.findById(userID);
+
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User Does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team Does not exist inside of User with id ' + userID });
+    }
+
+    const foundBoard = foundTeam.boards.id(boardID);
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board Does not exist inside of Team with id ' + teamID });
+    }
+
+    const foundTicket = foundBoard.tickets.id(ticketID);
+    if (!foundTicket) {
+      return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
+    }
+
+    // Find the index of the ticket within the board's tickets array
+    const ticketIndex = foundBoard.tickets.findIndex(ticket => ticket._id.equals(ticketID));
+    // If the ticket does not exist
+    if (ticketIndex === -1) {
+      return res.status(404).json({ error: 'Ticket Does Not Exist' });
+    }
+
+    // Remove the ticket from the tickets array using splice
+    foundBoard.tickets.splice(ticketIndex, 1);
+    // Save the updated user to the database
+    await foundUser.save();
+
+    // If everything is successful, send a success response
+    res.status(200).json({ message: 'Ticket deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting the ticket: ' + error });
+  }
+};
+
+const updateTicketFromBoard = async (req, res) => {
+  const { userID, teamID, boardID, ticketID } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(userID) ||
+        !mongoose.Types.ObjectId.isValid(teamID) ||
+        !mongoose.Types.ObjectId.isValid(boardID) ||
+        !mongoose.Types.ObjectId.isValid(ticketID)) {
+      return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
+    }
+
+    const foundUser = await userCollection.findById(userID);
+
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User Does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team Does not exist inside of User with id ' + userID });
+    }
+
+    const foundBoard = foundTeam.boards.id(boardID);
+    if (!foundBoard) {
+      return res.status(404).json({ error: 'Board Does not exist inside of Team with id ' + teamID });
+    }
+
+    const foundTicket = foundBoard.tickets.id(ticketID);
+
+    if (!foundTicket) {
+      return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + boardID });
+    }
+
+    // Update the ticket with the provided request body
     foundTicket.set({ ...req.body });
 
-    // Save the updated board to the database
-    await foundBoard.save();
+    // Save the updated user to the database
+    await foundUser.save();
 
-    // if everything is successful send board found as json
-    res.status(200).json({ mssg: 'UpdateTicket Sucessful', foundTicket });
+    // Send a success response
+    res.status(200).json({ message: 'UpdateTicket Successful', foundTicket });
+
   } catch (error) {
-    res.status(500).json({ error: 'Cant update' })
+    res.status(500).json({ error: 'An error occurred while updating the ticket: ' + error });
   }
-}
+};
 
 
 
