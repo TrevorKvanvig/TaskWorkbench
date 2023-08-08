@@ -1,31 +1,70 @@
-const boardCollection = require('../mongooseModels/boardModel');
+const userCollection = require('../mongooseModels/userModel');
 const mongoose = require('mongoose');
 
 
 const getAllBoards = async (req, res) => {
-  // get boards from database
-  const allBoards = await boardCollection.find({});
+  const { userID, teamID } = req.params;
   
-  // send boards as json data
-  res.status(200).json(allBoards);
+  if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) {
+    return res.status(400).json({ error: 'Invalid MongoDB ID format' });
+  }
+
+  try {
+    const foundUser = await userCollection.findById(userID);
+
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User does not exist' });
+    }
+
+    const foundTeam = foundUser.teams.id(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team does not exist inside the user with ID ' + userID });
+    }
+
+    // Retrieve all boards from the found team
+    const teamBoards = foundTeam.boards;
+
+    // Send the array of team boards as a response
+    res.status(200).json(teamBoards);
+
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching team boards: ' + error });
+  }
 }
 
 const sendSingleBoard = async (req, res) => {
-  const {boardTitle, tickets} = req.body;
+  {
+    const { userID, teamID } = req.params;
+    const { boardTitle, tickets } = req.body;
   
-  try {// this is async so to make function wait till this is completed use await and async
-    const boardCreated = await boardCollection
-      .create({
-        boardTitle,
-        tickets
-      });
-
-    // send created board to user as conformation
-    res.status(200).json(boardCreated);
-
-  } catch (error) {
-    res.status(400).json({error: error.message});
-  }
+    if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) {
+      return res.status(400).json({ error: 'Invalid MongoDB ID format' });
+    }
+  
+    try {
+      const foundUser = await userCollection.findById(userID);
+  
+      if (!foundUser) {
+        return res.status(404).json({ error: 'User does not exist' });
+      }
+  
+      const foundTeam = foundUser.teams.id(teamID);
+      if (!foundTeam) {
+        return res.status(404).json({ error: 'Team does not exist inside the user with ID ' + userID });
+      }
+  
+      // Create a new board and add it to the team's boards array
+      const newBoard = { boardTitle, tickets: tickets };
+      foundTeam.boards.push(newBoard);
+      await foundUser.save(); // Save the changes to the user document
+  
+      // Send the newly created board as a response
+      res.status(201).json(newBoard);
+  
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while creating the board: ' + error });
+    }
+  };
 }
 
 const getSingleBoard = async (req, res) => {

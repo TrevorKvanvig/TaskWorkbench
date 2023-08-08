@@ -22,7 +22,7 @@ const {
 const router = express.Router()
 
 // ======== General ===================
-router.route('/')
+router.route('/:userID/:teamID/')
   // return all boards in database
   .get(getAllBoards)
   
@@ -32,7 +32,7 @@ router.route('/')
 
 
 // ======== When ID is Searched =======
-router.route('/:boardID')
+router.route('/:userID/:teamID/:boardID')
   // return board with specified id
   .get(getSingleBoard)
 
