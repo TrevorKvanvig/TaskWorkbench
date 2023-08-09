@@ -122,38 +122,29 @@ const deleteTeamInUser = async (req, res) => {
 };
 
 const updateTeamTitle = async (req, res) => {
-  const { userID, teamID } = req.params;
+  const { teamID } = req.params;
 
   try {
     //use mongoose function to see if id is valid
-    if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) { // if not valid mongo ID
+    if ( !mongoose.Types.ObjectId.isValid(teamID)) { // if not valid mongo ID
       return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
     }
 
-    // find board and store in found board
-    const foundUser = await userCollection.findById(userID);
-
-    // if found board does not exist
-    if (!foundUser) {
-      return res.status(404).json({ error: 'User Does not exist' });
-    }
-
-    const foundTeam = foundUser.teams.id(teamID);
+    const foundTeam = await teamCollection.findById(teamID);
 
     if (!foundTeam) {
-      return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + userID });
+      return res.status(404).json({ error: 'Team Does not exist'});
     }
-
 
     foundTeam.set({ ...req.body });
 
     // Save the updated board to the database
-    await foundUser.save();
+    await foundTeam.save();
 
     // if everything is successful send board found as json
     res.status(200).json({ mssg: 'UpdateTicket Sucessful', foundTeam });
   } catch (error) {
-    res.status(500).json({ error: 'Cant update' })
+    res.status(500).json({ error: 'Cant update' + error })
   }
 
 } 
