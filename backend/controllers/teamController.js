@@ -50,9 +50,14 @@ const addTeamIdToUser = async (req, res) => {
     if (!foundTeam) {
       return res.status(404).json({ error: 'Team Does not exist' });
     }
-    foundUser.team_ids.push(foundTeam._id);
-    await foundUser.save();
-    // send created board to team as conformation
+
+    // Check if the teamID is already in the user's team_ids array
+    if (!foundUser.team_ids.includes(foundTeam._id)) {
+      foundUser.team_ids.push(foundTeam._id);
+      await foundUser.save();
+    }
+
+    // send updated user document as confirmation
     res.status(200).json(foundUser);
 
   } catch (error) {
@@ -62,26 +67,33 @@ const addTeamIdToUser = async (req, res) => {
 
 
 const deleteTeam = async (req, res) => {
-  const {teamID } = req.params;
+  const { teamID } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(teamID)) {
     return res.status(400).json({ error: 'Invalid MongoDB ID format' });
   }
 
   try {
-    const teamDeleted = await teamCollection.findByIdAndDelete({_id: teamID});
-
-    // if failed to delete
-    if(!teamDeleted) {
-      res.status(404).json({error: 'Team Does not exist'});
+    // delete team
+    const teamDeleted = await teamCollection.deleteOne({ _id: teamID });
+    
+    // if deleted count is 0 that means team does not exist
+    if (teamDeleted.deletedCount === 0) {
+      return res.status(404).json({ error: 'Team Does not exist' });
     }
-  
-    res.status(200).json(teamDeleted);
+
+    // Update users to remove the team's ID from their team_ids array
+    await userCollection.updateMany({ team_ids: teamID }, { $pull: { team_ids: teamID } });
+
+    res.status(200).json({ message: 'Team deleted successfully' });
 
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while deleting the team: ' + error });
   }
 };
+
+
+
 
 const deleteTeamInUser = async (req, res) => {
   const { userID, teamID } = req.params;
@@ -147,25 +159,17 @@ const updateTeamTitle = async (req, res) => {
 } 
 
 const getTeam = async (req, res) => {
-  const { userID, teamID } = req.params;
+  const { teamID } = req.params;
 
   //use mongoose function to see if id is valid
-  if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) { // if not valid mongo ID
+  if (!mongoose.Types.ObjectId.isValid(teamID)) { // if not valid mongo ID
     return res.status(404).json({ error: 'Not MongoDB Id Fromat' });
   }
 
-  // find board and store in found board
-  const foundUser = await userCollection.findById(userID);
-
-  // if found board does not exist
-  if (!foundUser) {
-    return res.status(404).json({ error: 'User Does not exist' });
-  }
-
-  const foundTeam = foundUser.teams.id(teamID);
+  const foundTeam = await teamCollection.findById(teamID);
 
   if (!foundTeam) {
-    return res.status(404).json({ error: 'Ticket Does not exist inside of board with id ' + userID });
+    return res.status(404).json({ error: 'Team Does Not Exist' });
   }
 
   // if everything is successful send board found as json
@@ -193,7 +197,6 @@ const getAllTeamsInDB = async (req, res) => {
   }catch(error) {
     res.status(500).json({error: 'unable to retrieve teams' + error})
   }
-
 }
 
 
