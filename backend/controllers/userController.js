@@ -14,15 +14,11 @@ const addUser = async (req, res) => {
   const { email, password, username } = req.body;
 
   try {// this is async so to make function wait till this is completed use await and async
-    const userCreated = await userCollection
-      .create({
-        username,
-        email,
-        password
-      });
 
+    // calls statc function in userModel.js
+    const userCreated = await userCollection.signup(username, email, password);
     // send created board to user as conformation
-    res.status(200).json(userCreated);
+    res.status(200).json({email, userCreated});
 
   } catch (error) {
     res.status(400).json({ error: error.message });
