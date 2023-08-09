@@ -3,6 +3,7 @@ const express = require('express');
 require('dotenv').config();
 const boardRoutes = require('./routes/boardRoutes')
 const userRoutes = require('./routes/userRoutes')
+const teamRoutes = require('./routes/teamRoutes')
 const mongoose = require('mongoose');
 
 //============== initialize App =========
@@ -23,8 +24,10 @@ app.use((req, res, next) => {
 
 //============== Routes =================
 // use routes from board routes when requests are made
-app.use('/api/boards', boardRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/team', teamRoutes);
+app.use('/api/boards', boardRoutes);
+
 
 //============== Body =================
 

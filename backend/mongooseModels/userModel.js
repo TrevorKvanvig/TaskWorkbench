@@ -6,6 +6,10 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
+    username: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -14,10 +18,15 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    teams: [teamSchema]
-  },
+    team_ids: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Team',
+      }
+  ]
+  }, { timestamps: true }
 );
 
 
 //export User collection to be used in other files using the BoardSchema declared
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);
