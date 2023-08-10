@@ -25,7 +25,8 @@ const addUser = async (req, res) => {
     
 
     const token = createToken(userCreated._id);
-    res.status(200).json({email, token});
+    const username = userCreated.username;
+    res.status(200).json({email, username, token});
 
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -38,10 +39,11 @@ const loginUser = async (req, res) => {
 
     // calls statc function in userModel.js
     const user = await userCollection.login(email, password);
-    
+
 
     const token = createToken(user._id);
-    res.status(200).json({email, token});
+    const username = user.username
+    res.status(200).json({ email, username, token});
 
   } catch (error) {
     res.status(400).json({ error: error.message });
