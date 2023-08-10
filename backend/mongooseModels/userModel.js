@@ -66,5 +66,26 @@ userSchema.statics.signup = async function(username, email, password) {
   return user
 }
 
+userSchema.statics.login = async function(email, password){
+
+  if (!email || !password){
+    throw Error('all feilds must be filled');
+  }
+
+  const user = await this.findOne({email});
+
+  if(!user) {
+    throw Error('Email is not in use')
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password)
+
+  if(!isMatch) {
+    throw Error('Incorrect Passowrd')
+  }
+
+  return user
+}
+
 //export User collection to be used in other files using the BoardSchema declared
 module.exports = mongoose.model('User', userSchema);

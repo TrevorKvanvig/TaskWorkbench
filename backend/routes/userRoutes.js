@@ -1,5 +1,5 @@
-const {getAllUsers, addUser, getSingleUser, deleteUser, updateUserInfo} = require('../controllers/userController')
-const {addTeamToUser, deleteTeamInUser, updateTeamTitle, getTeam,addTeamIdToUser} = require('../controllers/teamController')
+const {getAllUsers, addUser, getSingleUser, deleteUser, updateUserInfo, loginUser} = require('../controllers/userController')
+const {addTeamToUser, deleteTeamInUser, addTeamIdToUser} = require('../controllers/teamController')
 const express = require('express');
 
 // alows router functionality
@@ -13,7 +13,9 @@ router.route('/')
   // add a board to database
   .post(addUser)
 //
-
+router.route('/login')
+  .post(loginUser)
+  
 router.route('/:userID')
   .get(getSingleUser)
   .delete(deleteUser)

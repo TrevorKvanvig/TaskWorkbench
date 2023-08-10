@@ -1,6 +1,10 @@
 const userCollection = require('../mongooseModels/userModel.js');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken')
 
+const createToken = (id) => {
+  return jwt.sign({_id: id}, process.env.SECRET, {expiresIn: '3d'} )
+}
 
 const getAllUsers = async (req, res) => {
   // get boards from database
@@ -13,12 +17,31 @@ const getAllUsers = async (req, res) => {
 const addUser = async (req, res) => {
   const { email, password, username } = req.body;
 
-  try {// this is async so to make function wait till this is completed use await and async
+  try {
 
     // calls statc function in userModel.js
+    // this is async so to make function wait till this is completed use await and async
     const userCreated = await userCollection.signup(username, email, password);
-    // send created board to user as conformation
-    res.status(200).json({email, userCreated});
+    
+
+    const token = createToken(userCreated._id);
+    res.status(200).json({email, token});
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+const loginUser = async (req, res) => {
+  const {email, password} = req.body
+  try {
+
+    // calls statc function in userModel.js
+    const user = await userCollection.login(email, password);
+    
+
+    const token = createToken(user._id);
+    res.status(200).json({email, token});
 
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -102,5 +125,6 @@ module.exports = {
   addUser,
   getSingleUser,
   deleteUser,
-  updateUserInfo
+  updateUserInfo,
+  loginUser
 }
