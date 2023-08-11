@@ -1,47 +1,49 @@
 import { useBoardsContext } from '../hooks/useBoardsContext'
 import { useEffect, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd'
-import {useUser} from '../hooks/useUser'
+import { useAuthContext } from '../hooks/useAuthContext';
 
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
+import AddTeamModal from '../components/AddTeamModal';
 
 
 
 const Dashboard = () => {
   // current state of boards
   const { boards, dispatch } = useBoardsContext();
-  const {user, hasTeams} = useUser();
-  
+  const { user } = useAuthContext();
+
   // use states
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
+  const [isTeamModalOpen, changeTeamModalState] = useState(false);
   const [ticketsBoardDetails, setBoardDetails] = useState(null)
 
 
   // Whenever dasboard gets loaded run this function once
-  useEffect(() => {
-    
-    // const getBoardsfromDB = async () => {
-    //   //get response object
-    //   const response = await fetch('/api/boards');
-    //   // get boards from the response object
-    //   const allBoards = await response.json();
+  //useEffect(() => {
 
-    //   if (!allBoards.ok) {
-    //     dispatch({
-    //       type: 'SET_BOARDS',
-    //       payload: allBoards
-    //     });
-    //   }
+  // const getBoardsfromDB = async () => {
+  //   //get response object
+  //   const response = await fetch('/api/boards');
+  //   // get boards from the response object
+  //   const allBoards = await response.json();
 
-    // }
+  //   if (!allBoards.ok) {
+  //     dispatch({
+  //       type: 'SET_BOARDS',
+  //       payload: allBoards
+  //     });
+  //   }
 
-    // // call async function
-    // getBoardsfromDB();
+  // }
 
-  }, [dispatch])
+  // // call async function
+  // getBoardsfromDB();
+
+  //}, [dispatch])
 
 
   const handleAddBoard = async (boardTitle) => {
@@ -85,6 +87,18 @@ const Dashboard = () => {
   const handleBoardModalClose = () => {
     // close board modal
     changeBoardModalState(false);
+  }
+
+  const handleTeamModalOpen = () => {
+    changeTeamModalState(true);
+  }
+
+  const handleTeamModalClose = () => {
+    changeTeamModalState(false);
+  }
+
+  const handleAddTeam = () => {
+    console.log('add Team');
   }
 
   // ticketDetails: ticket details to dadd to databased passed from modal form
@@ -200,34 +214,52 @@ const Dashboard = () => {
 
   return (
     <>
-      <DragDropContext onDragEnd={handleDragEnd}>
-      <div className='grid'>
-        <div className='team-info-bar'>
-          <div className='team-info-bar-left'>
-            <h3 className='team-dropdown'>Teams</h3>
-          </div>
-          <div className='team-info-bar-right'>
-            <h3 className='team-members-dropdown'>Members</h3>
-          </div>
+      <div className='team-info-bar'>
+        <div className='team-info-bar-left'>
+          <h3 className='team-dropdown'>Teams</h3>
+          <button onClick={handleTeamModalOpen}>CREATE TEAM</button>
         </div>
-        <div className="board-container">
-          {boards && boards.map((board) => {
-            return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
-          })}
-          
-          <div className='add-board-btn-container'>
-            <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
-          </div>
+        <div className='team-info-bar-right'>
+          <h3 className='team-members-dropdown'>Members</h3>
         </div>
       </div>
-        
-      </DragDropContext>
+
+      {(user && user.team_ids.length > 0) && (
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className='grid'>
+
+            <div className="board-container">
+              {boards && boards.map((board) => {
+                return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
+              })}
+
+              <div className='add-board-btn-container'>
+                <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
+              </div>
+            </div>
+          </div>
+
+        </DragDropContext>
+
+      )}
+
+      {(user && user.team_ids.length === 0) &&
+        <div className='no-teams-div'>
+          <h1 className='no-teams-mssg'>You Have No Team Please Create One</h1>
+        </div>
+      }
 
       {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal
         onClose={handleTicketModalClose}
         onSubmit={handleAddTicket}
         boardDetails={ticketsBoardDetails}
       />}
+
+      {isTeamModalOpen && <AddTeamModal
+        onClose={handleTeamModalClose}
+        onSubmit={handleAddTeam}
+      />}
+
       {isBoardModalOpen && <AddBoardModal
         onClose={handleBoardModalClose}
         onSubmit={handleAddBoard}

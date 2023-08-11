@@ -25,8 +25,7 @@ const AddBoardModal = ({onSubmit, onClose}) => {
     setBoardTitle(value);
 
   }
-
-  console.log(boardTitle);
+  
   return (
     <>
     <div className='overlay-style'></div>

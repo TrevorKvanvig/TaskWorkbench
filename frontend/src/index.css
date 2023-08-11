@@ -221,7 +221,19 @@ button {
 
 .team-info-bar-left {
   padding-left: 20px;
+  display: flex;
+  align-items: center;
 }
 .team-info-bar-right {
   padding-right: 20px;
+}
+
+.no-teams-div {
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.no-teams-mssg {
+
 }
