@@ -1,5 +1,6 @@
 const userCollection = require('../mongooseModels/userModel.js');
-const teamCollection = require('../mongooseModels/teamModel.js')
+const teamCollection = require('../mongooseModels/teamModel.js');
+
 const mongoose = require('mongoose');
 
 

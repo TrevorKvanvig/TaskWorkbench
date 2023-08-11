@@ -1,5 +1,5 @@
 const express = require('express');
-
+const requireAuth = require('../middleWare/requireAuth')
 // Board controller Functions
 const {
   getAllBoards,
@@ -9,17 +9,14 @@ const {
 
 //Ticket functions
 const {
-  getTicketFromBoard,
   addTicketToBoard,
-  deleteTicketFromBoard,
-  updateTicketFromBoard,
   getAllTicketsFromBoard
 } = require('../controllers/ticketController');
 
 
 // alows router functionality
 const router = express.Router()
-
+//router.use(requireAuth);
 // ======== General ===================
 router.route('/:teamID')
   // return all boards in database
