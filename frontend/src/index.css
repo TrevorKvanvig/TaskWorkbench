@@ -210,3 +210,18 @@ button {
   justify-content: center;
 }
 
+.team-info-bar {
+  background-color: #888;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-info-bar-left {
+  padding-left: 20px;
+}
+.team-info-bar-right {
+  padding-right: 20px;
+}

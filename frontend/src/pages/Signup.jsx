@@ -11,7 +11,7 @@ const Signup = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+    console.log(formDetails.username, formDetails.email, formDetails.password);
     await signup(formDetails.username, formDetails.email, formDetails.password);
   }
 
@@ -36,7 +36,7 @@ const Signup = () => {
       <input type="text" name='username' value={formDetails.username} onChange={handleChange}></input>
 
       <label>password:</label>
-      <input type="text" name='password' value={formDetails.password} onChange={handleChange}></input>
+      <input type="password" name='password' value={formDetails.password} onChange={handleChange}></input>
 
       <div>
         <button disabled={isLoading} type="submit">SIGNUP</button>

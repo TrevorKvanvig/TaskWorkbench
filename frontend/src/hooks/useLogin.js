@@ -25,7 +25,7 @@ export const useLogin = () => {
       setIsLoading(false);
     }
     if(response.ok){
-      localStorage.setItem('user', JSON.stringify(json))
+      await localStorage.setItem('user', JSON.stringify(json))
 
       dispatch({
         type: "LOGIN",

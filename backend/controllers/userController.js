@@ -15,21 +15,22 @@ const getAllUsers = async (req, res) => {
 }
 
 const addUser = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { username ,email, password,  } = req.body;
 
   try {
 
     // calls statc function in userModel.js
     // this is async so to make function wait till this is completed use await and async
     const userCreated = await userCollection.signup(username, email, password);
-    
+    console.log(userCreated);
 
     const token = createToken(userCreated._id);
-    const username = userCreated.username;
+    const userN = userCreated.username;
     const team_ids = userCreated.team_ids;
-    res.status(200).json({email, username, team_ids, token});
+    res.status(200).json({email, username: userN, team_ids, token});
 
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({ error: error.message });
   }
 }
@@ -43,10 +44,10 @@ const loginUser = async (req, res) => {
 
 
     const token = createToken(user._id);
-    const username = user.username
+    const userN = user.username
     const team_ids = user.team_ids;
 
-    res.status(200).json({ email, username, team_ids, token});
+    res.status(200).json({ email, username: userN, team_ids, token});
 
   } catch (error) {
     res.status(400).json({ error: error.message });

@@ -1,16 +1,19 @@
 import { useBoardsContext } from '../hooks/useBoardsContext'
 import { useEffect, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd'
+import {useUser} from '../hooks/useUser'
 
 import Board from '../components/Board'
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
 
 
+
 const Dashboard = () => {
   // current state of boards
   const { boards, dispatch } = useBoardsContext();
-
+  const {user, hasTeams} = useUser();
+  
   // use states
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
@@ -19,24 +22,24 @@ const Dashboard = () => {
 
   // Whenever dasboard gets loaded run this function once
   useEffect(() => {
+    
+    // const getBoardsfromDB = async () => {
+    //   //get response object
+    //   const response = await fetch('/api/boards');
+    //   // get boards from the response object
+    //   const allBoards = await response.json();
 
-    const getBoardsfromDB = async () => {
-      //get response object
-      const response = await fetch('/api/boards');
-      // get boards from the response object
-      const allBoards = await response.json();
+    //   if (!allBoards.ok) {
+    //     dispatch({
+    //       type: 'SET_BOARDS',
+    //       payload: allBoards
+    //     });
+    //   }
 
-      if (!allBoards.ok) {
-        dispatch({
-          type: 'SET_BOARDS',
-          payload: allBoards
-        });
-      }
+    // }
 
-    }
-
-    // call async function
-    getBoardsfromDB();
+    // // call async function
+    // getBoardsfromDB();
 
   }, [dispatch])
 
@@ -199,15 +202,23 @@ const Dashboard = () => {
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
       <div className='grid'>
+        <div className='team-info-bar'>
+          <div className='team-info-bar-left'>
+            <h3 className='team-dropdown'>Teams</h3>
+          </div>
+          <div className='team-info-bar-right'>
+            <h3 className='team-members-dropdown'>Members</h3>
+          </div>
+        </div>
         <div className="board-container">
           {boards && boards.map((board) => {
             return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
           })}
+          
           <div className='add-board-btn-container'>
             <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
           </div>
         </div>
-        <div className='hit-bottom'></div>
       </div>
         
       </DragDropContext>

@@ -46,16 +46,6 @@ const Ticket = ({ ticket, boardDetails, index }) => {
     setTicketOpen(false)
   }
 
-  const ticketStyle = {
-    backgroundColor: "#1aac83",
-    marginLeft: "20px",
-    marginRight: "20px",
-    marginBottom: "0px",
-    marginTop: "0px",
-  
-    borderRadius: "10px",
-  }
-
   return (
     <>
       <Draggable draggableId={`${ticket._id}`} key={ticket._id} index={index}>

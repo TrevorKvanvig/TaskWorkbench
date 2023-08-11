@@ -10,6 +10,7 @@ export const useSignup = () => {
     setIsLoading(true);
     setError(null);
 
+    
     const response = await fetch('/api/users', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -19,8 +20,9 @@ export const useSignup = () => {
     const json = await response.json();
 
     if(!response.ok){
-      setIsLoading(false);
       setError(json.error);
+      setIsLoading(false);
+      
     }
     if(response.ok) {
       // save user to local storage
