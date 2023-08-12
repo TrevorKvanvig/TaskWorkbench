@@ -18,7 +18,7 @@ body {
 header {
   background: #c4c4c4aa;
   border-bottom: solid 5px #000000;
-  height: 90px;
+  height: 80px;
 }
 
 .navbar {
@@ -34,7 +34,16 @@ header {
 .navbar-right {
   color: #333;
   text-decoration: none;
-  justify-self: auto;
+  display: flex;
+  
+
+}
+.navbar-right a{
+  margin-left: 10px ;
+}
+
+nav a {
+  margin-left: 10px ;
 }
 
 header a {
@@ -44,14 +53,12 @@ header a {
 
 .grid {
   display: grid;
-  grid-template-rows: 10fr 1fr;
-  height: 89vh;
+  grid-template-rows: auto 1fr;
+  
 }
 
 .board-container {
-  background-color: #1aac83;
   display: flex;
-  
   justify-content: stretch;
   flex-wrap: nowrap;
   align-items: flex-start;
@@ -163,3 +170,70 @@ button {
   z-index: 1000;
 }
 
+.form {
+  background-color:#c4c4c4;
+  display: flex;
+  flex-direction: column;
+  text-align: flex-start;
+  height: 50vh;
+  width: 40%;
+  margin-top: 10vh;
+  padding: 0px 40px;
+  border-radius: 4px;
+} 
+
+.form > h3 {
+  align-self: center;
+}
+
+.form > div > button {
+  background-color:#005B9A ;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.nav-logout-button {
+  background-color: transparent;
+  color:#005B9A;
+  border: 2px solid #005B9A;
+  padding: 5px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  height: 50px;
+  align-self: center;
+  margin-left: 20px;
+}
+
+.signup-page {
+  display: flex;
+  justify-content: center;
+}
+
+.team-info-bar {
+  background-color: #888;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-info-bar-left {
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+}
+.team-info-bar-right {
+  padding-right: 20px;
+}
+
+.no-teams-div {
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.no-teams-mssg {
+
+}
