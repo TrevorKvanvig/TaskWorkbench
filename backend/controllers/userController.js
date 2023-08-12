@@ -27,7 +27,8 @@ const addUser = async (req, res) => {
     const token = createToken(userCreated._id);
     const userN = userCreated.username;
     const team_ids = userCreated.team_ids;
-    res.status(200).json({email, username: userN, team_ids, token});
+    const uID = userCreated._id
+    res.status(200).json({uID, email, username: userN, team_ids, token});
 
   } catch (error) {
     console.log(error.message);
@@ -46,8 +47,8 @@ const loginUser = async (req, res) => {
     const token = createToken(user._id);
     const userN = user.username
     const team_ids = user.team_ids;
-
-    res.status(200).json({ email, username: userN, team_ids, token});
+    const uID = user._id
+    res.status(200).json({ uID, email, username: userN, team_ids, token});
 
   } catch (error) {
     res.status(400).json({ error: error.message });
