@@ -84,16 +84,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {user && <div className='team-info-bar'>
-        <div className='team-info-bar-left'>
-          <h3 className='team-dropdown'>Teams</h3>
-          <button onClick={handleTeamModalOpen}>CREATE TEAM</button>
-        </div>
-        <div className='team-info-bar-right'>
-          
-          <h3 className='team-members-dropdown'>Members</h3>
-        </div>
-      </div>}
+      {user && }
 
       {(user && user.team_ids.length > 0) && <TeamBoard teamDetails={currentTeamDetails} />}
 
