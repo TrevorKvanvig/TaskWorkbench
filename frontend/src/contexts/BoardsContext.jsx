@@ -14,6 +14,7 @@ export const boardsReducer = (currentState, action) => {
         boards: currentState.boards.filter(board => action.payload._id !== board._id)
       }
     case 'ADD_BOARD':
+      console.log(action.payload);
       return {
         boards: [...currentState.boards, action.payload]
       }

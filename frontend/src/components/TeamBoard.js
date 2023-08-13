@@ -7,34 +7,35 @@ import AddTicketModal from '../components/AddTicketModal';
 import Board from '../components/Board'
 
 
-const TeamBoard = ({teamDetails}) => {
-  const { boards, dispatch } = useBoardsContext();
+const TeamBoard =  ({ teamDetails }) => {
+  const { boards, dispatch } =  useBoardsContext();
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
   const [ticketsBoardDetails, setBoardDetails] = useState(null)
 
   // Whenever dasboard gets loaded run this function once
-  //useEffect(() => {
+  useEffect(() => {
 
-  // const getBoardsfromDB = async () => {
-  //   //get response object
-  //   const response = await fetch('/api/boards');
-  //   // get boards from the response object
-  //   const allBoards = await response.json();
+    const getBoardsfromDB = async () => {
+      if (teamDetails) {
+        const response = await fetch('/api/boards/' + teamDetails._id);
+        const allBoards = await response.json();
 
-  //   if (!allBoards.ok) {
-  //     dispatch({
-  //       type: 'SET_BOARDS',
-  //       payload: allBoards
-  //     });
-  //   }
+        if (allBoards) {
+          dispatch({
+            type: 'SET_BOARDS',
+            payload: allBoards
+          });
+        }
+      }
+    }
 
-  // }
+    // Check if teamDetails is not null before making the API call
 
-  // // call async function
-  // getBoardsfromDB();
+    getBoardsfromDB();
 
-  //}, [dispatch])
+
+  }, [dispatch, teamDetails]);
 
 
   const findTicketInDOM = (sourceBoardID, draggableId) => {
@@ -70,6 +71,7 @@ const TeamBoard = ({teamDetails}) => {
       const deletedTicket = {
         foundTicket: ticketDragged
       }
+
       dispatch({
         type: 'MOVE_TICKET',
         payload: {
@@ -115,12 +117,12 @@ const TeamBoard = ({teamDetails}) => {
     changeTicketModalState(true);
   }
 
-    // ticketDetails: ticket details to add to databased passed from modal form
+  // ticketDetails: ticket details to add to databased passed from modal form
   // boardID: board id of where to add ticket from modal
   const handleAddTicket = async (ticketDetails, boardID) => {
 
     // try to add ticket to database
-    const response = await fetch('api/boards/' + boardID, {
+    const response = await fetch('api/boards/' + teamDetails._id + "/" + boardID, {
       method: 'POST',
       body: JSON.stringify(ticketDetails),
       headers: {
@@ -156,7 +158,7 @@ const TeamBoard = ({teamDetails}) => {
     }
 
     // send board to database
-    const response = await fetch('api/boards', {
+    const response = await fetch('api/boards/' + teamDetails._id, {
       method: 'POST',
       body: JSON.stringify(newBoard),
       headers: {
@@ -166,16 +168,19 @@ const TeamBoard = ({teamDetails}) => {
 
     // get board added back from database
     const boardAdded = await response.json()
-
+    console.log(boardAdded);
     // if board sucessfuly added to database
     if (response.ok) {
       // change current state of boards on dom using board contex
-      dispatch({
+      
+      await dispatch({
         type: 'ADD_BOARD',
         payload: boardAdded
-      })
+      });
+  
+
     } else {
-      console.log("error getting add board resopnse");
+      console.log("error getting add board response");
     }
   }
 
@@ -192,22 +197,14 @@ const TeamBoard = ({teamDetails}) => {
 
   return (
     <>
-    <div className='team-info-bar'>
-        <div className='team-info-bar-left'>
-          <h3 className='team-dropdown'>Teams</h3>
-          <button onClick={handleTeamModalOpen}>CREATE TEAM</button>
-        </div>
-        <div className='team-info-bar-right'>
-          
-          <h3 className='team-members-dropdown'>Members</h3>
-        </div>
-      </div>
+      {teamDetails && <h2>{teamDetails.teamTitle}</h2>}
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className='grid'>
-  
           <div className="board-container">
-            {boards && boards.map((board) => {
-              return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} />);
+
+            {teamDetails && boards && boards.map((board) => {
+              return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} teamDetails={teamDetails} />);
             })}
 
             <div className='add-board-btn-container'>
@@ -215,7 +212,6 @@ const TeamBoard = ({teamDetails}) => {
             </div>
           </div>
         </div>
-
       </DragDropContext>
 
 

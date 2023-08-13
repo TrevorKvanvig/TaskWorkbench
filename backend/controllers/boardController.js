@@ -31,7 +31,7 @@ const getAllBoards = async (req, res) => {
 const sendSingleBoard = async (req, res) => {
   {
     const { teamID } = req.params;
-    const { boardTitle, tickets } = req.body;
+    const { boardTitle } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(teamID)) {
       return res.status(400).json({ error: 'Invalid MongoDB ID format' });
@@ -45,10 +45,11 @@ const sendSingleBoard = async (req, res) => {
       }
 
       // Create a new board and add it to the team's boards array
-      const newBoard = { boardTitle, tickets: tickets };
+      const newBoard = { boardTitle, tickets: [] };
       foundTeam.boards.push(newBoard);
       await foundTeam.save(); // Save the changes 
 
+  
       // Send the newly created board as a response
       res.status(201).json(newBoard);
 
@@ -96,10 +97,10 @@ const updateBoard = async (req, res) => {
   }
 
   try {
-    
+
     const foundTeam = await teamColletion.findById(teamID);
     if (!foundTeam) {
-      return res.status(404).json({ error: 'Team does not exist'});
+      return res.status(404).json({ error: 'Team does not exist' });
     }
 
     const foundBoard = foundTeam.boards.id(boardID);
@@ -132,7 +133,7 @@ const deleteBoard = async (req, res) => {
 
     const foundTeam = await teamColletion.findById(teamID);
     if (!foundTeam) {
-      return res.status(404).json({ error: 'Team does not exist'});
+      return res.status(404).json({ error: 'Team does not exist' });
     }
 
     const foundBoard = foundTeam.boards.id(boardID);

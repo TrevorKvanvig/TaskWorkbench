@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 
 
 
-const Board = ({boardDetails, onTicketModalOpen}) => {
+const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
   const { dispatch } = useBoardsContext();
   const titleRef = useRef()
 
@@ -43,7 +43,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
   const handleDeleteBoard = async () => {
     // when the delete baord button in pressed
     // delete board from database using api
-    const response = await fetch('api/boards/' + boardDetails._id, {
+    const response = await fetch('api/team/' + teamDetails._id + "/" + boardDetails._id,  {
       method: 'DELETE'
     }) 
 
@@ -110,7 +110,7 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
       <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
     </div>
-    <Droppable droppableId={boardDetails._id}>
+    {boardDetails && <Droppable droppableId={boardDetails._id}>
       {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.droppableProps} >
           {
@@ -119,13 +119,11 @@ const Board = ({boardDetails, onTicketModalOpen}) => {
             })
           }
 
-          
-          
           {provided.placeholder}
         </div>
         
       )}
-    </Droppable>
+    </Droppable>}
     <div className="end-board-buttons">
       <button onClick={() => {
             onTicketModalOpen(boardDetails)
