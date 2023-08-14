@@ -110,20 +110,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
       <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
     </div>
-    {boardDetails && <Droppable droppableId={boardDetails._id}>
-      {(provided, snapshot) => (
-        <div ref={provided.innerRef} {...provided.droppableProps} >
-          {
-            boardDetails.tickets.map((ticket, index) => {
-            return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails} index={index}/>)
-            })
-          }
-
-          {provided.placeholder}
-        </div>
-        
-      )}
-    </Droppable>}
+    
     <div className="end-board-buttons">
       <button onClick={() => {
             onTicketModalOpen(boardDetails)
