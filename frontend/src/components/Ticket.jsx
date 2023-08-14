@@ -48,7 +48,26 @@ const Ticket = ({ ticket, boardDetails, index }) => {
 
   return (
     <>
-      
+      <Draggable draggableId={`${ticket._id}`} key={ticket._id} index={index}>
+  {(provided, snapshot) => (
+    <>
+      <div
+        className="ticket"
+        onClick={handleTicketClick}
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+      >
+        <h4 className='ticket-title'>{ticket.ticketTitle}</h4>
+
+        <button className="ticket-delete" name="delete-button" onClick={handleDeleteTicket}>
+          DELETE
+        </button>
+      </div>
+      {provided.placeholder}
+    </>
+  )}
+</Draggable>
 
 
 
