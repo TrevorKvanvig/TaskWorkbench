@@ -193,7 +193,7 @@ const TeamBoard =  ({ teamDetails }) => {
     // close board modal
     changeBoardModalState(false);
   }
-
+  
 
   return (
     <>
@@ -204,7 +204,8 @@ const TeamBoard =  ({ teamDetails }) => {
           <div className="board-container">
 
             {teamDetails && boards && boards.map((board) => {
-              return (<Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} teamDetails={teamDetails} />);
+              return (
+                <Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} teamDetails={teamDetails} />);
             })}
 
             <div className='add-board-btn-container'>

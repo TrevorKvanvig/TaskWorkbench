@@ -11,6 +11,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
 
   // declare states
   const [currentTitle, setBoardTitle] = useState(boardDetails.boardTitle);
+  const [currentID, setBoardID] = useState(boardDetails._id);
   const [isTitleChanging, setIsTitleChanging] = useState(false);
 
   useEffect(() => {
@@ -23,12 +24,13 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
         setIsTitleChanging(false);
         // set board title back to title in database
         setBoardTitle(boardDetails.boardTitle)
+        setBoardID(boardDetails._id)
       }
     };
 
     // set current title state to title from database 
     setBoardTitle(boardDetails.boardTitle)
-    
+    console.log(boardDetails);
     // create a listener for the entire dom that will detect clicks and call function
     document.addEventListener('mousedown', handleClickOutside)
     
@@ -36,7 +38,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
     
-  }, [boardDetails.boardTitle])
+  }, [boardDetails])
 
 
 
@@ -110,8 +112,9 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
       <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
     </div>
-    {boardDetails && <Droppable droppableId={boardDetails._id}>
+    {boardDetails && <Droppable droppableId={currentID}>
       {(provided, snapshot) => (
+      
         <div ref={provided.innerRef} {...provided.droppableProps} >
           {
             boardDetails.tickets.map((ticket, index) => {
