@@ -199,7 +199,7 @@ const TeamBoard =  ({ teamDetails }) => {
     <>
       {teamDetails && <h2>{teamDetails.teamTitle}</h2>}
 
-    
+      <DragDropContext onDragEnd={handleDragEnd}>
         <div className='grid'>
           <div className="board-container">
             
@@ -214,7 +214,7 @@ const TeamBoard =  ({ teamDetails }) => {
             </div>
           </div>
         </div>
-    
+      </DragDropContext>
 
 
       {isBoardModalOpen && <AddBoardModal

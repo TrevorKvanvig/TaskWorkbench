@@ -51,7 +51,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
 
     //get response
     const boardDeleted = await response.json()
-
+    console.log(boardDeleted);
     // if it was sucessful change in dom
     if(response.ok){
       dispatch({
