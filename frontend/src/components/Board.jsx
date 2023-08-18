@@ -104,6 +104,8 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     // remove save button
     setIsTitleChanging(false);
   }
+
+  
   
   // return this jsx code to browser
   return(
@@ -111,11 +113,14 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     <div className="board-title" ref={titleRef}>
       <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
+      {boardDetails._id}
     </div>
-    {boardDetails && <Droppable droppableId={currentID}>
+    {boardDetails && (<Droppable droppableId={boardDetails._id}>
+    
       {(provided, snapshot) => (
-      
+        
         <div ref={provided.innerRef} {...provided.droppableProps} >
+      
           {
             boardDetails.tickets.map((ticket, index) => {
             return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails} index={index}/>)
@@ -126,7 +131,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
         </div>
         
       )}
-    </Droppable>}
+    </Droppable>)}
     <div className="end-board-buttons">
       <button onClick={() => {
             onTicketModalOpen(boardDetails)
