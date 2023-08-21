@@ -4,6 +4,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 import TeamBoard from '../components/TeamBoard'
 import AddTeamModal from '../components/AddTeamModal';
+import DropdownItem from '../components/DropdownItem';
 
 
 
@@ -13,15 +14,17 @@ const Dashboard = () => {
 
   // use states
   const [isTeamModalOpen, changeTeamModalState] = useState(false);
-  const [currentTeamindex, changeTeamIndex] = useState(0);
+
   const [currentTeamDetails, changeTeamDetails] = useState(null);
+  const [allTeams, setAllTeams] = useState(null);
+
   const [isTeamDropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     // Check if user exists before making the API call
     if (user) {
       const getTeamFromDB = async () => {
-        const response = await fetch('/api/team/' + user.team_ids[currentTeamindex]);
+        const response = await fetch('/api/team/' + user.team_ids[0]);
         const team = await response.json();
         console.log(team);
 
@@ -32,10 +35,31 @@ const Dashboard = () => {
           changeTeamDetails(team);
         }
       }
+
+      const getAllTeamsFromDB = async () => {
+        // Create an array of promises that fetch team data
+        const fetchPromises = await user.team_ids.map(async teamID => {
+          const response = await fetch('/api/team/' + teamID);
+          const teamData = await response.json();
+          return teamData;
+        });
+      
+        // Wait for all fetch operations to complete
+        const allTeamData = await Promise.all(fetchPromises);
+
+    
+        await setAllTeams(allTeamData)
+      
+        
+        // Now you have all the team data in the allTeamData array
+        console.log(allTeamData);
+        // You can continue with your logic here...
+      }
   
       getTeamFromDB();
+      getAllTeamsFromDB();
     }
-  }, [user, currentTeamindex]);
+  }, [user]);
 
   const handleTeamModalOpen = () => {
     changeTeamModalState(true);
@@ -81,16 +105,20 @@ const Dashboard = () => {
 
   }
 
+  const changeTeam = (teamToChangeTo) => {
+    console.log(teamToChangeTo);
+    changeTeamDetails(teamToChangeTo);
+  }
 
 
   return (
     <>
       {user && <div className='team-info-bar'>
         <div className='team-info-bar-left'>
-          <h3 className='team-dropdown' onClick={() => {setDropdownOpen(!isTeamDropdownOpen)}}>Teams ^</h3>
-          {isTeamDropdownOpen && user && <ul className='team-dropdown-list'>
-            {user.team_ids.map((team_id) => {
-              return(<li className='team-dropdown-item'>{team_id}</li>)
+          <h3 className='team-dropdown' onClick={() => {setDropdownOpen(!isTeamDropdownOpen)}}>Change Team ^</h3>
+          {isTeamDropdownOpen && allTeams && <ul className='team-dropdown-list'>
+            {allTeams.map((team) => {
+              return(<DropdownItem key={team._id} object={team} changeTeam={changeTeam}/>)
             })}
           </ul>}
           <button onClick={handleTeamModalOpen}>CREATE TEAM</button>

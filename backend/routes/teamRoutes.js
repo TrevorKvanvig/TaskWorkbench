@@ -13,6 +13,9 @@ router.route('/')
   .get(getAllTeamsInDB)
   .post(createTeam)
 
+router.route('/user/:userID')
+  .get(getAllTeamsInDB)
+  
 router.route('/:teamID')
   .get(getTeam)
   .delete(deleteTeam)

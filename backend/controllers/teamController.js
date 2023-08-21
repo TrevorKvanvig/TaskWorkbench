@@ -1,6 +1,6 @@
 const userCollection = require('../mongooseModels/userModel.js');
 const teamCollection = require('../mongooseModels/teamModel.js');
-
+const requireAuth = require('../middleWare/requireAuth.js');
 const mongoose = require('mongoose');
 
 

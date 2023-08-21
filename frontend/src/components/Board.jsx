@@ -30,7 +30,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
 
     // set current title state to title from database 
     setBoardTitle(boardDetails.boardTitle)
-    console.log(boardDetails);
+    
     // create a listener for the entire dom that will detect clicks and call function
     document.addEventListener('mousedown', handleClickOutside)
     
