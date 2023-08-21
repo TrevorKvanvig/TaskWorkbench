@@ -197,7 +197,6 @@ const TeamBoard =  ({ teamDetails }) => {
 
   return (
     <>
-      {teamDetails && <h2>{teamDetails.teamTitle}</h2>}
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className='grid'>
