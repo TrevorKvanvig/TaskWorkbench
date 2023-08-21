@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [isTeamModalOpen, changeTeamModalState] = useState(false);
   const [currentTeamindex, changeTeamIndex] = useState(0);
   const [currentTeamDetails, changeTeamDetails] = useState(null);
+  const [isTeamDropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     // Check if user exists before making the API call
@@ -86,7 +87,12 @@ const Dashboard = () => {
     <>
       {user && <div className='team-info-bar'>
         <div className='team-info-bar-left'>
-          <h3 className='team-dropdown'>Teams</h3>
+          <h3 className='team-dropdown' onClick={() => {setDropdownOpen(!isTeamDropdownOpen)}}>Teams ^</h3>
+          {isTeamDropdownOpen && user && <ul className='team-dropdown-list'>
+            {user.team_ids.map((team_id) => {
+              return(<li className='team-dropdown-item'>{team_id}</li>)
+            })}
+          </ul>}
           <button onClick={handleTeamModalOpen}>CREATE TEAM</button>
         </div>
         <div className='team-info-bar-right'>

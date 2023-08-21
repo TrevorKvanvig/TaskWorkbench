@@ -196,7 +196,38 @@ const TeamBoard =  ({ teamDetails }) => {
   
 
   return (
-  
+    <>
+      {teamDetails && <h2>{teamDetails.teamTitle}</h2>}
+
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <div className='grid'>
+          <div className="board-container">
+            
+            {teamDetails && boards && boards.map((board) => {
+              return (
+                  <Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} teamDetails={teamDetails} />);
+    
+            })}
+
+            <div className='add-board-btn-container'>
+              <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
+            </div>
+          </div>
+        </div>
+      </DragDropContext>
+
+
+      {isBoardModalOpen && <AddBoardModal
+        onClose={handleBoardModalClose}
+        onSubmit={handleAddBoard}
+      />}
+
+      {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal
+        onClose={handleTicketModalClose}
+        onSubmit={handleAddTicket}
+        boardDetails={ticketsBoardDetails}
+      />}
+    </>
 
   );
 }
