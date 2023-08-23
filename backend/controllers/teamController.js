@@ -21,7 +21,8 @@ const addTeamToUser = async (req, res) => {
 
     const newTeam = await teamCollection
       .create({
-        teamTitle
+        teamTitle,
+        teamOwner: foundUser._id
       });
 
     foundUser.team_ids.push(newTeam._id);

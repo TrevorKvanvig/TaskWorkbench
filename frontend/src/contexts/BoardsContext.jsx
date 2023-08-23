@@ -16,6 +16,7 @@ export const boardsReducer = (currentState, action) => {
       }
     case 'ADD_BOARD':
       console.log(action.payload);
+      console.log([...currentState.boards, action.payload])
       return {
         boards: [...currentState.boards, action.payload]
       }

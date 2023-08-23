@@ -201,11 +201,14 @@ const TeamBoard =  ({ teamDetails }) => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className='grid'>
           <div className="board-container">
-            
             {teamDetails && boards && boards.map((board) => {
               return (
-                  <Board key={board._id} boardDetails={board} onTicketModalOpen={handleTicketModalOpen} teamDetails={teamDetails} />);
-    
+                  <Board key={board._id} 
+                  boardDetails={board} 
+                  onTicketModalOpen={handleTicketModalOpen} 
+                  teamDetails={teamDetails} 
+                />);
+
             })}
 
             <div className='add-board-btn-container'>

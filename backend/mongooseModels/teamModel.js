@@ -10,6 +10,10 @@ const teamSchema = new Schema(
       type: String,
       required: true,
     },
+    teamOwner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     boards: [boardSchema],
   },
 );

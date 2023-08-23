@@ -37,7 +37,6 @@ const Dashboard = () => {
       const getTeamFromDB = async () => {
         const response = await fetch('/api/team/' + user.team_ids[0]);
         const team = await response.json();
-        console.log(team);
 
         if (!team) {
           console.log('Could not get team');
@@ -63,8 +62,7 @@ const Dashboard = () => {
 
 
         // Now you have all the team data in the allTeamData array
-        console.log(allTeamData);
-        // You can continue with your logic here...
+    
       }
 
       getTeamFromDB();
@@ -123,7 +121,6 @@ const Dashboard = () => {
     changeTeamDetails(teamToChangeTo);
   }
 
-
   return (
     <>
       {user && currentTeamDetails && <div className='team-info-bar'>
@@ -139,7 +136,7 @@ const Dashboard = () => {
         </div>
         <div className='team-info-bar-right'>
 
-        <h3>Current Team: <span>{currentTeamDetails.teamTitle}</span></h3>
+        <h3>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
         </div>
       </div>}
 
@@ -155,8 +152,6 @@ const Dashboard = () => {
         onClose={handleTeamModalClose}
         onSubmit={handleAddTeam}
       />}
-
-
     </>
 
   );

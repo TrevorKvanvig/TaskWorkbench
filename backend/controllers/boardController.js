@@ -1,5 +1,6 @@
 const userCollection = require('../mongooseModels/userModel');
-const teamColletion = require('../mongooseModels/teamModel')
+const teamColletion = require('../mongooseModels/teamModel');
+const boardCollection = require('../mongooseModels/boardModel');
 const mongoose = require('mongoose');
 
 
@@ -29,35 +30,40 @@ const getAllBoards = async (req, res) => {
 }
 
 const sendSingleBoard = async (req, res) => {
-  {
-    const { teamID } = req.params;
-    const { boardTitle } = req.body;
+  const { teamID } = req.params;
+  const { boardTitle } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(teamID)) {
-      return res.status(400).json({ error: 'Invalid MongoDB ID format' });
+  if (!mongoose.Types.ObjectId.isValid(teamID)) {
+    return res.status(400).json({ error: 'Invalid MongoDB ID format' });
+  }
+
+  try {
+    const foundTeam = await teamColletion.findById(teamID);
+    if (!foundTeam) {
+      return res.status(404).json({ error: 'Team does not exist' });
     }
 
-    try {
+    // Create a new board
+    const newBoard = {
+      boardTitle,
+      tickets: []
+    };
 
-      const foundTeam = await teamColletion.findById(teamID);
-      if (!foundTeam) {
-        return res.status(404).json({ error: 'Team does not exist' });
-      }
+    // Add the new board to the team's boards array
+    foundTeam.boards.push(newBoard);
+    await foundTeam.save(); // Save the changes 
 
-      // Create a new board and add it to the team's boards array
-      const newBoard = { boardTitle, tickets: [] };
-      foundTeam.boards.push(newBoard);
-      await foundTeam.save(); // Save the changes 
+    // Fetch the newly created board with complete details from the database
+    const createdBoard = foundTeam.boards[foundTeam.boards.length - 1];
 
-  
-      // Send the newly created board as a response
-      res.status(201).json(newBoard);
+    // Send the newly created board with all its details as a response
+    res.status(201).json(createdBoard);
 
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while creating the board: ' + error });
-    }
-  };
-}
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while creating the board: ' + error });
+  }
+};
+
 
 const getSingleBoard = async (req, res) => {
   const { teamID, boardID } = req.params;
