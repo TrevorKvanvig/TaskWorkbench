@@ -2,16 +2,17 @@
 import { useBoardsContext } from '../hooks/useBoardsContext';
 import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-
+import { useAuthContext } from "../hooks/useAuthContext";
 import TicketDetails from './TicketDetails';
 
-const Ticket = ({ ticket, boardDetails, index }) => {
+const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
   const { dispatch } = useBoardsContext();
   const [isTicketOpen, setTicketOpen] = useState(null);
 
 
   const handleDeleteTicket = async () => {
-    const response = await fetch('api/boards/' + boardDetails._id + "/" + ticket._id, {
+    
+    const response = await fetch('api/team/'+ teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
       method: 'DELETE'
     })
     const deletedTicket = await response.json()

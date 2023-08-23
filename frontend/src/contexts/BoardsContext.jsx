@@ -6,7 +6,6 @@ export const boardsReducer = (currentState, action) => {
 
   switch (action.type) {
     case 'SET_BOARDS':
-      console.log(action.payload);
       return { // sets workouts key to array of all current workouts in database when dispach is called from home.js with SET_WORKOUTS as action type
         boards: action.payload
       }
@@ -49,7 +48,6 @@ export const boardsReducer = (currentState, action) => {
       }
     case 'DELETE_TICKET':
       const { deletedTicket, boardID } = action.payload;
-      console.log(deletedTicket);
       const updatedState = currentState.boards.map(board => {
         if (board._id === boardID) {
 

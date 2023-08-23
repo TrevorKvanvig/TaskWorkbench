@@ -5,9 +5,11 @@ import { Droppable } from "react-beautiful-dnd";
 
 
 
+
 const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
   const { dispatch } = useBoardsContext();
-  const titleRef = useRef()
+  const titleRef = useRef();
+
 
   // declare states
   const [currentTitle, setBoardTitle] = useState(boardDetails.boardTitle);
@@ -123,7 +125,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
       
           {
             boardDetails.tickets.map((ticket, index) => {
-            return(<Ticket key={ticket._id} ticket={ticket} boardDetails={boardDetails} index={index}/>)
+            return(<Ticket key={ticket._id} teamDetails={teamDetails} ticket={ticket} boardDetails={boardDetails} index={index}/>)
             })
           }
 

@@ -5,12 +5,14 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import TeamBoard from '../components/TeamBoard'
 import AddTeamModal from '../components/AddTeamModal';
 import DropdownItem from '../components/DropdownItem';
+import { useBoardsContext } from '../hooks/useBoardsContext';
 
 
 
 const Dashboard = () => {
   // current state of boards
   const { user, dispatch } = useAuthContext();
+  const {dispatch: bDispatch} = useBoardsContext();
   const teamDropdownRef = useRef();
   const changeTeamButton = useRef();
   // use states
@@ -123,6 +125,10 @@ const Dashboard = () => {
 
   const changeTeam = (teamToChangeTo) => {
     changeTeamDetails(teamToChangeTo);
+    bDispatch({
+      type: 'SET_BOARDS',
+      payload: teamToChangeTo.boards
+    });
   }
 
   return (

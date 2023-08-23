@@ -128,7 +128,7 @@ const deleteTicketFromBoard = async (req, res) => {
     await foundTeam.save();
 
     // If everything is successful, send a success response
-    res.status(200).json({ message: 'Ticket deleted successfully' });
+    res.status(200).json({ message: 'Ticket deleted successfully',foundTicket });
 
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while deleting the ticket: ' + error });
