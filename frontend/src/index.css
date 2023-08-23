@@ -194,16 +194,23 @@ button {
 }
 
 .nav-logout-button {
+  display: flex;
+  align-items: center;
   background-color: transparent;
   color:#005B9A;
   border: 2px solid #005B9A;
-  padding: 5px 15px;
+  padding: 6px 15px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1em;
-  height: 50px;
+  height: 30px;
   align-self: center;
   margin-left: 20px;
+  transition: background var(--speed);
+}
+
+.nav-logout-button:hover {
+  background-color: #74C2E1;
 }
 
 .signup-page {
@@ -246,6 +253,7 @@ button {
   padding: .2rem;
   border-radius: 7px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .team-dropdown:hover {
@@ -263,7 +271,7 @@ button {
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
-  padding-right: 5px;
+  padding-right: 15px;
   list-style: none;
 
 } 
@@ -271,11 +279,41 @@ button {
 
 .team-dropdown-item {
   height: 50px;
-  border-radius: 7px;
-  transition: background var(--speed);
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: solid black 3px;
+  cursor: pointer;
 }
 
-.team-dropdown-item:hover {
+.team-dropdown-item:last-child{
+  border-bottom: none;
+}
+
+.change-team-button {
+  cursor: pointer;
+  border-radius: 7px;
+  transition: background var(--speed);
+  flex-basis: 70%;
+  height: 25px;
+  padding: 5px 0px;
+  text-align: center;
+}
+
+.change-team-button:hover {
   background-color: #f1f1f1;
+}
+
+.dropdown-team-button {
+  background-color: transparent;
+  border: solid #005B9A 2px;
+  color: #005B9A;
+  border-radius: 7px;
+  padding: 2px;
+  cursor: pointer;
+  transition: background var(--speed);
+}
+
+.dropdown-team-button:hover {
+  background-color: #74C2E1;
 }

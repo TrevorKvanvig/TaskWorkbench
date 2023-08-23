@@ -41,7 +41,6 @@ const Dashboard = () => {
         if (!team) {
           console.log('Could not get team');
         } else {
-
           changeTeamDetails(team);
         }
       }
@@ -126,13 +125,15 @@ const Dashboard = () => {
       {user && currentTeamDetails && <div className='team-info-bar'>
         <div className='team-info-bar-left'>
           <h3 className='team-dropdown' ref={changeTeamButton} onClick={() => { setDropdownOpen(!isTeamDropdownOpen) }}>Change Team ^</h3>
+
           {isTeamDropdownOpen && allTeams && <ul ref={teamDropdownRef} className='team-dropdown-list'>
             {allTeams.map((team) => {
               return (<DropdownItem key={team._id} object={team} changeTeam={changeTeam} />)
             })}
           </ul>}
-          <button onClick={handleTeamModalOpen}>CREATE TEAM</button>
-          
+
+
+          <button onClick={handleTeamModalOpen} className='create-team-button dropdown-team-button'>CREATE TEAM</button>
         </div>
         <div className='team-info-bar-right'>
 
