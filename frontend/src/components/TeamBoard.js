@@ -17,7 +17,7 @@ const TeamBoard = ({ teamDetails }) => {
   useEffect(() => {
     if (teamDetails) {
       const getBoardsfromDB = async () => {
-      
+
         if (teamDetails.boards && teamDetails.boards.length > 0) {
           const response = await fetch('/api/boards/' + teamDetails._id);
           const allBoards = await response.json();
@@ -34,7 +34,7 @@ const TeamBoard = ({ teamDetails }) => {
       // Check if teamDetails is not null before making the API call
 
       getBoardsfromDB();
-    
+
     }
 
 
@@ -202,23 +202,23 @@ const TeamBoard = ({ teamDetails }) => {
     <>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className='grid'>
-          <div className="board-container">
-            {teamDetails && boards && boards.map((board) => {
-              return (
-                <Board key={board._id}
-                  boardDetails={board}
-                  onTicketModalOpen={handleTicketModalOpen}
-                  teamDetails={teamDetails}
-                />);
 
-            })}
+        <div className="board-container">
+          {teamDetails && boards && boards.map((board) => {
+            return (
+              <Board key={board._id}
+                boardDetails={board}
+                onTicketModalOpen={handleTicketModalOpen}
+                teamDetails={teamDetails}
+              />);
 
-            <div className='add-board-btn-container'>
-              <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
-            </div>
+          })}
+
+          <div className='add-board-btn-container'>
+            <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
           </div>
         </div>
+
       </DragDropContext>
 
 

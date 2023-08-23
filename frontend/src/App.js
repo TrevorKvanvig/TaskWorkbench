@@ -9,7 +9,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <div className="pages">
+      
         <Routes>
           <Route
           path="/dashboard"
@@ -30,7 +30,7 @@ function App() {
             }
           />
         </Routes>
-      </div>
+      
     </BrowserRouter>
   );
 }
