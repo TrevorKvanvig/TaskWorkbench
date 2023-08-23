@@ -87,7 +87,7 @@ const deleteTeam = async (req, res) => {
     // Update users to remove the team's ID from their team_ids array
     await userCollection.updateMany({ team_ids: teamID }, { $pull: { team_ids: teamID } });
 
-    res.status(200).json({ message: 'Team deleted successfully' });
+    res.status(200).json({ message: 'Team deleted successfully', teamID: teamID });
 
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while deleting the team: ' + error });

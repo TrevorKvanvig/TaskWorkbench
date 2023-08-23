@@ -2,7 +2,7 @@ import { set } from "date-fns";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useState, useEffect } from "react";
 const DropdownItem = ({ object, changeTeam }) => {
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const [isOwner, setIsOwner] = useState(false);
 
 
@@ -12,8 +12,7 @@ const DropdownItem = ({ object, changeTeam }) => {
     if (user) {
       const loggedInUserID = user.uID;
       const teamsOwnersID = object.teamOwner;
-      console.log('user', user.uID);
-      console.log('teamOwner', object.teamOwner);
+      console.log(user);
 
       if (loggedInUserID === teamsOwnersID) {
         setIsOwner(true);
@@ -24,7 +23,26 @@ const DropdownItem = ({ object, changeTeam }) => {
   }, [user, object.teamOwner]);
 
   const handleDeleteTeam = async () => {
-    //const response = a
+    const response = await fetch('/api/team/' + object._id,{
+      method: 'DELETE'
+    });
+
+    const teamDeleted = await response.json();
+  
+    
+    //update Dom
+    dispatch({
+      type: 'UPDATE-TEAMS',
+      payload:teamDeleted
+    })
+    //update localStorage
+    // Update the user data in local storage
+    const storedUserData = JSON.parse(localStorage.getItem('user'));
+    const updatedLocalStorageData = {
+      ...user,
+      team_ids: user.team_ids.filter((id) => id !== teamDeleted.teamID)
+    }
+    await localStorage.setItem('user', JSON.stringify(updatedLocalStorageData));
   }
 
   const handleLeaveTeam = async () => {
