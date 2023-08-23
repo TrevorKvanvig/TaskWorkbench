@@ -4,6 +4,7 @@ const requireAuth = require('../middleWare/requireAuth')
 const {
   getAllBoards,
   sendSingleBoard,
+  updateBoard,
   
 } = require('../controllers/boardController');
 
@@ -32,6 +33,7 @@ router.route('/:teamID/:boardID')
   .get(getAllTicketsFromBoard)
   //add ticket to board
   .post(addTicketToBoard)
+  .patch(updateBoard)
 //
 
 module.exports = router;

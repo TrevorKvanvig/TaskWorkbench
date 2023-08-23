@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin"
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const {login, isLoading, error} = useLogin();
+  const navigate = useNavigate();
 
   const [formDetails, setDetails] = useState({
     email: '',
@@ -10,10 +12,15 @@ const Login = () => {
   })
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     await login(formDetails.email, formDetails.password);
 
-  }
+    // Check if login was successful, then redirect
+    const storedUserData = localStorage.getItem("user");
+    if (storedUserData) {
+      navigate("/dashboard"); // Use the navigate function to redirect
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target

@@ -151,7 +151,7 @@ const deleteBoard = async (req, res) => {
     await foundTeam.save(); // Save the changes to the user document
 
     // Send a success response
-    res.status(200).json({ message: 'Board deleted successfully' });
+    res.status(200).json({ message: 'Board deleted successfully', _id: boardID });
 
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while deleting the board: ' + error });

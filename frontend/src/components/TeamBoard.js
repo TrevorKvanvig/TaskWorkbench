@@ -7,32 +7,35 @@ import AddTicketModal from '../components/AddTicketModal';
 import Board from '../components/Board'
 
 
-const TeamBoard =  ({ teamDetails }) => {
-  const { boards, dispatch } =  useBoardsContext();
+const TeamBoard = ({ teamDetails }) => {
+  const { boards, dispatch } = useBoardsContext();
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
   const [ticketsBoardDetails, setBoardDetails] = useState(null)
 
   // Whenever dasboard gets loaded run this function once
   useEffect(() => {
+    if (teamDetails) {
+      const getBoardsfromDB = async () => {
+      
+        if (teamDetails.boards && teamDetails.boards.length > 0) {
+          const response = await fetch('/api/boards/' + teamDetails._id);
+          const allBoards = await response.json();
 
-    const getBoardsfromDB = async () => {
-      if (teamDetails) {
-        const response = await fetch('/api/boards/' + teamDetails._id);
-        const allBoards = await response.json();
-
-        if (allBoards) {
-          dispatch({
-            type: 'SET_BOARDS',
-            payload: allBoards
-          });
+          if (allBoards) {
+            dispatch({
+              type: 'SET_BOARDS',
+              payload: allBoards
+            });
+          }
         }
       }
+
+      // Check if teamDetails is not null before making the API call
+
+      getBoardsfromDB();
+    
     }
-
-    // Check if teamDetails is not null before making the API call
-
-    getBoardsfromDB();
 
 
   }, [dispatch, teamDetails]);
@@ -172,12 +175,12 @@ const TeamBoard =  ({ teamDetails }) => {
     // if board sucessfuly added to database
     if (response.ok) {
       // change current state of boards on dom using board contex
-      
+
       await dispatch({
         type: 'ADD_BOARD',
         payload: boardAdded
       });
-  
+
 
     } else {
       console.log("error getting add board response");
@@ -193,7 +196,7 @@ const TeamBoard =  ({ teamDetails }) => {
     // close board modal
     changeBoardModalState(false);
   }
-  
+
 
   return (
     <>
@@ -203,10 +206,10 @@ const TeamBoard =  ({ teamDetails }) => {
           <div className="board-container">
             {teamDetails && boards && boards.map((board) => {
               return (
-                  <Board key={board._id} 
-                  boardDetails={board} 
-                  onTicketModalOpen={handleTicketModalOpen} 
-                  teamDetails={teamDetails} 
+                <Board key={board._id}
+                  boardDetails={board}
+                  onTicketModalOpen={handleTicketModalOpen}
+                  teamDetails={teamDetails}
                 />);
 
             })}

@@ -6,6 +6,7 @@ export const boardsReducer = (currentState, action) => {
 
   switch (action.type) {
     case 'SET_BOARDS':
+      console.log(action.payload);
       return { // sets workouts key to array of all current workouts in database when dispach is called from home.js with SET_WORKOUTS as action type
         boards: action.payload
       }
@@ -15,10 +16,16 @@ export const boardsReducer = (currentState, action) => {
         boards: currentState.boards.filter(board => action.payload._id !== board._id)
       }
     case 'ADD_BOARD':
-      console.log(action.payload);
-      console.log([...currentState.boards, action.payload])
-      return {
-        boards: [...currentState.boards, action.payload]
+      if (currentState.boards) {
+        return {
+          ...currentState,
+          boards: [...currentState.boards, action.payload]
+        };
+      } else {
+        return {
+          ...currentState,
+          boards: [action.payload]
+        };
       }
     case 'ADD_TICKET':
       const { ticketAdded, boardID: boardIdToFind } = action.payload
@@ -134,7 +141,7 @@ export const boardsReducer = (currentState, action) => {
         })
       }
     case 'MOVE_TICKET':
-      const {sourceBoardID, destinationBoardID, index } = action.payload;
+      const { sourceBoardID, destinationBoardID, index } = action.payload;
 
       // Delete the ticket from the source board
       const updatedSourceBoard = currentState.boards.map(board => {

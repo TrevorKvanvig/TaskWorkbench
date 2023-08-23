@@ -10,7 +10,7 @@ import DropdownItem from '../components/DropdownItem';
 
 const Dashboard = () => {
   // current state of boards
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const teamDropdownRef = useRef();
   const changeTeamButton = useRef();
   // use states
@@ -97,6 +97,11 @@ const Dashboard = () => {
 
     // get board added back from database
     const teamAdded = await response.json()
+
+    dispatch({
+      type: 'ADD-TEAM',
+      payload: teamAdded._id
+    })
 
     setAllTeams([...allTeams, teamAdded])
     console.log(allTeams);

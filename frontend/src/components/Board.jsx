@@ -80,7 +80,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     }
     
     // send patch request to api
-    const response = await fetch('/api/boards/' + boardDetails._id, {
+    const response = await fetch('/api/boards/' + teamDetails._id + '/' + boardDetails._id, {
       method: 'PATCH',
       headers: {
         Accept: "application/json",

@@ -12,7 +12,6 @@ const DropdownItem = ({ object, changeTeam }) => {
     if (user) {
       const loggedInUserID = user.uID;
       const teamsOwnersID = object.teamOwner;
-      console.log(user);
 
       if (loggedInUserID === teamsOwnersID) {
         setIsOwner(true);
@@ -36,8 +35,6 @@ const DropdownItem = ({ object, changeTeam }) => {
       payload:teamDeleted
     })
     //update localStorage
-    // Update the user data in local storage
-    const storedUserData = JSON.parse(localStorage.getItem('user'));
     const updatedLocalStorageData = {
       ...user,
       team_ids: user.team_ids.filter((id) => id !== teamDeleted.teamID)

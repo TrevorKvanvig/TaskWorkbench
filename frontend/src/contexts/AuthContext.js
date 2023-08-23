@@ -9,14 +9,24 @@ export const authReducer = (state, action) => {
     case 'LOGOUT':
       return { user: null }
     case 'UPDATE-TEAMS':
-      console.log(action.payload);
-      console.log(state);
-
       if (state.user && state.user.team_ids) {
         return {
           user: {
             ...state.user,
             team_ids: state.user.team_ids.filter((id) => id !== action.payload.teamID)
+          }
+        };
+      } else {
+        // If state.user or state.user.team_ids is undefined, return the current state
+        return state;
+      }
+    case 'ADD-TEAM':
+
+      if (state.user && state.user.team_ids) {
+        return {
+          user: {
+            ...state.user,
+            team_ids: [...state.user.team_ids, action.payload]
           }
         };
       } else {
