@@ -11,7 +11,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
 
   const handleDeleteTicket = async () => {
-    
+
     const response = await fetch('api/team/'+ teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
       method: 'DELETE'
     })
@@ -72,7 +72,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
 
 
-      {isTicketOpen && <TicketDetails ticketDetails={ticket} onClose={handleTicketClose} boardID={boardDetails._id} />}
+      {isTicketOpen && <TicketDetails teamDetails={teamDetails} ticketDetails={ticket} onClose={handleTicketClose} boardID={boardDetails._id} />}
     </>);
 
 }
