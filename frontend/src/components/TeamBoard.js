@@ -51,7 +51,60 @@ const TeamBoard = ({ teamDetails }) => {
     return ticketDragged
   }
 
-  
+  const handleDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+    const sourceBoardID = source.droppableId;
+    const destinationBoardID = destination.droppableId;
+
+    console.log(result);
+
+    // if place item is grabbed fro  is the same as where it was placed do nothing
+    if (source.droppableId === destination.droppableId && source.index === destination.index) {
+      console.log('dropped in same Place');
+      return;
+    } else {
+      console.log('dropped in different board');
+      // steps
+      // 1. find ticket in boards database and store it
+      const ticketDragged = findTicketInDOM(sourceBoardID, draggableId);
+      console.log(ticketDragged);
+
+
+      // 2. remove ticket from souce board ===============
+      const deletedTicket = {
+        foundTicket: ticketDragged
+      }
+
+      dispatch({
+        type: 'MOVE_TICKET',
+        payload: {
+          deletedTicket,
+          sourceBoardID,
+          destinationBoardID,
+          index: destination.index
+        }
+      });
+      const response = await fetch('api/boards/' + sourceBoardID + '/' + draggableId, {
+        method: 'DELETE'
+      })
+      if (!response.ok) {
+        console.log(response.json.error);
+      }
+
+
+      // 3. add ticket at correct index ===============
+      const addTicketResponse = await fetch('api/boards/' + destinationBoardID + '?index=' + destination.index, {
+        method: 'POST',
+        body: JSON.stringify(ticketDragged),
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      });
+      if (!addTicketResponse) {
+        console.log(addTicketResponse.json.error)
+      }
+    }
+  }
   const handleTicketModalClose = () => {
     // close ticket modal
     // reset board details

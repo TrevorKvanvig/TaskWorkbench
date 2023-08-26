@@ -54,7 +54,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
       <button type="submit" onClick={(event) => {
         event.preventDefault();
         onSubmit(ticketDetails, boardDetails._id);
-
+        onClose();
         setTicketDetails({
           ticketTitle: '',
           ticketDescription: '',
