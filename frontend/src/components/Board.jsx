@@ -115,7 +115,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     <div className="board-title" ref={titleRef}>
       <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
       {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
-      {boardDetails._id}
+
     </div>
     {boardDetails && (<Droppable droppableId={boardDetails._id}>
     
