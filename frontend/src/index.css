@@ -149,13 +149,16 @@ button {
 
 /* modal styling */
 .modal {
-  background-color: beige;
+  background-color:#005B9A;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 50px;
+  padding: 0px 20px 20px 20px ;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  border-radius: 7px;
 }
 
 .modal input {
@@ -318,3 +321,4 @@ button {
 .dropdown-team-button:hover {
   background-color: #74C2E1;
 }
+
