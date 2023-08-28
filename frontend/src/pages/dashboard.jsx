@@ -5,6 +5,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 import TeamBoard from '../components/TeamBoard'
 import AddTeamModal from '../components/AddTeamModal';
 import DropdownItem from '../components/DropdownItem';
+import JoinTeamModal from '../components/JoinTeamModal';
 import { useBoardsContext } from '../hooks/useBoardsContext';
 
 
@@ -17,11 +18,11 @@ const Dashboard = () => {
   const changeTeamButton = useRef();
   // use states
   const [isTeamModalOpen, changeTeamModalState] = useState(false);
-
   const [currentTeamDetails, changeTeamDetails] = useState(null);
   const [allTeams, setAllTeams] = useState(null);
-
   const [isTeamDropdownOpen, setDropdownOpen] = useState(false);
+  const [isJoinTeamModalOpen, setJoinTeamModal] = useState(false);
+  const [joinTeamError, setJoinTeamError] = useState(null);
 
   useEffect(() => {
     // Check if user exists before making the API call
@@ -96,8 +97,76 @@ const Dashboard = () => {
     changeTeamModalState(false);
   }
 
+  const handleJoinTeamModalOpen = () => {
+    setJoinTeamModal(true);
+  }
+  const handleJoinTeamModalClose = () => {
+    setJoinTeamModal(false);
+  }
+
+  const handleJoinTeam = async (joinTeamID) => {
+    console.log(joinTeamID);
+    console.log(user.team_ids);
+    if (user.team_ids.includes(joinTeamID)) {
+      // The joinTeamID is in the user.team_ids array
+      // Perform the action you want for joining the team
+      setJoinTeamError('You are already in that team');
+    } else {
+      // add team to user on database
+      const response = await fetch('/api/users/' + user.uID + '/' + joinTeamID,
+        {
+          method: 'POST',
+          headers: {
+            "Content-Type": 'application/json'
+          }
+        })
+      const updatedUser = await response.json();
+      const updatedTeamIDS = await updatedUser.team_ids;
+      console.log(updatedTeamIDS);
+
+      if (!response.ok) {
+        console.log('failed');
+        setJoinTeamError('Team Does Not Exist')
+
+      } else {// if sucessful
+        // add new team to user.team_ids
+        // add new tean to DOM
+        dispatch({
+          type: 'ADD-TEAM',
+          payload: joinTeamID
+        })
+
+        const response = await fetch('/api/team/' + joinTeamID);
+        const teamJoined = await response.json();
+
+        if (!teamJoined) {
+          console.log('Could not get team');
+        } else {
+          setAllTeams([...allTeams, teamJoined])
+          console.log(allTeams);
+        }
+
+
+        // Update the user data in local storage
+        const storedUserData = JSON.parse(localStorage.getItem('user'));
+        const updatedLocalStorageData = {
+          ...storedUserData,
+          team_ids: [...user.team_ids, joinTeamID]
+        }
+        await localStorage.setItem('user', JSON.stringify(updatedLocalStorageData));
+
+
+
+
+        setJoinTeamModal(false);
+        setJoinTeamError(null);
+      }
+
+    }
+
+  }
+
   const handleAddTeam = async (teamTitle) => {
-    console.log(teamTitle);
     // close board modal
     changeTeamModalState(false);
 
@@ -163,10 +232,12 @@ const Dashboard = () => {
 
 
           <button onClick={handleTeamModalOpen} className='create-team-button dropdown-team-button'>CREATE TEAM</button>
+          <button onClick={handleJoinTeamModalOpen} className='join-team-button dropdown-team-button'>JOIN TEAM</button>
         </div>
         <div className='team-info-bar-right'>
 
           <h3>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
+          <h3>ID: <span> {currentTeamDetails._id}</span></h3>
         </div>
       </div>}
 
@@ -182,6 +253,9 @@ const Dashboard = () => {
         onClose={handleTeamModalClose}
         onSubmit={handleAddTeam}
       />}
+
+      {isJoinTeamModalOpen && <JoinTeamModal onClose={handleJoinTeamModalClose}
+        onSubmit={handleJoinTeam} joinTeamError={joinTeamError} />}
     </>
 
   );

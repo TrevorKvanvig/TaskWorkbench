@@ -187,6 +187,10 @@ button {
   border-radius: 4px;
 } 
 
+.join-team-button {
+ margin-left: 13px;
+}
+
 .form > h3 {
   align-self: center;
 }
