@@ -232,7 +232,9 @@ const Dashboard = () => {
         </div>
         <div className='team-info-bar-right'>
 
-          
+          <h3 className='id-dropdown' ref={viewIDButton} onClick={() => { setIdOpen(!isIdOpen) }}>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
+          {isIdOpen && <div className='id-dropdown-list' ref={idDropdownRef}>
+          <h3 className='id-dropdown-item1'>Team ID:</h3><h3 className='id-dropdown-item2'>{currentTeamDetails._id}</h3></div>}
         </div>
       </div>}
 
