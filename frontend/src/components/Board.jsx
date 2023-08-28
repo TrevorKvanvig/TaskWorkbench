@@ -6,7 +6,7 @@ import { Droppable } from "react-beautiful-dnd";
 
 
 
-const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
+const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
   const { dispatch } = useBoardsContext();
   const titleRef = useRef();
 
@@ -32,14 +32,14 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
 
     // set current title state to title from database 
     setBoardTitle(boardDetails.boardTitle)
-    
+
     // create a listener for the entire dom that will detect clicks and call function
     document.addEventListener('mousedown', handleClickOutside)
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-    
+
   }, [boardDetails])
 
 
@@ -47,15 +47,15 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
   const handleDeleteBoard = async () => {
     // when the delete baord button in pressed
     // delete board from database using api
-    const response = await fetch('api/team/' + teamDetails._id + "/" + boardDetails._id,  {
+    const response = await fetch('api/team/' + teamDetails._id + "/" + boardDetails._id, {
       method: 'DELETE'
-    }) 
+    })
 
     //get response
     const boardDeleted = await response.json()
     console.log(boardDeleted);
     // if it was sucessful change in dom
-    if(response.ok){
+    if (response.ok) {
       dispatch({
         type: 'DELETE_BOARD',
         payload: boardDeleted
@@ -67,11 +67,11 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     // when a change in title is detected
     // show save button
     setIsTitleChanging(true);
-    const {value} = event.target;
-    
+    const { value } = event.target;
+
     // set state of current title to the changes that are being made
     setBoardTitle(value);
-  
+
   }
 
   const saveNewBoardTitle = async () => {
@@ -80,7 +80,7 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     const updatedTitle = {
       boardTitle: currentTitle
     }
-    
+
     // send patch request to api
     const response = await fetch('/api/boards/' + teamDetails._id + '/' + boardDetails._id, {
       method: 'PATCH',
@@ -92,8 +92,8 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     })
 
     // if sucessful 
-    if(response.ok){  
-      
+    if (response.ok) {
+
       //update dom with new title from database using board context
       dispatch({
         type: 'UPDATE_BOARD_TITLE',
@@ -107,43 +107,60 @@ const Board = ({boardDetails, onTicketModalOpen, teamDetails}) => {
     setIsTitleChanging(false);
   }
 
-  
-  
+
+
   // return this jsx code to browser
-  return(
-  <div className="board">
-    <div className="board-title" ref={titleRef}>
-      <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20'  />
-      {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
-
-    </div>
-    {boardDetails && (<Droppable droppableId={boardDetails._id}>
-    
-      {(provided, snapshot) => (
+  return (
+    <Droppable droppableId={boardDetails._id}>
+      {(provided, snapshot) => {
+        // Calculate total height of tickets
+        let totalTicketHeight = 0;
+        if (boardDetails && boardDetails.tickets) {
+          totalTicketHeight = boardDetails.tickets.length * 74; // Assuming each ticket has a height of 100px
+        }
         
-        <div ref={provided.innerRef} {...provided.droppableProps} >
-      
-          {
-            boardDetails.tickets.map((ticket, index) => {
-            return(<Ticket key={ticket._id} teamDetails={teamDetails} ticket={ticket} boardDetails={boardDetails} index={index}/>)
-            })
-          }
+        return (<div className="board"
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+          style={{
+            background: '#0191C8'
+            }}
+        >
 
-          {provided.placeholder}
-        </div>
-        
-      )}
-    </Droppable>)}
-    <div className="end-board-buttons">
-      <button onClick={() => {
-            onTicketModalOpen(boardDetails)
-    }}>ADD TICKET</button>
-    <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
-    </div>
-    
-  </div>
+          <div className="board-title" ref={titleRef}>
+            <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20' />
+            {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
+          </div>
+
+          {boardDetails && (<div 
+          style={{
+            minHeight: `${totalTicketHeight}px`,
+            background: snapshot.isDraggingOver ? 'lightblue' : '#0191C8'
+            }}>
+            {boardDetails.tickets.map((ticket, index) => {
+              return (<Ticket key={ticket._id}
+                teamDetails={teamDetails}
+                ticket={ticket}
+                boardDetails={boardDetails}
+                index={index} />)
+            })}
+          </div>
+
+          )}
+          <div className="end-board-buttons">
+            <button onClick={() => {
+              onTicketModalOpen(boardDetails)
+            }}>ADD TICKET</button>
+            <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
+          </div>
+
+        </div>);
+
+      }}
+
+    </Droppable>
   );
-  
+
 }
 
 export default Board;

@@ -12,7 +12,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
   const handleDeleteTicket = async () => {
 
-    const response = await fetch('api/team/'+ teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
+    const response = await fetch('api/team/' + teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
       method: 'DELETE'
     })
     const deletedTicket = await response.json()
@@ -49,28 +49,37 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
   return (
     <>
-      <Draggable draggableId={`${ticket._id}`} key={ticket._id} index={index}>
-  {(provided, snapshot) => (
-    <>
-      <div
-        className="ticket"
-        onClick={handleTicketClick}
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
+      <Draggable
+        key={ticket._id}
+        draggableId={ticket._id}
+        index={index}
       >
-        <h4 className='ticket-title'>{ticket.ticketTitle}</h4>
+        {(provided, snapshot) => {
+          return (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              style={{
+                userSelect: 'none',
+                backgroundColor: snapshot.isDraging ? 'green' : '#74C2E1',
+                ...provided.draggableProps.style
+              
+              }}
+              className="ticket"
+              onClick={handleTicketClick}
+            >
+              <h4 className='ticket-title'>{ticket.ticketTitle}</h4>
 
-        <button className="ticket-delete" name="delete-button" onClick={handleDeleteTicket}>
-          DELETE
-        </button>
-      </div>
-      {provided.placeholder}
-    </>
-  )}
-</Draggable>
+              <button className="ticket-delete" name="delete-button" onClick={handleDeleteTicket}>
+                DELETE
+              </button>
+            </div>
+          );
 
+        }}
 
+      </Draggable>
 
       {isTicketOpen && <TicketDetails teamDetails={teamDetails} ticketDetails={ticket} onClose={handleTicketClose} boardID={boardDetails._id} />}
     </>);

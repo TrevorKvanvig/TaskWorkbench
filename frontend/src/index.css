@@ -69,13 +69,14 @@ header a {
 .grid {
   display: flex;
 }
+
 .board {
-  background-color: #0191C8;
   box-shadow: 2px 2px 5px #33333380;
   min-width: 400px;
   margin-left: 1rem;
   border-radius: 8px;
   padding: .8rem;
+  min-height: auto;
 }
 
 .add-board-btn-container {
@@ -134,7 +135,6 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #74C2E1;
   border-radius: 8px;
   padding: 10px;
   margin-bottom: .8rem;
