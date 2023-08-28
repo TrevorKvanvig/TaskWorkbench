@@ -116,7 +116,7 @@ const deleteTeamInUser = async (req, res) => {
     await foundUser.save();   // Save the changes to the user document
 
     // Send a success response
-    res.status(200).json({ message: 'Team deleted successfully in Users teamIds array' });
+    res.status(200).json({ message: 'Team deleted successfully in Users teamIds array', teamID });
 
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while deleting the team: ' + error });

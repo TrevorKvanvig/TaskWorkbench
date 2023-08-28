@@ -326,3 +326,33 @@ button {
   background-color: #74C2E1;
 }
 
+.id-dropdown {
+  transition: background var(--speed);
+  padding: .2rem;
+  border-radius: 7px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.id-dropdown:hover {
+  background-color: #c4c4c4;
+}
+
+.id-dropdown-list {
+  position: absolute;
+  top: 115px;
+  transform: translateX(3%);
+  background-color:#c4c4c4;
+  border: solid 1px black;
+  border-radius: 7px;
+  list-style: none;
+}
+
+.id-dropdown-item1 {
+  margin: 10px 10px 0px 10px
+}
+.id-dropdown-item2 {
+  margin: 0px 15px 10px 10px
+}
+
+

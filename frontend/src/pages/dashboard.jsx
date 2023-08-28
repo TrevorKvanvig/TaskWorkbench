@@ -16,6 +16,8 @@ const Dashboard = () => {
   const { dispatch: bDispatch } = useBoardsContext();
   const teamDropdownRef = useRef();
   const changeTeamButton = useRef();
+  const viewIDButton = useRef();
+  const idDropdownRef = useRef();
   // use states
   const [isTeamModalOpen, changeTeamModalState] = useState(false);
   const [currentTeamDetails, changeTeamDetails] = useState(null);
@@ -23,6 +25,7 @@ const Dashboard = () => {
   const [isTeamDropdownOpen, setDropdownOpen] = useState(false);
   const [isJoinTeamModalOpen, setJoinTeamModal] = useState(false);
   const [joinTeamError, setJoinTeamError] = useState(null);
+  const [isIdOpen, setIdOpen ] = useState(null);
 
   useEffect(() => {
     // Check if user exists before making the API call
@@ -36,6 +39,15 @@ const Dashboard = () => {
       }
 
       document.addEventListener('mousedown', handleClickOutside);
+
+      const handleClickOutsideID = (event) => {
+        // if user clicks outside of form close modal
+        if (idDropdownRef.current && !idDropdownRef.current.contains(event.target) && !viewIDButton.current.contains(event.target)) {
+          setIdOpen(false);
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutsideID);
 
       const getTeamFromDB = async () => {
         if (!JSON.parse(localStorage.getItem('teamID'))) {
@@ -62,7 +74,6 @@ const Dashboard = () => {
             await localStorage.setItem('teamID', JSON.stringify(team._id))
           }
         }
-
       }
 
       const getAllTeamsFromDB = async () => {
@@ -75,17 +86,12 @@ const Dashboard = () => {
 
         // Wait for all fetch operations to complete
         const allTeamData = await Promise.all(fetchPromises);
-
-
         await setAllTeams(allTeamData)
-
-
         // Now you have all the team data in the allTeamData array
-
       }
-
       getTeamFromDB();
       getAllTeamsFromDB();
+      console.log(allTeams);
     }
   }, [user]);
 
@@ -146,7 +152,6 @@ const Dashboard = () => {
           console.log(allTeams);
         }
 
-
         // Update the user data in local storage
         const storedUserData = JSON.parse(localStorage.getItem('user'));
         const updatedLocalStorageData = {
@@ -155,15 +160,10 @@ const Dashboard = () => {
         }
         await localStorage.setItem('user', JSON.stringify(updatedLocalStorageData));
 
-
-
-
         setJoinTeamModal(false);
         setJoinTeamError(null);
       }
-
     }
-
   }
 
   const handleAddTeam = async (teamTitle) => {
@@ -173,7 +173,6 @@ const Dashboard = () => {
     const newTeam = {
       teamTitle: teamTitle
     }
-
 
     const response = await fetch('api/users/' + user.uID, {
       method: 'POST',
@@ -204,9 +203,7 @@ const Dashboard = () => {
         team_ids: [...user.team_ids, teamAdded._id]
       }
       await localStorage.setItem('user', JSON.stringify(updatedLocalStorageData));
-
     }
-
   }
 
   const changeTeam = async (teamToChangeTo) => {
@@ -230,14 +227,12 @@ const Dashboard = () => {
             })}
           </ul>}
 
-
           <button onClick={handleTeamModalOpen} className='create-team-button dropdown-team-button'>CREATE TEAM</button>
           <button onClick={handleJoinTeamModalOpen} className='join-team-button dropdown-team-button'>JOIN TEAM</button>
         </div>
         <div className='team-info-bar-right'>
 
-          <h3>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
-          <h3>ID: <span> {currentTeamDetails._id}</span></h3>
+          
         </div>
       </div>}
 
@@ -257,7 +252,6 @@ const Dashboard = () => {
       {isJoinTeamModalOpen && <JoinTeamModal onClose={handleJoinTeamModalClose}
         onSubmit={handleJoinTeam} joinTeamError={joinTeamError} />}
     </>
-
   );
 }
 

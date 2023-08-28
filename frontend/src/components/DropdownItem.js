@@ -22,17 +22,16 @@ const DropdownItem = ({ object, changeTeam }) => {
   }, [user, object.teamOwner]);
 
   const handleDeleteTeam = async () => {
-    const response = await fetch('/api/team/' + object._id,{
+    const response = await fetch('/api/team/' + object._id, {
       method: 'DELETE'
     });
 
     const teamDeleted = await response.json();
-  
-    
+
     //update Dom
     dispatch({
       type: 'UPDATE-TEAMS',
-      payload:teamDeleted
+      payload: teamDeleted
     })
     //update localStorage
     const updatedLocalStorageData = {
@@ -43,7 +42,28 @@ const DropdownItem = ({ object, changeTeam }) => {
   }
 
   const handleLeaveTeam = async () => {
+    //Leave team in DB
+    const response = await fetch('/api/users/' + user.uID + '/' + object._id, {
+      method: 'DELETE'
+    });
+    const teamLeft = await response.json();
 
+    //Update Dom  
+    if (response.ok) {
+      dispatch({
+        type: 'UPDATE-TEAMS',
+        payload: teamLeft
+      })
+      //Update local storage
+      const updatedLocalStorageData = {
+        ...user,
+        team_ids: user.team_ids.filter((id) => id !== teamLeft.teamID)
+      }
+      await localStorage.setItem('user', JSON.stringify(updatedLocalStorageData));
+
+    } else{
+      console.log('unable to Leave team');
+    }
   }
 
   return (
