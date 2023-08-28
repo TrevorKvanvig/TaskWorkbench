@@ -12,7 +12,7 @@ import { useBoardsContext } from '../hooks/useBoardsContext';
 const Dashboard = () => {
   // current state of boards
   const { user, dispatch } = useAuthContext();
-  const {dispatch: bDispatch} = useBoardsContext();
+  const { dispatch: bDispatch } = useBoardsContext();
   const teamDropdownRef = useRef();
   const changeTeamButton = useRef();
   // use states
@@ -37,14 +37,31 @@ const Dashboard = () => {
       document.addEventListener('mousedown', handleClickOutside);
 
       const getTeamFromDB = async () => {
-        const response = await fetch('/api/team/' + user.team_ids[0]);
-        const team = await response.json();
+        if (!JSON.parse(localStorage.getItem('teamID'))) {
+          console.log('no Team ID');
+          const response = await fetch('/api/team/' + user.team_ids[0]);
+          const team = await response.json();
 
-        if (!team) {
-          console.log('Could not get team');
+          if (!team) {
+            console.log('Could not get team');
+          } else {
+            changeTeamDetails(team);
+            await localStorage.setItem('teamID', JSON.stringify(team._id))
+          }
+
         } else {
-          changeTeamDetails(team);
+          const currentID = JSON.parse(localStorage.getItem('teamID'));
+          const response = await fetch('/api/team/' + currentID);
+          const team = await response.json();
+
+          if (!team) {
+            console.log('Could not get team');
+          } else {
+            changeTeamDetails(team);
+            await localStorage.setItem('teamID', JSON.stringify(team._id))
+          }
         }
+
       }
 
       const getAllTeamsFromDB = async () => {
@@ -63,7 +80,7 @@ const Dashboard = () => {
 
 
         // Now you have all the team data in the allTeamData array
-    
+
       }
 
       getTeamFromDB();
@@ -118,17 +135,18 @@ const Dashboard = () => {
         team_ids: [...user.team_ids, teamAdded._id]
       }
       await localStorage.setItem('user', JSON.stringify(updatedLocalStorageData));
-      
+
     }
 
   }
 
-  const changeTeam = (teamToChangeTo) => {
+  const changeTeam = async (teamToChangeTo) => {
     changeTeamDetails(teamToChangeTo);
     bDispatch({
       type: 'SET_BOARDS',
       payload: teamToChangeTo.boards
     });
+    await localStorage.setItem('teamID', JSON.stringify(teamToChangeTo._id))
   }
 
   return (
@@ -148,7 +166,7 @@ const Dashboard = () => {
         </div>
         <div className='team-info-bar-right'>
 
-        <h3>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
+          <h3>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
         </div>
       </div>}
 
