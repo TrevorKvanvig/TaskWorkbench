@@ -84,16 +84,18 @@ const TeamBoard = ({ teamDetails }) => {
           index: destination.index
         }
       });
-      const response = await fetch('api/boards/' + sourceBoardID + '/' + draggableId, {
+      ///api/team/64e575412cea5f9c5f24d7c9/64e57ae8c8c11cc5bfca16dd/64e691d8c4adebe7d4ea27a3
+      const response = await fetch('/api/team/'+ teamDetails._id + '/' + sourceBoardID + '/' + draggableId, {
         method: 'DELETE'
       })
+
       if (!response.ok) {
         console.log(response.json.error);
       }
 
 
       // 3. add ticket at correct index ===============
-      const addTicketResponse = await fetch('api/boards/' + destinationBoardID + '?index=' + destination.index, {
+      const addTicketResponse = await fetch('api/boards/' + teamDetails._id + '/' + destinationBoardID + '?index=' + destination.index, {
         method: 'POST',
         body: JSON.stringify(ticketDragged),
         headers: {
@@ -218,7 +220,7 @@ const TeamBoard = ({ teamDetails }) => {
           </div>
       </div>
       </DragDropContext>
-      
+
       {isBoardModalOpen && <AddBoardModal
         onClose={handleBoardModalClose}
         onSubmit={handleAddBoard}
