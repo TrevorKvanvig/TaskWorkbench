@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSignup } from "../hooks/useSignup";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 const Signup = () => {
   const navigate = useNavigate();
   const [formDetails, setDetails] = useState({
@@ -34,21 +34,20 @@ const Signup = () => {
   return(
     <div className="signup-page ">
       <form className="signup-form form" onSubmit={handleSubmit}>
-      <h3>SIGN UP</h3>
+      <h3 className="login-title">SIGN UP</h3>
 
-      <label>Email:</label>
-      <input type="email" name='email'value={formDetails.email} onChange={handleChange}></input>
+      <input placeholder="Email Adress" className="login-input" type="email" name='email'value={formDetails.email} onChange={handleChange}></input>
 
-      <label>Username:</label>
-      <input type="text" name='username' value={formDetails.username} onChange={handleChange}></input>
+      <input placeholder="User Name" className="login-input" type="text" name='username' value={formDetails.username} onChange={handleChange}></input>
 
-      <label>password:</label>
-      <input type="password" name='password' value={formDetails.password} onChange={handleChange}></input>
-
-      <div>
-        <button disabled={isLoading} type="submit">SIGNUP</button>
-      </div>
+      <input placeholder="Password" className="login-input" type="password" name='password' value={formDetails.password} onChange={handleChange}></input>
+    
+      <button className="login-input login-button" disabled={isLoading} type="submit">SIGNUP</button>
+      
       {error && <div className="error">{error}</div>}
+      <div className="signup-link-wrapper">
+        <h4>Just Want to Test? <Link className="signup-link" to={''}>Use Guest Account!</Link></h4>
+      </div>
     </form>
     </div>
     

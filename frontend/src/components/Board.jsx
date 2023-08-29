@@ -134,7 +134,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{
-              minHeight: totalTicketHeight !== 0 ? `${totalTicketHeight}px`: '100px',
+              minHeight: totalTicketHeight !== 0 ? `${totalTicketHeight}px`: '74px',
               borderRadius: '7px',
               backgroundColor: snapshot.isDraggingOver? 'lightblue' : '#0191C8',
               margin: '0px 0px 10px 0px'
