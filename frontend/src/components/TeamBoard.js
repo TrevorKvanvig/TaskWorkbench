@@ -97,7 +97,7 @@ const TeamBoard = ({ teamDetails }) => {
       // 3. add ticket at correct index ===============
       const addTicketResponse = await fetch('api/boards/' + teamDetails._id + '/' + destinationBoardID + '?index=' + destination.index, {
         method: 'POST',
-        body: JSON.stringify(ticketDragged),
+        body: JSON.stringify({...ticketDragged, ticketID: deletedTicket.foundTicket._id }),
         headers: {
           "Content-Type": 'application/json'
         }

@@ -147,6 +147,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
                 boardDetails={boardDetails}
                 index={index} />)
             })}
+            {provided.placeholder}
           </div>);
         }}
       </Droppable>

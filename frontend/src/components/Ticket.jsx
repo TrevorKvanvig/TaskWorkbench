@@ -49,7 +49,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
   return (
     <>
-      <Draggable
+      {ticket &&<Draggable
         key={ticket._id}
         draggableId={ticket._id}
         index={index}
@@ -70,16 +70,18 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
               onClick={handleTicketClick}
             >
               <h4 className='ticket-title'>{ticket.ticketTitle}</h4>
-
+        
               <button className="ticket-delete" name="delete-button" onClick={handleDeleteTicket}>
                 DELETE
               </button>
+              {provided.placeholder}
             </div>
           );
 
         }}
 
-      </Draggable>
+      </Draggable>}
+      
 
       {isTicketOpen && <TicketDetails teamDetails={teamDetails} ticketDetails={ticket} onClose={handleTicketClose} boardID={boardDetails._id} />}
     </>);

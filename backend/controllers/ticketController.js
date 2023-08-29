@@ -5,10 +5,10 @@ const addTicketToBoard = async (req, res) => {
   const { teamID, boardID } = req.params;
   const index = req.query.index;
 
-  const { ticketTitle, ticketDescription, ticketPriority } = req.body;
+  const { ticketTitle, ticketDescription, ticketPriority, ticketID } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(teamID) ||
-      !mongoose.Types.ObjectId.isValid(boardID)) {
+    !mongoose.Types.ObjectId.isValid(boardID)) {
     return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
   }
 
@@ -22,13 +22,24 @@ const addTicketToBoard = async (req, res) => {
     if (!foundBoard) {
       return res.status(404).json({ error: 'Board Does not exist inside of Team with id ' + teamID });
     }
+    let newTicket;
+    if (ticketID) {
+      newTicket = {
+        _id: ticketID,
+        ticketTitle,
+        ticketDescription,
+        ticketPriority,
+        createdAt: new Date(),
+      };
+    } else {
+      newTicket = {
+        ticketTitle,
+        ticketDescription,
+        ticketPriority,
+        createdAt: new Date(),
+      };
+    }
 
-    const newTicket = {
-      ticketTitle,
-      ticketDescription,
-      ticketPriority,
-      createdAt: new Date(),
-    };
 
     let parsedIndex; // Declare the parsedIndex variable
 
@@ -46,7 +57,7 @@ const addTicketToBoard = async (req, res) => {
     // Get the ID of the newly created ticket
     const newTicketIndex = index !== undefined ? parsedIndex : foundBoard.tickets.length - 1;
     const newTicketID = foundBoard.tickets[newTicketIndex]._id;
-    
+
     // Return the newly added ticket with its ID
     res.status(200).json({ ...newTicket, _id: newTicketID });
   } catch (error) {
@@ -59,15 +70,15 @@ const getTicketFromBoard = async (req, res) => {
   const { teamID, boardID, ticketID } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(teamID) ||
-      !mongoose.Types.ObjectId.isValid(boardID) ||
-      !mongoose.Types.ObjectId.isValid(ticketID)) {
+    !mongoose.Types.ObjectId.isValid(boardID) ||
+    !mongoose.Types.ObjectId.isValid(ticketID)) {
     return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
   }
 
   try {
     const foundTeam = await teamCollection.findById(teamID);
     if (!foundTeam) {
-      return res.status(404).json({ error: 'Team Does not exist'});
+      return res.status(404).json({ error: 'Team Does not exist' });
     }
 
     const foundBoard = foundTeam.boards.id(boardID);
@@ -93,16 +104,16 @@ const deleteTicketFromBoard = async (req, res) => {
   const { teamID, boardID, ticketID } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(teamID) ||
-      !mongoose.Types.ObjectId.isValid(boardID) ||
-      !mongoose.Types.ObjectId.isValid(ticketID)) {
+    !mongoose.Types.ObjectId.isValid(boardID) ||
+    !mongoose.Types.ObjectId.isValid(ticketID)) {
     return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
   }
 
   try {
-    
+
     const foundTeam = await teamCollection.findById(teamID);
     if (!foundTeam) {
-      return res.status(404).json({ error: 'Team Does not exist '});
+      return res.status(404).json({ error: 'Team Does not exist ' });
     }
 
     const foundBoard = foundTeam.boards.id(boardID);
@@ -128,7 +139,7 @@ const deleteTicketFromBoard = async (req, res) => {
     await foundTeam.save();
 
     // If everything is successful, send a success response
-    res.status(200).json({ message: 'Ticket deleted successfully',foundTicket });
+    res.status(200).json({ message: 'Ticket deleted successfully', foundTicket });
 
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while deleting the ticket: ' + error });
@@ -140,15 +151,15 @@ const updateTicketFromBoard = async (req, res) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(teamID) ||
-        !mongoose.Types.ObjectId.isValid(boardID) ||
-        !mongoose.Types.ObjectId.isValid(ticketID)) {
+      !mongoose.Types.ObjectId.isValid(boardID) ||
+      !mongoose.Types.ObjectId.isValid(ticketID)) {
       return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
     }
 
     const foundTeam = await teamCollection.findById(teamID);
 
     if (!foundTeam) {
-      return res.status(404).json({ error: 'Team Does not exist '});
+      return res.status(404).json({ error: 'Team Does not exist ' });
     }
 
     const foundBoard = foundTeam.boards.id(boardID);
@@ -177,15 +188,15 @@ const updateTicketFromBoard = async (req, res) => {
 };
 
 const getAllTicketsFromBoard = async (req, res) => {
-  const {teamID, boardID} = req.params;
+  const { teamID, boardID } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(teamID) ||
-      !mongoose.Types.ObjectId.isValid(boardID)) {
+    !mongoose.Types.ObjectId.isValid(boardID)) {
     return res.status(404).json({ error: 'Invalid MongoDB Id Format' });
   }
 
   try {
-  
+
     const foundTeam = await teamCollection.findById(teamID);
     if (!foundTeam) {
       return res.status(404).json({ error: 'Team Does not exist' });
@@ -197,7 +208,7 @@ const getAllTicketsFromBoard = async (req, res) => {
     }
 
     const boardTickets = foundBoard.tickets
-    
+
 
     // Send the found ticket as a response
     res.status(200).json(boardTickets);

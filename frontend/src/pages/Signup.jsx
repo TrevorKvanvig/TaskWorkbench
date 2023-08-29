@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSignup } from "../hooks/useSignup";
+import { useNavigate } from 'react-router-dom';
 const Signup = () => {
+  const navigate = useNavigate();
   const [formDetails, setDetails] = useState({
     username: '',
     email: '',
@@ -13,6 +15,11 @@ const Signup = () => {
     event.preventDefault();
     console.log(formDetails.username, formDetails.email, formDetails.password);
     await signup(formDetails.username, formDetails.email, formDetails.password);
+
+    const storedUserData = localStorage.getItem("user");
+    if (storedUserData) {
+      navigate("/dashboard"); // Use the navigate function to redirect
+    }
   }
 
   const handleChange = (event) => {

@@ -25,12 +25,13 @@ const Dashboard = () => {
   const [isTeamDropdownOpen, setDropdownOpen] = useState(false);
   const [isJoinTeamModalOpen, setJoinTeamModal] = useState(false);
   const [joinTeamError, setJoinTeamError] = useState(null);
-  const [isIdOpen, setIdOpen ] = useState(null);
+  const [isIdOpen, setIdOpen] = useState(null);
+  const [isUserStored, setUserStored] = useState(false);
 
   useEffect(() => {
     // Check if user exists before making the API call
     if (user) {
-
+    
       const handleClickOutside = (event) => {
         // if user clicks outside of form close modal
         if (teamDropdownRef.current && !teamDropdownRef.current.contains(event.target) && !changeTeamButton.current.contains(event.target)) {
@@ -50,13 +51,15 @@ const Dashboard = () => {
       document.addEventListener('mousedown', handleClickOutsideID);
 
       const getTeamFromDB = async () => {
-        if (!JSON.parse(localStorage.getItem('teamID'))) {
+        const tID = JSON.parse(localStorage.getItem('teamID'))
+        if (!tID) {
           console.log('no Team ID');
           const response = await fetch('/api/team/' + user.team_ids[0]);
           const team = await response.json();
-
-          if (!team) {
+          
+          if (!response.ok) {
             console.log('Could not get team');
+            await localStorage.setItem('teamID', JSON.stringify(null))
           } else {
             changeTeamDetails(team);
             await localStorage.setItem('teamID', JSON.stringify(team._id))
@@ -67,8 +70,9 @@ const Dashboard = () => {
           const response = await fetch('/api/team/' + currentID);
           const team = await response.json();
 
-          if (!team) {
+          if (!response.ok) {
             console.log('Could not get team');
+            await localStorage.setItem('teamID', JSON.stringify(null))
           } else {
             changeTeamDetails(team);
             await localStorage.setItem('teamID', JSON.stringify(team._id))
@@ -89,9 +93,9 @@ const Dashboard = () => {
         await setAllTeams(allTeamData)
         // Now you have all the team data in the allTeamData array
       }
+      const storedUserData = localStorage.getItem("user");
       getTeamFromDB();
       getAllTeamsFromDB();
-      console.log(allTeams);
     }
   }, [user]);
 
@@ -189,9 +193,12 @@ const Dashboard = () => {
       type: 'ADD-TEAM',
       payload: teamAdded._id
     })
-
     setAllTeams([...allTeams, teamAdded])
-    console.log(allTeams);
+    changeTeamDetails(teamAdded)
+
+    await localStorage.setItem('teamID', JSON.stringify(teamAdded._id));
+    
+
     if (!response.ok) {
       console.log("error getting add team resopnse");
     } else {
@@ -212,14 +219,15 @@ const Dashboard = () => {
       type: 'SET_BOARDS',
       payload: teamToChangeTo.boards
     });
-    await localStorage.setItem('teamID', JSON.stringify(teamToChangeTo._id))
+    await localStorage.setItem('teamID', JSON.stringify(teamToChangeTo._id));
+    window.location.reload();
   }
 
   return (
     <>
-      {user && currentTeamDetails && <div className='team-info-bar'>
+      {user && <div className='team-info-bar'>
         <div className='team-info-bar-left'>
-          <h3 className='team-dropdown' ref={changeTeamButton} onClick={() => { setDropdownOpen(!isTeamDropdownOpen) }}>Change Team ^</h3>
+          {currentTeamDetails && <h3 className='team-dropdown' ref={changeTeamButton} onClick={() => { setDropdownOpen(!isTeamDropdownOpen) }}>Change Team ^</h3>}
 
           {isTeamDropdownOpen && allTeams && <ul ref={teamDropdownRef} className='team-dropdown-list'>
             {allTeams.map((team) => {
@@ -230,19 +238,19 @@ const Dashboard = () => {
           <button onClick={handleTeamModalOpen} className='create-team-button dropdown-team-button'>CREATE TEAM</button>
           <button onClick={handleJoinTeamModalOpen} className='join-team-button dropdown-team-button'>JOIN TEAM</button>
         </div>
-        <div className='team-info-bar-right'>
+        {currentTeamDetails && <div className='team-info-bar-right'>
 
           <h3 className='id-dropdown' ref={viewIDButton} onClick={() => { setIdOpen(!isIdOpen) }}>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
           {isIdOpen && <div className='id-dropdown-list' ref={idDropdownRef}>
-          <h3 className='id-dropdown-item1'>Team ID:</h3><h3 className='id-dropdown-item2'>{currentTeamDetails._id}</h3></div>}
-        </div>
+            <h3 className='id-dropdown-item1'>Team ID:</h3><h3 className='id-dropdown-item2'>{currentTeamDetails._id}</h3></div>}
+        </div>}
       </div>}
 
       {(user && user.team_ids.length > 0 && currentTeamDetails) && <TeamBoard key={currentTeamDetails._id} teamDetails={currentTeamDetails} />}
 
       {(user && user.team_ids.length === 0) &&
         <div className='no-teams-div'>
-          <h1 className='no-teams-mssg'>You Have No Team Please Create One</h1>
+          <h1 className='no-teams-mssg'>You Have No Team Please Create Or Join One</h1>
         </div>
       }
 
