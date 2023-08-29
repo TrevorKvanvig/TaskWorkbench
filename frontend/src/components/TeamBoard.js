@@ -200,29 +200,25 @@ const TeamBoard = ({ teamDetails }) => {
 
   return (
     <>
-
-
-      
+    <DragDropContext onDragEnd={handleDragEnd}>
       <div className="board-container">
-        <DragDropContext onDragEnd={handleDragEnd}>
-        {teamDetails && boards && boards.map((board) => {
-          return (
-            <Board key={board._id}
-              boardDetails={board}
-              onTicketModalOpen={handleTicketModalOpen}
-              teamDetails={teamDetails}
-            />);
+        
+          {teamDetails && boards && boards.map((board) => {
+            return (
+              <Board key={board._id}
+                boardDetails={board}
+                onTicketModalOpen={handleTicketModalOpen}
+                teamDetails={teamDetails}
+              />);
 
-        })}
+          })}
 
-        <div className='add-board-btn-container'>
-          <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
-        </div></DragDropContext>
+          <div className='add-board-btn-container'>
+            <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
+          </div>
       </div>
+      </DragDropContext>
       
-
-
-
       {isBoardModalOpen && <AddBoardModal
         onClose={handleBoardModalClose}
         onSubmit={handleAddBoard}

@@ -111,32 +111,35 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
 
   // return this jsx code to browser
   return (
-    <Droppable droppableId={boardDetails._id}>
-      {(provided, snapshot) => {
-        // Calculate total height of tickets
-        let totalTicketHeight = 0;
-        if (boardDetails && boardDetails.tickets) {
-          totalTicketHeight = boardDetails.tickets.length * 74; // Assuming each ticket has a height of 100px
-        }
-        
-        return (<div className="board"
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          style={{
-            background: '#0191C8'
+    <div className="board"
+      style={{
+        background: '#0191C8'
+      }}
+    >
+
+      <div className="board-title" ref={titleRef}>
+        <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20' />
+        {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
+      </div>
+
+      {boardDetails && (<Droppable droppableId={boardDetails._id}>
+        {(provided, snapshot) => {
+          // Calculate total height of tickets
+          let totalTicketHeight = 0;
+          if (boardDetails && boardDetails.tickets) {
+            totalTicketHeight = boardDetails.tickets.length * 74; // Assuming each ticket has a height of 100px
+          }
+
+          return (<div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            style={{
+              minHeight: totalTicketHeight !== 0 ? `${totalTicketHeight}px`: '100px',
+              borderRadius: '7px',
+              backgroundColor: snapshot.isDraggingOver? 'lightblue' : '#0191C8',
+              margin: '0px 0px 10px 0px'
             }}
-        >
-
-          <div className="board-title" ref={titleRef}>
-            <input className="board-title-input" value={currentTitle} onChange={handleTitleChange} maxLength='20' />
-            {isTitleChanging && <button onClick={saveNewBoardTitle}>save</button>}
-          </div>
-
-          {boardDetails && (<div 
-          style={{
-            minHeight: `${totalTicketHeight}px`,
-            background: snapshot.isDraggingOver ? 'lightblue' : '#0191C8'
-            }}>
+          >
             {boardDetails.tickets.map((ticket, index) => {
               return (<Ticket key={ticket._id}
                 teamDetails={teamDetails}
@@ -144,21 +147,22 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
                 boardDetails={boardDetails}
                 index={index} />)
             })}
-          </div>
+          </div>);
+        }}
+      </Droppable>
+      )}
 
-          )}
-          <div className="end-board-buttons">
-            <button onClick={() => {
-              onTicketModalOpen(boardDetails)
-            }}>ADD TICKET</button>
-            <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
-          </div>
+      <div className="end-board-buttons">
+        <button onClick={() => {
+          onTicketModalOpen(boardDetails)
+        }}>ADD TICKET</button>
+        <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
+      </div>
 
-        </div>);
+    </div>
 
-      }}
 
-    </Droppable>
+
   );
 
 }
