@@ -40,18 +40,18 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
     <>
       <div className='overlay-style'></div>
       <form className="add-board-modal modal" ref={ticketModalRef}>
-      <h2>Add New Ticket to "{boardDetails.boardTitle}"</h2>
+      <h2 className="new-ticket-title">Add New Ticket to "{boardDetails.boardTitle}"</h2>
       
       <label htmlFor="ticket-title">New Ticket Title</label>
-      <input type="text" id="ticket-title" name="ticketTitle" value={ticketDetails.ticketTitle}  onChange={handleChange}/>
+      <input className='ticket-details-title' type="text" id="ticket-title" name="ticketTitle" value={ticketDetails.ticketTitle}  onChange={handleChange}/>
 
       <label htmlFor="ticket-description">New Ticket Description</label>
-      <input type="text" id="ticket-description" name="ticketDescription" value={ticketDetails.ticketDescription} onChange={handleChange}/>
+      <input className='ticket-details-title' type="text" id="ticket-description" name="ticketDescription" value={ticketDetails.ticketDescription} onChange={handleChange}/>
       
       <label htmlFor="ticket-priority">New Ticket Priority</label>
-      <input type="text" id="ticket-priority" name="ticketPriority" value={ticketDetails.ticketPriority} onChange={handleChange}/>
+      <input className='ticket-details-title' type="text" id="ticket-priority" name="ticketPriority" value={ticketDetails.ticketPriority} onChange={handleChange}/>
       
-      <button type="submit" onClick={(event) => {
+      <button className="login-input login-button" type="submit" onClick={(event) => {
         event.preventDefault();
         onSubmit(ticketDetails, boardDetails._id);
         onClose();
@@ -62,7 +62,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
         });
       }}>Add Ticket</button>
 
-      <button onClick={(event) => {
+      <button className="login-input login-button close" onClick={(event) => {
         event.preventDefault()
         onClose()
       }}>close</button>

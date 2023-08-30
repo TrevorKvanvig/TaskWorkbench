@@ -169,24 +169,20 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
       <div className='overlay-style'></div>
       <div className="modal" ref={modalRef}>
         <label>Title:</label>
-        <div ref={titleRef}>
-          <input name="currentTitle" value={currentTitle} onChange={handleChange} />
-          {isTitleChanging && <button onClick={handleUpdateTicketTitle}>Save New Title</button>}
+        <div className='align-right' ref={titleRef}>
+          <input className='ticket-details-title' name="currentTitle" value={currentTitle} onChange={handleChange} />
+          {isTitleChanging && <button className='save-btn' onClick={handleUpdateTicketTitle}>Save New Title</button>}
         </div>
 
         <label>Description:</label>
-        <div ref={descRef}>
-          <input name="currentDesc" value={currentDesc} onChange={handleChange} />
-          {isDescChanging && <button onClick={handleUpdateTicketDescription}>Save New Description</button>}
+        <div className='align-right' ref={descRef}>
+          <textarea  type='text' className='ticket-details-description' name="currentDesc" value={currentDesc} onChange={handleChange}></textarea>
+          {isDescChanging && <button className='save-btn' onClick={handleUpdateTicketDescription}>Save New Description</button>}
         </div>
 
-        <label>Priority:</label>
-        <div ref={priRef}>
-          <input name="currentPri" value={currentPri} onChange={handleChange} />
-          {ispriChanging && <button onClick={handleUpdateTicketPriority}>Save New Priority</button>}
-        </div>
+        <p className='ticket-added-p'>Ticket Added</p>
         <p className='ticket-edited'>{formatDistanceToNow(new Date(ticketDetails.createdAt), { addSuffix: true })}</p>
-        <button onClick={onClose}>close</button>
+        <button className="login-input login-button" onClick={onClose}>close</button>
       </div>
     </>
   );

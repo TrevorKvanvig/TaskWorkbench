@@ -10,11 +10,7 @@ const ticketSchema = new Schema(
     ticketDescription: {
       type: String,
       required: true,
-    },
-    ticketPriority: {
-      type: Number,
-      required: true,
-    },
+    }
   },
   { timestamps: true }
 );

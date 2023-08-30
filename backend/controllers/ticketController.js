@@ -22,24 +22,22 @@ const addTicketToBoard = async (req, res) => {
     if (!foundBoard) {
       return res.status(404).json({ error: 'Board Does not exist inside of Team with id ' + teamID });
     }
+    
     let newTicket;
     if (ticketID) {
       newTicket = {
         _id: ticketID,
         ticketTitle,
         ticketDescription,
-        ticketPriority,
         createdAt: new Date(),
       };
     } else {
       newTicket = {
         ticketTitle,
         ticketDescription,
-        ticketPriority,
         createdAt: new Date(),
       };
     }
-
 
     let parsedIndex; // Declare the parsedIndex variable
 

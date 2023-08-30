@@ -110,6 +110,9 @@ button {
   margin: none;
   background-color: #c4c4c4;
   border: none;
+  border-radius: 7px;
+  min-height: 20px;
+  border: solid #005B9A 1.5px;
 }
 
 .board-title {
@@ -153,7 +156,7 @@ button {
 
 /* modal styling */
 .modal {
-  background-color:#005B9A;
+  background-color:#e2e2e2;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -163,10 +166,44 @@ button {
   display: flex;
   flex-direction: column;
   border-radius: 7px;
+  padding: 30px;
+  margin: 0;
 }
 
 .modal input {
   display: block;
+}
+
+.ticket-details-title {
+  height: 40px;
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
+  background-color: transparent;
+  border: solid #005B9A 2px;
+  border-radius: 7px;
+  
+}
+
+.ticket-details-description {
+  height: 40vh;
+  width: 98%;
+  border: solid #005B9A 2px;
+  border-radius: 7px;
+  text-align: start;
+  overflow: auto;
+  font-size: 18px;
+  width: 550px;
+  resize: none;
+}
+
+.modal p {
+  margin: 0px;
+  text-align: center;
+}
+
+.ticket-added-p {
+  padding-top: 10px;
 }
 
 .overlay-style {
@@ -398,6 +435,28 @@ button {
 
 .signup-link {
   color: #005B9A;
+}
+
+.close {
+  background-color: #333;
+  border: none;
+}
+
+.new-ticket-title {
+  text-align: center;
+  margin-top: 0px;
+}
+
+.save-btn {
+  align-self: flex-end;
+  background-color: #005B9A;
+  color: #f1f1f1;
+  margin-top: 10px;
+}
+
+.align-right {
+  display: flex;
+  flex-direction: column;
 }
 
 
