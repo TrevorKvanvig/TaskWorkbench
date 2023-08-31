@@ -30,18 +30,18 @@ const AddTeamModal = ({ onSubmit, onClose }) => {
     <>
       <div className='overlay-style'></div>
       <form className="add-team-modal modal" ref={teamModalRef}>
-        <h2 >ADD team</h2>
+        <h2 className="new-ticket-title">ADD team</h2>
 
         <label htmlFor="team-title">New team Title</label>
-        <input type="text" id="team-title" name="teamTitle" value={teamTitle} onChange={handleChange} />
+        <input className='ticket-details-title' type="text" id="team-title" name="teamTitle" value={teamTitle} onChange={handleChange} />
 
-        <button type="submit" onClick={(event) => {
+        <button className="login-input login-button" type="submit" onClick={(event) => {
           event.preventDefault();
           onSubmit(teamTitle);
           setTeamTitle('');
         }}>Add Team</button>
 
-        <button onClick={onClose}>close</button>
+        <button  className="login-input login-button close" onClick={onClose}>close</button>
       </form>
     </>
 

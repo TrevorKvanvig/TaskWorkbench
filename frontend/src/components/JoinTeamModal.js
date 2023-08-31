@@ -30,18 +30,18 @@ const JoinTeamModal = ({ onSubmit, onClose, joinTeamError }) => {
     <>
       <div className='overlay-style'></div>
       <form className="add-team-modal modal" ref={teamModalRef}>
-        <h2>ADD team</h2>
+        <h2 className="new-ticket-title">Join A Team</h2>
 
-        <label htmlFor="team-ID">ID Of Team TO Join</label>
-        <input type="text" id="team-title" name="teamTitle" value={teamID} onChange={handleChange} />
+        <label  htmlFor="team-ID">ID Of Team To Join:</label>
+        <input className='ticket-details-title' type="text" id="team-title" name="teamTitle" value={teamID} onChange={handleChange} />
 
-        <button type="submit" onClick={(event) => {
+        <button className="login-input login-button" type="submit" onClick={(event) => {
           event.preventDefault();
           onSubmit(teamID);
           setTeamID('');
-        }}>JOIN Team</button>
+        }}>Join Team</button>
 
-        <button onClick={onClose}>close</button>
+        <button className="login-input login-button close" onClick={onClose}>Close</button>
         {joinTeamError && <h3>{joinTeamError}</h3>}
       </form>
     </>

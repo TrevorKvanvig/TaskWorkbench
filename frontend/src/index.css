@@ -459,4 +459,8 @@ button {
   flex-direction: column;
 }
 
+.add-board-modal, .add-team-modal{
+  min-width: 300px;
+}
+
 

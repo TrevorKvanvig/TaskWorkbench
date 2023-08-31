@@ -182,7 +182,7 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
 
         <p className='ticket-added-p'>Ticket Added</p>
         <p className='ticket-edited'>{formatDistanceToNow(new Date(ticketDetails.createdAt), { addSuffix: true })}</p>
-        <button className="login-input login-button" onClick={onClose}>close</button>
+        <button className="login-input login-button" onClick={onClose}>Close</button>
       </div>
     </>
   );

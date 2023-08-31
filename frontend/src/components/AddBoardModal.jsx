@@ -30,18 +30,18 @@ const AddBoardModal = ({onSubmit, onClose}) => {
     <>
     <div className='overlay-style'></div>
     <form className="add-board-modal modal" ref={boardModalRef}>
-      <h2>ADD BOARD</h2>
+      <h2 className="new-ticket-title">ADD BOARD</h2>
       
       <label htmlFor="board-title">New Board Title</label>
-      <input type="text" id="board-title" name="boardTitle" value={boardTitle} onChange={handleChange}/>
+      <input maxLength={20} className='ticket-details-title' type="text" id="board-title" name="boardTitle" value={boardTitle} onChange={handleChange}/>
       
-      <button type="submit" onClick={(event) => {
+      <button className="login-input login-button" type="submit" onClick={(event) => {
         event.preventDefault();
         onSubmit(boardTitle);
         setBoardTitle('');
       }}>Add Board</button>
 
-      <button onClick={onClose}>close</button>
+      <button className="login-input login-button close" onClick={onClose}>close</button>
   </form>  
     </>
   
