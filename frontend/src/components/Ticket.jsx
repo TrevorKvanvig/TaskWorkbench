@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { useAuthContext } from "../hooks/useAuthContext";
 import TicketDetails from './TicketDetails';
-
+import { ReactComponent as TrashLogo } from '../trash.svg';
 const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
   const { dispatch } = useBoardsContext();
   const [isTicketOpen, setTicketOpen] = useState(null);
@@ -72,7 +72,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
               <h4 className='ticket-title'>{ticket.ticketTitle}</h4>
         
               <button className="ticket-delete" name="delete-button" onClick={handleDeleteTicket}>
-                DELETE
+                <TrashLogo/>
               </button>
               {provided.placeholder}
             </div>

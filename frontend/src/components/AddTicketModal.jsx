@@ -46,10 +46,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
       <input className='ticket-details-title' type="text" id="ticket-title" name="ticketTitle" value={ticketDetails.ticketTitle}  onChange={handleChange}/>
 
       <label htmlFor="ticket-description">New Ticket Description</label>
-      <input className='ticket-details-title' type="text" id="ticket-description" name="ticketDescription" value={ticketDetails.ticketDescription} onChange={handleChange}/>
-      
-      <label htmlFor="ticket-priority">New Ticket Priority</label>
-      <input className='ticket-details-title' type="text" id="ticket-priority" name="ticketPriority" value={ticketDetails.ticketPriority} onChange={handleChange}/>
+      <textarea type='text' className='ticket-details-description' id="ticket-description" name="ticketDescription" value={ticketDetails.ticketDescription} onChange={handleChange} ></textarea>
       
       <button className="login-input login-button" type="submit" onClick={(event) => {
         event.preventDefault();
@@ -65,7 +62,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
       <button className="login-input login-button close" onClick={(event) => {
         event.preventDefault()
         onClose()
-      }}>close</button>
+      }}>Close</button>
     </form>
     </>
   );

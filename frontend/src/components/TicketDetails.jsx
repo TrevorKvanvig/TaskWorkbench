@@ -102,37 +102,6 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
     }
   }
 
-  const handleUpdateTicketPriority = async () => {
-    setCurrentPri(currentPri)
-
-    const updateObject = {
-      ticketPriority: currentPri
-    }
-
-    const response = await fetch('/api/team/' + teamDetails._id + '/' + boardID + '/' + ticketDetails._id, {
-      method: 'PATCH',
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(updateObject)
-    });
-
-    const json = await response.json()
-    if (response.ok) {
-      dispatch({
-        type: 'UPDATE_TICKET_PRI',
-        payload: {
-          updateObject,
-          ticketID: ticketDetails._id,
-          boardID
-        }
-      })
-    } else {
-      console.log(json.error);
-    }
-  }
-
   const handleUpdateTicketDescription = async () => {
     setCurrentDesc(currentDesc);
 

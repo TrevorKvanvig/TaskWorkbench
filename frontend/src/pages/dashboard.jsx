@@ -1,4 +1,4 @@
-
+import { ReactComponent as DropdownLogo } from '../dropdown.svg'; 
 import { useEffect, useState, useRef } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 
@@ -234,7 +234,7 @@ const Dashboard = () => {
     <>
       {user && <div className='team-info-bar'>
         <div className='team-info-bar-left'>
-          {isTeamStored && <h3 className='team-dropdown' ref={changeTeamButton} onClick={() => { setDropdownOpen(!isTeamDropdownOpen) }}>Change Team ^</h3>}
+          {isTeamStored && <h3 className='team-dropdown' ref={changeTeamButton} onClick={() => { setDropdownOpen(!isTeamDropdownOpen) }}>Change Team <DropdownLogo /></h3>}
 
           {isTeamDropdownOpen && allTeams && <ul ref={teamDropdownRef} className='team-dropdown-list'>
             {allTeams.map((team) => {
@@ -247,7 +247,7 @@ const Dashboard = () => {
         </div>
         {isTeamStored && currentTeamDetails && <div className='team-info-bar-right'>
 
-          <h3 className='id-dropdown' ref={viewIDButton} onClick={() => { setIdOpen(!isIdOpen) }}>Current Team: <span> {currentTeamDetails.teamTitle}</span></h3>
+          <h3 className='id-dropdown' ref={viewIDButton} onClick={() => { setIdOpen(!isIdOpen) }}>Current Team: {currentTeamDetails.teamTitle} <DropdownLogo /></h3>
           {isIdOpen && <div className='id-dropdown-list' ref={idDropdownRef}>
             <h3 className='id-dropdown-item1'>Team ID:</h3><h3 className='id-dropdown-item2'>{currentTeamDetails._id}</h3></div>}
         </div>}

@@ -2,7 +2,7 @@ import Ticket from "./Ticket";
 import { useBoardsContext } from "../hooks/useBoardsContext";
 import { useEffect, useState, useRef } from "react";
 import { Droppable } from "react-beautiful-dnd";
-
+import { ReactComponent as AddLogo } from '../add-square.svg';
 
 
 
@@ -154,10 +154,11 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
       )}
 
       <div className="end-board-buttons">
-        <button onClick={() => {
+        
+        <button className="board-delete" onClick={handleDeleteBoard}>Delete Board</button>
+        <button className="add-board-button" onClick={() => {
           onTicketModalOpen(boardDetails)
-        }}>ADD TICKET</button>
-        <button className="board-delete" onClick={handleDeleteBoard}>Delete Entire Board</button>
+        }}><AddLogo/></button>
       </div>
 
     </div>
