@@ -1,6 +1,7 @@
 import { DragDropContext } from 'react-beautiful-dnd'
 import { useState, useEffect } from 'react';
 import { useBoardsContext } from '../hooks/useBoardsContext'
+import { ReactComponent as AddLogo } from '../add-square.svg';
 
 import AddBoardModal from "../components/AddBoardModal";
 import AddTicketModal from '../components/AddTicketModal';
@@ -216,7 +217,7 @@ const TeamBoard = ({ teamDetails }) => {
           })}
 
           <div className='add-board-btn-container'>
-            <button onClick={handleBoardModalOpen} className='add-board-btn'>Add Board</button>
+            <button onClick={handleBoardModalOpen} className='add-board-btn'><AddLogo width="50" height="50" /></button>
           </div>
       </div>
       </DragDropContext>

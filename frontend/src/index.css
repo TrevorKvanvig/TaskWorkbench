@@ -480,18 +480,16 @@ button {
 .add-board-btn {
 display: flex;
   align-items: center;
-  background-color: #74C2E1;
+  background-color: transparent;
   color:black;
   border: 2px solid #005B9A;
-  padding: 6px 15px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1em;
-  height: 10vh;
-  width: 100px;
   align-self: center;
   margin-right: 20px;
   transition: background var(--speed);
+  border-radius: 7px;
 }
 
 
