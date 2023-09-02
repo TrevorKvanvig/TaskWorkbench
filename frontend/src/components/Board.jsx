@@ -155,7 +155,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
 
       <div className="end-board-buttons">
         
-        <button className="board-delete" onClick={handleDeleteBoard}>Delete</button>
+        <button className="board-delete" onClick={handleDeleteBoard}>Delete Board</button>
         <button className="add-board-button" onClick={() => {
           onTicketModalOpen(boardDetails)
         }}><AddLogo/></button>

@@ -370,7 +370,7 @@ button {
   border: solid #005B9A 2px;
   color: #005B9A;
   border-radius: 7px;
-  padding: 2px;
+  padding: 4px;
   cursor: pointer;
   transition: background var(--speed);
 }
