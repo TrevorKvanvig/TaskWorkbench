@@ -34,7 +34,11 @@ const Login = () => {
 
   return(
     
-    <div className="signup-page ">
+    <div className="signup-page">
+      <div className="login-title-wrapper">
+        <h2 className="login-title">Welcome To Task Workbench!</h2>
+      </div>
+
       <form className="signup-form form" onSubmit={handleSubmit}>
       <h3 className="login-title">Log in</h3>
 
