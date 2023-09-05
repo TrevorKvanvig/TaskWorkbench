@@ -186,7 +186,7 @@ button {
 
 .ticket-details-title {
   height: 40px;
-  width: 100%;
+  width: 520px;
   font-size: 30px;
   text-align: center;
   background-color: transparent;
@@ -197,13 +197,13 @@ button {
 
 .ticket-details-description {
   height: 40vh;
-  width: 98%;
+  
   border: solid #005B9A 2px;
   border-radius: 7px;
   text-align: start;
   overflow: auto;
   font-size: 18px;
-  width: 550px;
+  width: 520px;
   resize: none;
 }
 

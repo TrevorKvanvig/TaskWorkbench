@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from "react";
 const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
   const ticketModalRef = useRef();
 
+  const [DescriptionError, setDError] = useState(null);
+  const [TitleError, setTError] = useState(null);
+
   useEffect(() => {
 
     const handleClickOutside = (event) => {
@@ -51,7 +54,7 @@ const AddTicketModal = ({onSubmit, onClose, boardDetails}) => {
       <button className="login-input login-button" type="submit" onClick={(event) => {
         event.preventDefault();
         onSubmit(ticketDetails, boardDetails._id);
-        onClose();
+        
         setTicketDetails({
           ticketTitle: '',
           ticketDescription: '',
