@@ -34,10 +34,10 @@ const userSchema = new Schema(
 userSchema.statics.signup = async function(username, email, password) {
 
   if (!email || !password || !username){
-    throw Error('all feilds must be filled');
+    throw Error('Please Fill In All Feilds');
   }
   if(!validator.isEmail(email)){
-    throw Error('Email is not valid');
+    throw Error('Email Is Not A Valid Email');
   }
   // if I need strong passwords
   // if(!validator.isStrongPassword(password)){
@@ -48,10 +48,10 @@ userSchema.statics.signup = async function(username, email, password) {
   const uEists = await this.findOne({ username });
 
   if (eExists) {
-    throw Error('Email is already being used');
+    throw Error('Email Is Already Being Used');
   }
   if (uEists) {
-    throw Error('Username is already Being Used');
+    throw Error('Username Is Already Being Used');
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -69,19 +69,19 @@ userSchema.statics.signup = async function(username, email, password) {
 userSchema.statics.login = async function(email, password){
 
   if (!email || !password){
-    throw Error('all feilds must be filled');
+    throw Error('Please Fill In All Feilds');
   }
 
   const user = await this.findOne({email});
 
   if(!user) {
-    throw Error('Email is not in use')
+    throw Error('There Is No Account With This Email')
   }
 
   const isMatch = await bcrypt.compare(password, user.password)
 
   if(!isMatch) {
-    throw Error('Incorrect Passowrd')
+    throw Error('Incorrect Password')
   }
 
   return user

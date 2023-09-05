@@ -544,3 +544,12 @@ display: flex;
 .board-title-input {
   margin-bottom: 10px;
 }
+
+.error {
+  background-color: #ff000071;
+  border: solid var(--error) 2px;
+  border-radius: 7px;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 20px;
+}
