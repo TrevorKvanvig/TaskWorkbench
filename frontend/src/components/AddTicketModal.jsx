@@ -4,9 +4,6 @@ import { useState, useEffect, useRef } from "react";
 const AddTicketModal = ({onSubmit, onClose, boardDetails, emptyFeilds}) => {
   const ticketModalRef = useRef();
 
-  const [DescriptionError, setDError] = useState(null);
-  const [TitleError, setTError] = useState(null);
-
   useEffect(() => {
 
     const handleClickOutside = (event) => {

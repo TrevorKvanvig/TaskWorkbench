@@ -2,7 +2,6 @@
 import { useBoardsContext } from '../hooks/useBoardsContext';
 import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { useAuthContext } from "../hooks/useAuthContext";
 import TicketDetails from './TicketDetails';
 import { ReactComponent as TrashLogo } from '../trash.svg';
 const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {

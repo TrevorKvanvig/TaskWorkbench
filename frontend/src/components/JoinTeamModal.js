@@ -7,7 +7,6 @@ const JoinTeamModal = ({ onSubmit, onClose, joinTeamError }) => {
   useEffect(() => {
     const handleModalClicks = (event) => {
       if (teamModalRef && !teamModalRef.current.contains(event.target)) {
-        console.log('clicked outside');
         onClose();
       }
     }
@@ -23,7 +22,6 @@ const JoinTeamModal = ({ onSubmit, onClose, joinTeamError }) => {
     const { value } = event.target;
 
     setTeamID(value);
-
   }
 
   return (
