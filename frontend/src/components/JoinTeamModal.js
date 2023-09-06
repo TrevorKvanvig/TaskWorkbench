@@ -34,6 +34,8 @@ const JoinTeamModal = ({ onSubmit, onClose, joinTeamError }) => {
 
         <label  htmlFor="team-ID">ID Of Team To Join:</label>
         <input className='ticket-details-title' type="text" id="team-title" name="teamTitle" value={teamID} onChange={handleChange} />
+        
+        {joinTeamError && <div className="error">{joinTeamError}</div>}
 
         <button className="login-input login-button" type="submit" onClick={(event) => {
           event.preventDefault();
@@ -42,7 +44,7 @@ const JoinTeamModal = ({ onSubmit, onClose, joinTeamError }) => {
         }}>Join Team</button>
 
         <button className="login-input login-button close" onClick={onClose}>Close</button>
-        {joinTeamError && <h3>{joinTeamError}</h3>}
+        
       </form>
     </>
 

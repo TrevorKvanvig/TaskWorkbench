@@ -5,7 +5,17 @@ const addTicketToBoard = async (req, res) => {
   const { teamID, boardID } = req.params;
   const index = req.query.index;
 
-  const { ticketTitle, ticketDescription, ticketPriority, ticketID } = req.body;
+  const { ticketTitle, ticketDescription, ticketID } = req.body;
+
+  let emptyFeilds = [];
+
+  if(!ticketTitle) {
+    emptyFeilds.push('Title');
+  }
+
+  if(!ticketDescription) {
+    emptyFeilds.push('Description')
+  }
 
   if (!mongoose.Types.ObjectId.isValid(teamID) ||
     !mongoose.Types.ObjectId.isValid(boardID)) {
@@ -59,7 +69,7 @@ const addTicketToBoard = async (req, res) => {
     // Return the newly added ticket with its ID
     res.status(200).json({ ...newTicket, _id: newTicketID });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message, emptyFeilds });
   }
 };
 

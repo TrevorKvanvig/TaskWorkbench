@@ -546,10 +546,14 @@ display: flex;
 }
 
 .error {
+  display: flex;
   background-color: #ff000071;
   border: solid var(--error) 2px;
   border-radius: 7px;
   text-align: center;
   margin-top: 20px;
   font-size: 20px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
 }

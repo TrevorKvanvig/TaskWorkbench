@@ -8,6 +8,12 @@ const addTeamToUser = async (req, res) => {
   const { userID } = req.params;
   const { teamTitle } = req.body;
 
+  let emptyFeilds = []
+
+  if(!teamTitle) {
+    emptyFeilds.push('Title');
+  }
+
   if (!mongoose.Types.ObjectId.isValid(userID)) {
     return res.status(404).json({ error: 'Not MongoDB Id Format' });
   }
@@ -31,12 +37,18 @@ const addTeamToUser = async (req, res) => {
     res.status(200).json(newTeam);
 
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message, emptyFeilds });
   }
 };
 
 const addTeamIdToUser = async (req, res) => {
   const { userID, teamID } = req.params;
+  
+  let emptyFeilds = []
+
+  if(!teamID) {
+    emptyFeilds.push('ID');
+  }
 
   if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(teamID)) {
     return res.status(404).json({ error: 'Not MongoDB Id Format' });
@@ -63,7 +75,7 @@ const addTeamIdToUser = async (req, res) => {
     res.status(200).json(foundUser);
 
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message, emptyFeilds });
   }
 }
 

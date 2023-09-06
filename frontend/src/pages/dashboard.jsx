@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [joinTeamError, setJoinTeamError] = useState(null);
   const [isIdOpen, setIdOpen] = useState(null);
   const [isTeamStored, setTeamStored] = useState(false);
+  const [teamEmpty, setTeamEmpty] = useState([]);
 
   useEffect(() => {
     // Check if user exists before making the API call
@@ -101,8 +102,6 @@ const Dashboard = () => {
       getTeamFromDB();
       
       getAllTeamsFromDB();
-      
-      
     }
   }, [user]);
 
@@ -112,6 +111,7 @@ const Dashboard = () => {
 
   const handleTeamModalClose = () => {
     changeTeamModalState(false);
+    setTeamEmpty([]);
   }
 
   const handleJoinTeamModalOpen = () => {
@@ -119,6 +119,7 @@ const Dashboard = () => {
   }
   const handleJoinTeamModalClose = () => {
     setJoinTeamModal(false);
+    setJoinTeamError(null)
   }
 
   const handleJoinTeam = async (joinTeamID) => {
@@ -178,8 +179,6 @@ const Dashboard = () => {
   }
 
   const handleAddTeam = async (teamTitle) => {
-    // close board modal
-    changeTeamModalState(false);
 
     const newTeam = {
       teamTitle: teamTitle
@@ -195,21 +194,22 @@ const Dashboard = () => {
 
     // get board added back from database
     const teamAdded = await response.json()
-
-    dispatch({
-      type: 'ADD-TEAM',
-      payload: teamAdded._id
-    })
-    setAllTeams([...allTeams, teamAdded])
-    changeTeamDetails(teamAdded)
-
-    await localStorage.setItem('teamID', JSON.stringify(teamAdded._id));
     
-
     if (!response.ok) {
-      console.log("error getting add team resopnse");
+      
+      setTeamEmpty(teamAdded.emptyFeilds)
     } else {
-
+      setTeamEmpty([])
+      dispatch({
+        type: 'ADD-TEAM',
+        payload: teamAdded._id
+      })
+      setAllTeams([...allTeams, teamAdded])
+      changeTeamDetails(teamAdded)
+  
+      await localStorage.setItem('teamID', JSON.stringify(teamAdded._id));
+      // close board modal
+      changeTeamModalState(false);
       // Update the user data in local storage
       const storedUserData = JSON.parse(localStorage.getItem('user'));
       const updatedLocalStorageData = {
@@ -264,6 +264,7 @@ const Dashboard = () => {
       {isTeamModalOpen && <AddTeamModal
         onClose={handleTeamModalClose}
         onSubmit={handleAddTeam}
+        emptyFeilds={teamEmpty}
       />}
 
       {isJoinTeamModalOpen && <JoinTeamModal onClose={handleJoinTeamModalClose}

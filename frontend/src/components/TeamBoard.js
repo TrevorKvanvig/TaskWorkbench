@@ -12,8 +12,9 @@ const TeamBoard = ({ teamDetails }) => {
   const { boards, dispatch } = useBoardsContext();
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
-  const [ticketsBoardDetails, setBoardDetails] = useState(null)
-
+  const [ticketsBoardDetails, setBoardDetails] = useState(null);
+  const [emptyFeilds, setEmptyFeilds] = useState([]);
+  const [emptyBoardFeilds, setEmptyBoardFeilds] = useState([]);
   // Whenever dasboard gets loaded run this function once
   useEffect(() => {
     if (teamDetails) {
@@ -113,6 +114,7 @@ const TeamBoard = ({ teamDetails }) => {
     // reset board details
     changeTicketModalState(false);
     setBoardDetails(null);
+    setEmptyFeilds([])
 
   }
 
@@ -149,14 +151,16 @@ const TeamBoard = ({ teamDetails }) => {
           boardID
         }
       })
+      setEmptyFeilds([]);
+      changeTicketModalState(false)
     } else {
-      console.log(ticketAdded.error);
+      console.log(ticketAdded.error, ticketAdded.emptyFeilds);
+      setEmptyFeilds(ticketAdded.emptyFeilds);
     }
   }
 
   const handleAddBoard = async (boardTitle) => {
-    // close board modal
-    changeBoardModalState(false);
+    
 
     //create new board to pass into database
     const newBoard = {
@@ -183,10 +187,12 @@ const TeamBoard = ({ teamDetails }) => {
         type: 'ADD_BOARD',
         payload: boardAdded
       });
-
+      // close board modal
+      changeBoardModalState(false);
 
     } else {
       console.log("error getting add board response");
+      setEmptyBoardFeilds('Title')
     }
   }
 
@@ -198,6 +204,7 @@ const TeamBoard = ({ teamDetails }) => {
   const handleBoardModalClose = () => {
     // close board modal
     changeBoardModalState(false);
+    setEmptyBoardFeilds([])
   }
 
 
@@ -225,12 +232,14 @@ const TeamBoard = ({ teamDetails }) => {
       {isBoardModalOpen && <AddBoardModal
         onClose={handleBoardModalClose}
         onSubmit={handleAddBoard}
+        emptyFeilds={emptyBoardFeilds}
       />}
 
       {isTicketModalOpen && ticketsBoardDetails && <AddTicketModal
         onClose={handleTicketModalClose}
         onSubmit={handleAddTicket}
         boardDetails={ticketsBoardDetails}
+        emptyFeilds={emptyFeilds}
       />}
     </>
 

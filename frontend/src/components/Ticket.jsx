@@ -10,8 +10,8 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
   const [isTicketOpen, setTicketOpen] = useState(null);
 
 
-  const handleDeleteTicket = async () => {
-
+  const handleDeleteTicket = async (event) => {
+    event.stopPropagation();
     const response = await fetch('api/team/' + teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
       method: 'DELETE'
     })
@@ -34,7 +34,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
   const handleTicketClick = (event) => {
     const { name } = event.target;
-
+    console.log(name);
     //if delete button is pressed dont open modal
     if (name !== 'delete-button') {
       // if it is not pressed open modal

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const AddBoardModal = ({onSubmit, onClose}) => {
+const AddBoardModal = ({onSubmit, onClose, emptyFeilds}) => {
   const [boardTitle, setBoardTitle] = useState('');
   const boardModalRef = useRef()
 
@@ -33,8 +33,12 @@ const AddBoardModal = ({onSubmit, onClose}) => {
       <h2 className="new-ticket-title">ADD BOARD</h2>
       
       <label htmlFor="board-title">New Board Title</label>
-      <input maxLength={20} className='ticket-details-title' type="text" id="board-title" name="boardTitle" value={boardTitle} onChange={handleChange}/>
-      
+      <input style={{
+        backgroundColor: emptyFeilds.includes('Title') ? '#ff000071' : '',
+        border: emptyFeilds.includes('Title') ? 'solid #e7195a 2px' : ''
+      }} maxLength={20} className='ticket-details-title' type="text" id="board-title" name="boardTitle" value={boardTitle} onChange={handleChange}/>
+      {emptyFeilds.length > 0 && <div className="error">Please Enter A Title</div>}
+
       <button className="login-input login-button" type="submit" onClick={(event) => {
         event.preventDefault();
         onSubmit(boardTitle);

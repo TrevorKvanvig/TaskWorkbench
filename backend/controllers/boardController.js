@@ -32,6 +32,10 @@ const getAllBoards = async (req, res) => {
 const sendSingleBoard = async (req, res) => {
   const { teamID } = req.params;
   const { boardTitle } = req.body;
+  let emptyFeilds = [];
+  if (!boardTitle){
+    emptyFeilds.push('Title')
+  }
 
   if (!mongoose.Types.ObjectId.isValid(teamID)) {
     return res.status(400).json({ error: 'Invalid MongoDB ID format' });
@@ -60,7 +64,7 @@ const sendSingleBoard = async (req, res) => {
     res.status(201).json(createdBoard);
 
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while creating the board: ' + error });
+    res.status(500).json({ error: 'An error occurred while creating the board: ' + error, emptyFeilds });
   }
 };
 
