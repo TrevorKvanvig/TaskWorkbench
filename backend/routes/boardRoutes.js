@@ -17,7 +17,7 @@ const {
 
 // alows router functionality
 const router = express.Router()
-//router.use(requireAuth);
+router.use(requireAuth);
 // ======== General ===================
 router.route('/:teamID')
   // return all boards in database

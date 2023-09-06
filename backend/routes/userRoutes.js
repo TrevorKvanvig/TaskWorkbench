@@ -1,10 +1,11 @@
-const {getAllUsers, addUser, getSingleUser, deleteUser, updateUserInfo, loginUser} = require('../controllers/userController')
-const {addTeamToUser, deleteTeamInUser, addTeamIdToUser} = require('../controllers/teamController')
+const {getAllUsers, addUser, getSingleUser, deleteUser, updateUserInfo, loginUser} = require('../controllers/userController');
+const {addTeamToUser, deleteTeamInUser, addTeamIdToUser} = require('../controllers/teamController');
+const requireAuth = require('../middleWare/requireAuth.js');
 const express = require('express');
 
 // alows router functionality
 const router = express.Router()
-
+router.use(requireAuth)
 // ======== User Routes ===================
 router.route('/')
   // return all boards in database
