@@ -3,13 +3,13 @@ import { useBoardsContext } from "../hooks/useBoardsContext";
 import { useEffect, useState, useRef } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { ReactComponent as AddLogo } from '../add-square.svg';
-
+import { useAuthContext } from "../hooks/useAuthContext";
 
 
 const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
   const { dispatch } = useBoardsContext();
   const titleRef = useRef();
-
+  const { user } = useAuthContext();
 
   // declare states
   const [currentTitle, setBoardTitle] = useState(boardDetails.boardTitle);
@@ -48,7 +48,10 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
     // when the delete baord button in pressed
     // delete board from database using api
     const response = await fetch('api/team/' + teamDetails._id + "/" + boardDetails._id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${user.token}`
+      }
     })
 
     //get response
@@ -86,7 +89,8 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
       method: 'PATCH',
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${user.token}`
       },
       body: JSON.stringify(updatedTitle)
     })
@@ -134,9 +138,9 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{
-              minHeight: totalTicketHeight !== 0 ? `${totalTicketHeight}px`: '74px',
+              minHeight: totalTicketHeight !== 0 ? `${totalTicketHeight}px` : '74px',
               borderRadius: '7px',
-              backgroundColor: snapshot.isDraggingOver? 'lightblue' : '#0191C8',
+              backgroundColor: snapshot.isDraggingOver ? 'lightblue' : '#0191C8',
               margin: '0px 0px 10px 0px'
             }}
           >
@@ -154,11 +158,11 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
       )}
 
       <div className="end-board-buttons">
-        
+
         <button className="board-delete" onClick={handleDeleteBoard}>Delete Board</button>
         <button className="add-board-button" onClick={() => {
           onTicketModalOpen(boardDetails)
-        }}><AddLogo/></button>
+        }}><AddLogo /></button>
       </div>
 
     </div>

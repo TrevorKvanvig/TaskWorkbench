@@ -23,7 +23,10 @@ const DropdownItem = ({ object, changeTeam }) => {
 
   const handleDeleteTeam = async () => {
     const response = await fetch('/api/team/' + object._id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${user.token}`
+      }
     });
 
     const teamDeleted = await response.json();
@@ -44,8 +47,13 @@ const DropdownItem = ({ object, changeTeam }) => {
   const handleLeaveTeam = async () => {
     //Leave team in DB
     const response = await fetch('/api/users/' + user.uID + '/' + object._id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${user.token}`
+      }
     });
+
+    
     const teamLeft = await response.json();
 
     //Update Dom  

@@ -4,15 +4,21 @@ import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import TicketDetails from './TicketDetails';
 import { ReactComponent as TrashLogo } from '../trash.svg';
+import { useAuthContext } from '../hooks/useAuthContext';
+
 const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
   const { dispatch } = useBoardsContext();
-  const [isTicketOpen, setTicketOpen] = useState(null);
+  const { user } = useAuthContext();
+  const [isTicketOpen, setTicketOpen] = useState(null); 
 
 
   const handleDeleteTicket = async (event) => {
     event.stopPropagation();
     const response = await fetch('api/team/' + teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${user.token}`
+      }
     })
     const deletedTicket = await response.json()
 

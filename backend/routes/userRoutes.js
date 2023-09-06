@@ -5,7 +5,6 @@ const express = require('express');
 
 // alows router functionality
 const router = express.Router()
-router.use(requireAuth)
 // ======== User Routes ===================
 router.route('/')
   // return all boards in database

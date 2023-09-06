@@ -52,9 +52,7 @@ const Login = () => {
       <div className="signup-link-wrapper">
         <h4>Dont Have An Account? <Link className="signup-link" to={'/signup'}>Sign Up Here!</Link></h4>
       </div>
-      <div className="signup-link-wrapper2">
-        <h4>Just Want to Test? <Link className="signup-link" to={''}>Use Guest Account!</Link></h4>
-      </div>
+      
       </form>
     </div>
   );

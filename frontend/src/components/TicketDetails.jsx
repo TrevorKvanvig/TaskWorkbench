@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useBoardsContext } from '../hooks/useBoardsContext';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
-  const { dispatch } = useBoardsContext()
-
+  const { dispatch } = useBoardsContext();
+  const { user } = useAuthContext();
   const modalRef = useRef();
   const titleRef = useRef();
   const priRef = useRef();
@@ -82,7 +83,8 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
       method: 'PATCH',
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${user.token}`
       },
       body: JSON.stringify(updateObject)
     });
@@ -113,7 +115,8 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
       method: 'PATCH',
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${user.token}`
       },
       body: JSON.stringify(updateObject)
     });

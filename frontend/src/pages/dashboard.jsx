@@ -55,7 +55,11 @@ const Dashboard = () => {
         const tID = JSON.parse(localStorage.getItem('teamID'))
         if (!tID) {
           console.log('no Team ID');
-          const response = await fetch('/api/team/' + user.team_ids[0]);
+          const response = await fetch('/api/team/' + user.team_ids[0], {
+            headers: {
+              'Authorization': `Bearer ${user.token}`
+            }
+          });
           const team = await response.json();
           
           if (!response.ok) {
@@ -70,7 +74,11 @@ const Dashboard = () => {
 
         } else {
           const currentID = JSON.parse(localStorage.getItem('teamID'));
-          const response = await fetch('/api/team/' + currentID);
+          const response = await fetch('/api/team/' + currentID, {
+            headers: {
+              'Authorization': `Bearer ${user.token}`
+            }
+          });
           const team = await response.json();
 
           if (!response.ok) {
@@ -88,7 +96,11 @@ const Dashboard = () => {
       const getAllTeamsFromDB = async () => {
         // Create an array of promises that fetch team data
         const fetchPromises = await user.team_ids.map(async teamID => {
-          const response = await fetch('/api/team/' + teamID);
+          const response = await fetch('/api/team/' + teamID, {
+            headers: {
+              'Authorization': `Bearer ${user.token}`
+            }
+          });
           const teamData = await response.json();
           return teamData;
         });
@@ -134,7 +146,8 @@ const Dashboard = () => {
         {
           method: 'POST',
           headers: {
-            "Content-Type": 'application/json'
+            "Content-Type": 'application/json',
+            'Authorization': `Bearer ${user.token}`
           }
         })
       const updatedUser = await response.json();
@@ -153,7 +166,11 @@ const Dashboard = () => {
           payload: joinTeamID
         })
 
-        const response = await fetch('/api/team/' + joinTeamID);
+        const response = await fetch('/api/team/' + joinTeamID, {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        });
         const teamJoined = await response.json();
 
         if (!teamJoined) {
@@ -187,10 +204,10 @@ const Dashboard = () => {
       method: 'POST',
       body: JSON.stringify(newTeam),
       headers: {
-        "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        'Authorization': `Bearer ${user.token}`
       }
     });
-
     // get board added back from database
     const teamAdded = await response.json()
     
@@ -252,7 +269,7 @@ const Dashboard = () => {
         </div>}
       </div>}
 
-      {(user && user.team_ids.length > 0 && currentTeamDetails) && <TeamBoard key={currentTeamDetails._id} teamDetails={currentTeamDetails} />}
+      {(user && user.team_ids.length > 0 && currentTeamDetails) && <TeamBoard key={currentTeamDetails._id} teamDetails={currentTeamDetails} user={user} />}
 
       {(user && user.team_ids.length === 0) &&
         <div className='no-teams-div'>

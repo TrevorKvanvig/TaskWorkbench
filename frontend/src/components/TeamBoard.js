@@ -8,7 +8,7 @@ import AddTicketModal from '../components/AddTicketModal';
 import Board from '../components/Board'
 
 
-const TeamBoard = ({ teamDetails }) => {
+const TeamBoard = ({ teamDetails, user }) => {
   const { boards, dispatch } = useBoardsContext();
   const [isBoardModalOpen, changeBoardModalState] = useState(false);
   const [isTicketModalOpen, changeTicketModalState] = useState(false);
@@ -21,7 +21,10 @@ const TeamBoard = ({ teamDetails }) => {
       const getBoardsfromDB = async () => {
 
         if (teamDetails.boards && teamDetails.boards.length > 0) {
-          const response = await fetch('/api/boards/' + teamDetails._id);
+          const response = await fetch('/api/boards/' + teamDetails._id, { 
+            headers: {
+            'Authorization': `Bearer ${user.token}`
+          }});
           const allBoards = await response.json();
 
           if (allBoards) {
@@ -88,7 +91,10 @@ const TeamBoard = ({ teamDetails }) => {
       });
       ///api/team/64e575412cea5f9c5f24d7c9/64e57ae8c8c11cc5bfca16dd/64e691d8c4adebe7d4ea27a3
       const response = await fetch('/api/team/'+ teamDetails._id + '/' + sourceBoardID + '/' + draggableId, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+        'Authorization': `Bearer ${user.token}`
+        }
       })
 
       if (!response.ok) {
@@ -101,7 +107,8 @@ const TeamBoard = ({ teamDetails }) => {
         method: 'POST',
         body: JSON.stringify({...ticketDragged, ticketID: deletedTicket.foundTicket._id }),
         headers: {
-          "Content-Type": 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
         }
       });
       if (!addTicketResponse) {
@@ -134,7 +141,8 @@ const TeamBoard = ({ teamDetails }) => {
       method: 'POST',
       body: JSON.stringify(ticketDetails),
       headers: {
-        "Content-Type": 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       }
     });
 
@@ -172,7 +180,8 @@ const TeamBoard = ({ teamDetails }) => {
       method: 'POST',
       body: JSON.stringify(newBoard),
       headers: {
-        "Content-Type": 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       }
     });
 
