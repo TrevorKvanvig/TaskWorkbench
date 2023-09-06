@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/dashboard';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-
+import { useAuthContext } from './hooks/useAuthContext';
 
 function App() {
+  const {user} = useAuthContext();
   return (
     <BrowserRouter>
       <Navbar />
@@ -14,7 +15,7 @@ function App() {
           <Route
           path="/dashboard"
           element={
-            <Dashboard />
+            user ? <Dashboard /> : <Navigate to='/'/>
           }
           />
           <Route

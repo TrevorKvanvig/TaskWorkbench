@@ -13,7 +13,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
 
   // declare states
   const [currentTitle, setBoardTitle] = useState(boardDetails.boardTitle);
-  const [currentID, setBoardID] = useState(boardDetails._id);
+
   const [isTitleChanging, setIsTitleChanging] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
         setIsTitleChanging(false);
         // set board title back to title in database
         setBoardTitle(boardDetails.boardTitle)
-        setBoardID(boardDetails._id)
+    
       }
     };
 
@@ -56,7 +56,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
 
     //get response
     const boardDeleted = await response.json()
-    console.log(boardDeleted);
+  
     // if it was sucessful change in dom
     if (response.ok) {
       dispatch({

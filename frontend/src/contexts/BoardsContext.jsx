@@ -10,7 +10,6 @@ export const boardsReducer = (currentState, action) => {
         boards: action.payload
       }
     case 'DELETE_BOARD':
-      console.log(action.payload._id);
       return {
         boards: currentState.boards.filter(board => action.payload._id !== board._id)
       }

@@ -1,10 +1,8 @@
-import { set } from "date-fns";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useState, useEffect } from "react";
 const DropdownItem = ({ object, changeTeam }) => {
   const { user, dispatch } = useAuthContext();
   const [isOwner, setIsOwner] = useState(false);
-
 
 
   useEffect(() => {

@@ -43,7 +43,7 @@ const TeamBoard = ({ teamDetails, user }) => {
     }
 
 
-  }, [dispatch, teamDetails]);
+  }, [dispatch, teamDetails, user.token]);
 
 
   const findTicketInDOM = (sourceBoardID, draggableId) => {

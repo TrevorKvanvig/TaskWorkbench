@@ -8,17 +8,16 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
   const { user } = useAuthContext();
   const modalRef = useRef();
   const titleRef = useRef();
-  const priRef = useRef();
   const descRef = useRef();
 
   // use to manage states of ticket value inputs
   const [currentTitle, setCurrentTitle] = useState(ticketDetails.ticketTitle);
   const [currentDesc, setCurrentDesc] = useState(ticketDetails.ticketDescription);
-  const [currentPri, setCurrentPri] = useState(ticketDetails.ticketPriority);
+
 
   const [isTitleChanging, setTitleChanging] = useState(false);
   const [isDescChanging, setDescChanging] = useState(false);
-  const [ispriChanging, setPriChanging] = useState(false);
+
 
 
   useEffect(() => {
@@ -40,11 +39,6 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
         setDescChanging(false);
 
       }
-      if (priRef.current && !priRef.current.contains(event.target)) {
-
-        setCurrentPri(ticketDetails.ticketPriority);
-        setPriChanging(false);
-      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -52,7 +46,7 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose, ticketDetails.ticketDescription, ticketDetails.ticketPriority, ticketDetails.ticketTitle]);
+  }, [onClose, ticketDetails.ticketDescription, ticketDetails.ticketTitle]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -64,10 +58,6 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
     } else if (name === 'currentDesc') {
       setCurrentDesc(value);
       setDescChanging(true);
-
-    } else if (name === 'currentPri') {
-      setCurrentPri(value)
-      setPriChanging(true);
     }
   }
 
