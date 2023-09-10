@@ -44,7 +44,7 @@ const Login = () => {
 
       <input placeholder="Email Address" className="login-input" type="email" name='email'value={formDetails.email} onChange={handleChange}></input>
       
-      <input placeholder="Password" className="login-input" type="text" name='password' value={formDetails.password} onChange={handleChange}></input>
+      <input placeholder="Password" className="login-input" type="pasword" name='password' value={formDetails.password} onChange={handleChange}></input>
       
       <button className="login-input login-button" disabled={isLoading} type="submit">Login</button>
       
