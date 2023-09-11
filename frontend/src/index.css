@@ -338,7 +338,7 @@ button {
   width: 230px;
   transform: translateX(-5%);
   background-color:#c4c4c4;
-  border: solid 1px black;
+  border: solid 1px #005B9A;
   border-radius: 7px;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -409,7 +409,7 @@ button {
   top: 115px;
   transform: translateX(3%);
   background-color:#c4c4c4;
-  border: solid 1px black;
+  border: solid 1px #005B9A;
   border-radius: 7px;
   list-style: none;
 }
