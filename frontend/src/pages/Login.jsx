@@ -30,6 +30,7 @@ const Login = () => {
       ...formDetails,
       [name]: value
     })
+    console.log("current ",formDetails);
   }
 
   return(

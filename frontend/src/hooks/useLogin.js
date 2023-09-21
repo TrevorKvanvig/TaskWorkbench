@@ -10,7 +10,7 @@ export const useLogin = () => {
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
-
+    console.log("before request",email, password);
     try {
       const response = await fetch('/api/users/login',
       {
