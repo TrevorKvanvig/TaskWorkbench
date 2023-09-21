@@ -11,29 +11,34 @@ export const useLogin = () => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch('/api/users/login',
-    {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, password})
-    });
+    try {
+      const response = await fetch('/api/users/login',
+      {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password})
+      });
 
-    const json = await response.json();
+      const json = await response.json();
 
-    if(!response.ok){
-      setError(json.error);
-      setIsLoading(false);
+      if(!response.ok){
+        setError(json.error);
+        setIsLoading(false);
+      }
+      if(response.ok){
+        await localStorage.setItem('user', JSON.stringify(json))
+
+        dispatch({
+          type: "LOGIN",
+          payload: json
+        })
+
+        setIsLoading(false);
+      }
+    } catch(error) {
+      console.log(error.message);
     }
-    if(response.ok){
-      await localStorage.setItem('user', JSON.stringify(json))
-
-      dispatch({
-        type: "LOGIN",
-        payload: json
-      })
-
-      setIsLoading(false);
-    }
+    
   }
 
   return {login, isLoading, error}
