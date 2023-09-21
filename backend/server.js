@@ -5,6 +5,7 @@ const boardRoutes = require('./routes/boardRoutes')
 const userRoutes = require('./routes/userRoutes')
 const teamRoutes = require('./routes/teamRoutes')
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 //============== initialize App =========
 const app = express();
