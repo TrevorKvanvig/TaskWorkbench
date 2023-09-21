@@ -11,7 +11,7 @@ export const useLogin = () => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/users/login',
+    const response = await fetch('/api/users/login',
     {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
