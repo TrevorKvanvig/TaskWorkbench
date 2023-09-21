@@ -29,7 +29,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/boards', boardRoutes);
 app.use(cors({
-  origin: 'https://taskworkbench.onrender.com',
+  origin: 'https://taskworkbenchbackend.onrender.com',
   // You can also specify more origins as an array, like origin: ['https://origin1.com', 'https://origin2.com']
 }));
 
