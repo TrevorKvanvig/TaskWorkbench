@@ -31,12 +31,14 @@ app.use('/api/boards', boardRoutes);
 
 //============== Body =================
 
+const port = process.env.PORT || 4000;
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => { 
     console.log('Connected to MongoDB Database');
     // only allow listening on port when connected to database
-    app.listen(process.env.PORT || 4000, (req, res) => {
-      console.log('listening on port 4000');
+    app.listen(port, (req, res) => {
+      console.log(`listening on port ${port}`);
     });
   })
   .catch(() => {
