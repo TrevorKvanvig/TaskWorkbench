@@ -37,11 +37,12 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => { 
     console.log('Connected to MongoDB Database');
     // only allow listening on port when connected to database
-    app.listen(port, (req, res) => {
-      console.log(`listening on port ${port}`);
-    });
+  
   })
   .catch(() => {
     console.log('Cant Connect to MongoDB Database');
   })
 
+  app.listen(port, (req, res) => {
+      console.log(`listening on port ${port}`);
+    });
