@@ -9,10 +9,7 @@ const cors = require('cors');
 
 //============== initialize App =========
 const app = express();
-app.use(cors(//{
-  //origin: 'https://taskworkbench.onrender.com',
-//}
-));
+app.use(cors());
 // allows req.body to be used
 app.use(express.json());
 

@@ -21,7 +21,7 @@ const TeamBoard = ({ teamDetails, user }) => {
       const getBoardsfromDB = async () => {
 
         if (teamDetails.boards && teamDetails.boards.length > 0) {
-          const response = await fetch('/api/boards/' + teamDetails._id, { 
+          const response = await fetch('https://taskworkbenchbackend.onrender.com/api/boards/' + teamDetails._id, { 
             headers: {
             'Authorization': `Bearer ${user.token}`
           }});
@@ -90,7 +90,7 @@ const TeamBoard = ({ teamDetails, user }) => {
         }
       });
       ///api/team/64e575412cea5f9c5f24d7c9/64e57ae8c8c11cc5bfca16dd/64e691d8c4adebe7d4ea27a3
-      const response = await fetch('/api/team/'+ teamDetails._id + '/' + sourceBoardID + '/' + draggableId, {
+      const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/'+ teamDetails._id + '/' + sourceBoardID + '/' + draggableId, {
         method: 'DELETE',
         headers: {
         'Authorization': `Bearer ${user.token}`
@@ -103,7 +103,7 @@ const TeamBoard = ({ teamDetails, user }) => {
 
 
       // 3. add ticket at correct index ===============
-      const addTicketResponse = await fetch('api/boards/' + teamDetails._id + '/' + destinationBoardID + '?index=' + destination.index, {
+      const addTicketResponse = await fetch('https://taskworkbenchbackend.onrender.com/api/boards/' + teamDetails._id + '/' + destinationBoardID + '?index=' + destination.index, {
         method: 'POST',
         body: JSON.stringify({...ticketDragged, ticketID: deletedTicket.foundTicket._id }),
         headers: {
@@ -137,7 +137,7 @@ const TeamBoard = ({ teamDetails, user }) => {
   const handleAddTicket = async (ticketDetails, boardID) => {
 
     // try to add ticket to database
-    const response = await fetch('api/boards/' + teamDetails._id + "/" + boardID, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/boards/' + teamDetails._id + "/" + boardID, {
       method: 'POST',
       body: JSON.stringify(ticketDetails),
       headers: {
@@ -176,7 +176,7 @@ const TeamBoard = ({ teamDetails, user }) => {
     }
 
     // send board to database
-    const response = await fetch('api/boards/' + teamDetails._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/boards/' + teamDetails._id, {
       method: 'POST',
       body: JSON.stringify(newBoard),
       headers: {

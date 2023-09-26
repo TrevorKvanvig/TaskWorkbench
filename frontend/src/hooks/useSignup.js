@@ -10,7 +10,7 @@ export const useSignup = () => {
     setIsLoading(true);
     setError(null);
     
-    const response = await fetch('/api/users', {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/users', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username, email, password})

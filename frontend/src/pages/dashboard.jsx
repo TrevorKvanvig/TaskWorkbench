@@ -55,7 +55,7 @@ const Dashboard = () => {
         const tID = JSON.parse(localStorage.getItem('teamID'))
         if (!tID) {
           console.log('no Team ID');
-          const response = await fetch('/api/team/' + user.team_ids[0], {
+          const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + user.team_ids[0], {
             headers: {
               'Authorization': `Bearer ${user.token}`
             }
@@ -74,7 +74,7 @@ const Dashboard = () => {
 
         } else {
           const currentID = JSON.parse(localStorage.getItem('teamID'));
-          const response = await fetch('/api/team/' + currentID, {
+          const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + currentID, {
             headers: {
               'Authorization': `Bearer ${user.token}`
             }
@@ -96,7 +96,7 @@ const Dashboard = () => {
       const getAllTeamsFromDB = async () => {
         // Create an array of promises that fetch team data
         const fetchPromises = await user.team_ids.map(async teamID => {
-          const response = await fetch('/api/team/' + teamID, {
+          const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + teamID, {
             headers: {
               'Authorization': `Bearer ${user.token}`
             }
@@ -142,7 +142,7 @@ const Dashboard = () => {
       setJoinTeamError('You are already in that team');
     } else {
       // add team to user on database
-      const response = await fetch('/api/users/' + user.uID + '/' + joinTeamID,
+      const response = await fetch('https://taskworkbenchbackend.onrender.com/api/users/' + user.uID + '/' + joinTeamID,
         {
           method: 'POST',
           headers: {
@@ -166,7 +166,7 @@ const Dashboard = () => {
           payload: joinTeamID
         })
 
-        const response = await fetch('/api/team/' + joinTeamID, {
+        const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + joinTeamID, {
           headers: {
             'Authorization': `Bearer ${user.token}`
           }
@@ -200,7 +200,7 @@ const Dashboard = () => {
       teamTitle: teamTitle
     }
 
-    const response = await fetch('api/users/' + user.uID, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/users/' + user.uID, {
       method: 'POST',
       body: JSON.stringify(newTeam),
       headers: {

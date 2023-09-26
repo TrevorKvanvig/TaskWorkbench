@@ -41,13 +41,13 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
     };
 
   }, [boardDetails])
-
+  
 
 
   const handleDeleteBoard = async () => {
     // when the delete baord button in pressed
     // delete board from database using api
-    const response = await fetch('api/team/' + teamDetails._id + "/" + boardDetails._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + teamDetails._id + "/" + boardDetails._id, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`
@@ -85,7 +85,7 @@ const Board = ({ boardDetails, onTicketModalOpen, teamDetails }) => {
     }
 
     // send patch request to api
-    const response = await fetch('/api/boards/' + teamDetails._id + '/' + boardDetails._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/boards/' + teamDetails._id + '/' + boardDetails._id, {
       method: 'PATCH',
       headers: {
         Accept: "application/json",

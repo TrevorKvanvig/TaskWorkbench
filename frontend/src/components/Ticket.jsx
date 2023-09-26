@@ -14,7 +14,7 @@ const Ticket = ({ teamDetails, ticket, boardDetails, index }) => {
 
   const handleDeleteTicket = async (event) => {
     event.stopPropagation();
-    const response = await fetch('api/team/' + teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + teamDetails._id + '/' + boardDetails._id + "/" + ticket._id, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`

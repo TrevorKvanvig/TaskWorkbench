@@ -15,7 +15,7 @@ function App() {
           <Route
           path="/dashboard"
           element={
-            user ? <Dashboard /> : <Navigate to='/'/>
+            <Dashboard /> 
           }
           />
           <Route

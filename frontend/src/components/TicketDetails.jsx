@@ -69,7 +69,7 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
       ticketTitle: currentTitle
     }
 
-    const response = await fetch('/api/team/' + teamDetails._id + '/' + boardID + '/' + ticketDetails._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + teamDetails._id + '/' + boardID + '/' + ticketDetails._id, {
       method: 'PATCH',
       headers: {
         Accept: "application/json",
@@ -101,7 +101,7 @@ const TicketDetails = ({ ticketDetails, onClose, boardID, teamDetails }) => {
       ticketDescription: currentDesc
     }
 
-    const response = await fetch('/api/team/' + teamDetails._id + '/' + boardID + '/' + ticketDetails._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + teamDetails._id + '/' + boardID + '/' + ticketDetails._id, {
       method: 'PATCH',
       headers: {
         Accept: "application/json",

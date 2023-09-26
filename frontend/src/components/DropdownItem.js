@@ -20,7 +20,7 @@ const DropdownItem = ({ object, changeTeam }) => {
   }, [user, object.teamOwner]);
 
   const handleDeleteTeam = async () => {
-    const response = await fetch('/api/team/' + object._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/team/' + object._id, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`
@@ -44,7 +44,7 @@ const DropdownItem = ({ object, changeTeam }) => {
 
   const handleLeaveTeam = async () => {
     //Leave team in DB
-    const response = await fetch('/api/users/' + user.uID + '/' + object._id, {
+    const response = await fetch('https://taskworkbenchbackend.onrender.com/api/users/' + user.uID + '/' + object._id, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`
