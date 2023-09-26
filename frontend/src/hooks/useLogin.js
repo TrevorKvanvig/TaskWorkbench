@@ -10,7 +10,7 @@ export const useLogin = () => {
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
-    console.log("before request",email, password);
+    //console.log("before request",email, password);
     try {
       const response = await fetch('https://taskworkbenchbackend.onrender.com/api/users/login',
       {
@@ -18,7 +18,7 @@ export const useLogin = () => {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, password})
       });
-      console.log(response);
+      //console.log(response);
       const json = await response.json();
 
       if(!response.ok){
@@ -36,7 +36,7 @@ export const useLogin = () => {
         setIsLoading(false);
       }
     } catch(error) {
-      console.log(error.message);
+      //console.log(error.message);
     }
     
   }
