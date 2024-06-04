@@ -1,7 +1,7 @@
 # TaskWorkbench
 TaskWorkbench is a complete MERN Stack application. 
 
-Task Workbench is a support team task tracking software that streamlines the process of creating and managing tasks.
+Task Workbench is a team task tracking software that streamlines the process of creating and managing tasks.
 
 Developed a comprehensive Full Stack application, integrating a RESTful API for seamless data transmission, reception, and manipulation.
 
