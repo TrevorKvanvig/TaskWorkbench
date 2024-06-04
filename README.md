@@ -1,8 +1,12 @@
 # TaskWorkbench
-TaskWorkbench is a complete MERN Stack application to expand on and make better my previous project CorrectiveMeasures. 
+TaskWorkbench is a complete MERN Stack application. 
 
-Task Workbench is a support ticket tracking software that streamlines the process of creating and managing bug tickets. With Corrective Measures, users can easily create and track tickets through a convenient web portal.
+Task Workbench is a support team task tracking software that streamlines the process of creating and managing tasks.
 
-I Created a api to be able to update MongoDB database in real time and use react to send the data and update data on the boards and sync with database
+Developed a comprehensive Full Stack application, integrating a RESTful API for seamless data transmission, reception, and manipulation.
 
-Uses REST API for backend database comunications
+Implemented robust security measures, including mandatory bearer token API key authentication and cryptographic hash function-based password encryption, to safeguard user data.
+
+Leveraged the cloud-based NoSQL Database MongoDB for efficient hosting and management of ticket, user, and login data.
+
+Empowered users to establish and manage teams, streamlining the storage and organization of tickets for enhanced collaborative task management within groups.
